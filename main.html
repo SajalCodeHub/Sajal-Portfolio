@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sajal Bhattarai | Data Engineer</title>
+  <meta name="description" content="Sajal Bhattarai — Senior Data Engineer building production-grade pipelines with AI integration. 5+ years experience with Airflow, Spark, and cloud platforms." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- ============================== -->
+  <!-- NAVIGATION                     -->
+  <!-- ============================== -->
+  <header class="topbar" id="top">
+    <nav class="nav container">
+      <a class="brand" href="main.html" aria-label="Go to Home">
+        <span class="brand-badge">SB</span>
+        <span class="brand-text">Sajal Bhattarai</span>
+      </a>
+
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a class="nav-link active" href="main.html">Home</a>
+        <a class="nav-link" href="projects.html">Projects</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="Resume.html">Resume</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+
+        <a class="btn-star" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" title="Star on GitHub">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+          Star
+        </a>
+
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============================== -->
+    <!-- HERO SECTION                   -->
+    <!-- ============================== -->
+    <section class="section hero" id="home">
+      <div class="container hero-grid">
+        <!-- Left: Content -->
+        <div class="hero-left">
+          <p class="chip">
+            <span class="status-dot"></span>
+            <span>Open to Work</span>
+            <span class="chip-sep">•</span>
+            <span>Data Engineer</span>
+          </p>
+
+          <h1 class="hero-title">
+            Building AI-powered<br/>
+            data systems that<br/>
+            <span class="accent">drive real impact</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            I architect production-grade ETL/ELT pipelines, AI-integrated analytics platforms, and 
+            scalable data infrastructure using Python, Spark, Airflow, and cloud technologies. 
+            5+ years delivering systems teams actually trust.
+          </p>
+
+          <div class="badge-row" aria-label="Tech stack badges">
+            <span class="badge">Python</span>
+            <span class="badge">Apache Airflow</span>
+            <span class="badge">Apache Spark</span>
+            <span class="badge">SQL</span>
+            <span class="badge">PostgreSQL</span>
+            <span class="badge">Snowflake</span>
+            <span class="badge">AWS · Azure · GCP</span>
+            <span class="badge">Docker</span>
+            <span class="badge">Databricks</span>
+            <span class="badge">Azure OpenAI</span>
+          </div>
+
+          <div class="cta-row">
+            <a class="btn primary" href="projects.html">View Projects</a>
+            <a class="btn ghost" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              GitHub
+            </a>
+            <a class="btn outline" href="https://www.linkedin.com/in/sajal-bhattarai-912347216" target="_blank" rel="noopener">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+              LinkedIn
+            </a>
+          </div>
+
+          <!-- Contact row -->
+          <div class="hero-contact">
+            <a href="mailto:jobsajalbhattarai@gmail.com" class="hero-contact-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+              jobsajalbhattarai@gmail.com
+            </a>
+            <span class="divider-dot">·</span>
+            <a href="tel:+15169398077" class="hero-contact-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.88.37 1.88.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.93.33 1.93.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              516-939-8077
+            </a>
+            <span class="divider-dot">·</span>
+            <span class="hero-contact-link location">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Hicksville, NY
+            </span>
+          </div>
+        </div>
+
+        <!-- Right: Photo + floating badges -->
+        <div class="hero-visual">
+          <div class="photo-frame">
+            <img src="assets/img/IMG_4781.PNG" alt="Sajal Bhattarai — Data Engineer" class="hero-photo" loading="eager" />
+            <div class="photo-glow"></div>
+          </div>
+          <!-- Floating badges around photo -->
+          <div class="floating-badge fb-1" aria-hidden="true">
+            <span></span> 5+ Years Experience
+          </div>
+          <div class="floating-badge fb-2" aria-hidden="true">
+            <span></span> AI + Data Integration
+          </div>
+          <div class="floating-badge fb-3" aria-hidden="true">
+            <span></span> AWS · Azure · GCP
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll cue -->
+      <div class="scroll-cue" aria-hidden="true">
+        <span>scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- IMPACT NUMBERS                 -->
+    <!-- ============================== -->
+    <section class="section stats" id="stats">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-icon">📅</span>
+            <span class="stat-number">5+</span>
+            <span class="stat-label">Years of Experience</span>
+            <span class="stat-sublabel">Enterprise pipelines to AI analytics</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">🔍</span>
+            <span class="stat-number">1,700+</span>
+            <span class="stat-label">Records Indexed</span>
+            <span class="stat-sublabel">AI-powered semantic search platform</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">⏱️</span>
+            <span class="stat-number">3–5 hrs/wk</span>
+            <span class="stat-label">Time Saved</span>
+            <span class="stat-sublabel">AI-automated classification workflow</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">🏗️</span>
+            <span class="stat-number">Multi-Cloud</span>
+            <span class="stat-label">Platform Experience</span>
+            <span class="stat-sublabel">AWS, Azure, GCP deployments</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- MEET SAJAL                     -->
+    <!-- ============================== -->
+    <section class="section meet" id="about-preview">
+      <div class="container meet-grid">
+        <div class="meet-content">
+          <span class="section-tag">About Me</span>
+          <h2 class="section-title">Meet Sajal</h2>
+
+          <p class="meet-body">
+            I grew up in a household of teachers in Janakpur, Nepal — surrounded by Maithili culture,
+            bicycle rides with friends, and an early obsession with problem-solving. I got my first
+            computer in class 9, wrote my first lines of code in QBASIC, and chose physics over
+            biology because I loved solving numerical problems.
+          </p>
+
+          <p class="meet-body">
+            Then came a leap of faith — visa approved August 3rd, landed in Kentucky August 10th.
+            Seven days to start a new life. From NKU to New York, from SUNY Old Westbury to
+            building production pipelines at KWI — every step was driven by curiosity and
+            the belief that data, done right, powers better decisions.
+          </p>
+
+          <a class="btn primary meet-cta" href="about.html">
+            Read My Full Story
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+
+        <!-- Journey Markers -->
+        <div class="meet-visual">
+          <div class="journey-markers">
+            <div class="journey-marker">
+              <span class="marker-flag">🇳🇵</span>
+              <span class="marker-place">Janakpur</span>
+              <span class="marker-note">Where it started</span>
+            </div>
+            <div class="journey-connector"></div>
+            <div class="journey-marker">
+              <span class="marker-flag">🏔️</span>
+              <span class="marker-place">Kathmandu</span>
+              <span class="marker-note">CCRC College · Science track</span>
+            </div>
+            <div class="journey-connector"></div>
+            <div class="journey-marker">
+              <span class="marker-flag">🇺🇸</span>
+              <span class="marker-place">Kentucky</span>
+              <span class="marker-note">NKU · 2021–2023</span>
+            </div>
+            <div class="journey-connector"></div>
+            <div class="journey-marker active">
+              <span class="marker-flag">🗽</span>
+              <span class="marker-place">New York</span>
+              <span class="marker-note">SUNY Old Westbury · KWI · Now</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- TECH STACK                     -->
+    <!-- ============================== -->
+    <section class="section stack-section" id="stack">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Toolkit</span>
+          <h2 class="section-title">What I Work With</h2>
+          <p class="section-desc">The tools and platforms I use to build, orchestrate, and scale production data systems.</p>
+        </div>
+
+        <!-- Scrolling Marquee -->
+        <div class="marquee-wrapper">
+          <div class="marquee-track">
+            <span class="marquee-item">Python</span>
+            <span class="marquee-item">SQL</span>
+            <span class="marquee-item">Apache Airflow</span>
+            <span class="marquee-item">Apache Spark</span>
+            <span class="marquee-item">Databricks</span>
+            <span class="marquee-item">PostgreSQL</span>
+            <span class="marquee-item">Snowflake</span>
+            <span class="marquee-item">Redshift</span>
+            <span class="marquee-item">Azure OpenAI</span>
+            <span class="marquee-item">pgvector</span>
+            <span class="marquee-item">AWS</span>
+            <span class="marquee-item">Azure</span>
+            <span class="marquee-item">GCP</span>
+            <span class="marquee-item">Docker</span>
+            <span class="marquee-item">dbt</span>
+            <span class="marquee-item">Git</span>
+            <!-- Duplicate for seamless loop -->
+            <span class="marquee-item">Python</span>
+            <span class="marquee-item">SQL</span>
+            <span class="marquee-item">Apache Airflow</span>
+            <span class="marquee-item">Apache Spark</span>
+            <span class="marquee-item">Databricks</span>
+            <span class="marquee-item">PostgreSQL</span>
+            <span class="marquee-item">Snowflake</span>
+            <span class="marquee-item">Redshift</span>
+            <span class="marquee-item">Azure OpenAI</span>
+            <span class="marquee-item">pgvector</span>
+            <span class="marquee-item">AWS</span>
+            <span class="marquee-item">Azure</span>
+            <span class="marquee-item">GCP</span>
+            <span class="marquee-item">Docker</span>
+            <span class="marquee-item">dbt</span>
+            <span class="marquee-item">Git</span>
+          </div>
+        </div>
+
+        <!-- Categorized Grid -->
+        <div class="stack-grid">
+          <div class="stack-category">
+            <h4 class="stack-cat-title">Languages</h4>
+            <div class="stack-pills">
+              <span class="stack-pill">Python</span>
+              <span class="stack-pill">SQL</span>
+              <span class="stack-pill">Bash</span>
+            </div>
+          </div>
+          <div class="stack-category">
+            <h4 class="stack-cat-title">Orchestration & Processing</h4>
+            <div class="stack-pills">
+              <span class="stack-pill">Apache Airflow</span>
+              <span class="stack-pill">Apache Spark</span>
+              <span class="stack-pill">Databricks</span>
+              <span class="stack-pill">PySpark</span>
+              <span class="stack-pill">dbt</span>
+            </div>
+          </div>
+          <div class="stack-category">
+            <h4 class="stack-cat-title">Databases & Warehouses</h4>
+            <div class="stack-pills">
+              <span class="stack-pill">PostgreSQL</span>
+              <span class="stack-pill">MySQL</span>
+              <span class="stack-pill">Snowflake</span>
+              <span class="stack-pill">Redshift</span>
+              <span class="stack-pill">pgvector</span>
+            </div>
+          </div>
+          <div class="stack-category">
+            <h4 class="stack-cat-title">Cloud & DevOps</h4>
+            <div class="stack-pills">
+              <span class="stack-pill">AWS (S3, Lambda, Glue)</span>
+              <span class="stack-pill">Azure (OpenAI, Databricks)</span>
+              <span class="stack-pill">GCP (BigQuery, Cloud Storage)</span>
+              <span class="stack-pill">Docker</span>
+              <span class="stack-pill">Git</span>
+            </div>
+          </div>
+          <div class="stack-category">
+            <h4 class="stack-cat-title">AI & Analytics</h4>
+            <div class="stack-pills">
+              <span class="stack-pill">Azure OpenAI</span>
+              <span class="stack-pill">RAG Architecture</span>
+              <span class="stack-pill">Power BI</span>
+              <span class="stack-pill">Pandas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- FEATURED PROJECTS              -->
+    <!-- ============================== -->
+    <section class="section featured-section" id="featured">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Portfolio</span>
+          <h2 class="section-title">Featured Work</h2>
+          <p class="section-desc">Production-grade data systems with AI integration, real-time processing, and enterprise-scale impact.</p>
+        </div>
+
+        <!-- Project Grid -->
+        <div class="featured-grid">
+          
+          <!-- Project 1: AI Semantic Search -->
+          <article class="featured-card featured-highlight">
+            <div class="featured-badge">🤖 AI-Powered</div>
+            <h3 class="featured-title">AI-Powered Semantic Search Platform</h3>
+            <p class="featured-desc">
+              Built production RAG architecture with PostgreSQL pgvector, indexing 1,700+ records for 
+              similarity search. Integrated Azure OpenAI for embeddings and semantic retrieval without 
+              replacing existing database infrastructure.
+            </p>
+            <div class="featured-tech">
+              <span class="tech-pill">Azure OpenAI</span>
+              <span class="tech-pill">PostgreSQL</span>
+              <span class="tech-pill">pgvector</span>
+              <span class="tech-pill">Python</span>
+              <span class="tech-pill">RAG</span>
+            </div>
+            <div class="featured-impact">
+              <div class="impact-badge">
+                <span class="impact-number">1,700+</span>
+                <span class="impact-label">Records Indexed</span>
+              </div>
+              <div class="impact-badge">
+                <span class="impact-number">Vector</span>
+                <span class="impact-label">Similarity Search</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 2: Azure OpenAI Integration -->
+          <article class="featured-card">
+            <div class="featured-badge">⚡ Automation</div>
+            <h3 class="featured-title">AI-Automated Product Classification</h3>
+            <p class="featured-desc">
+              Integrated Azure OpenAI into production ETL pipeline to automatically classify and prioritize 
+              product feedback data, reducing manual analysis time by 3–5 hours per week. Built with Airflow 
+              orchestration and quality validation.
+            </p>
+            <div class="featured-tech">
+              <span class="tech-pill">Azure OpenAI</span>
+              <span class="tech-pill">Airflow</span>
+              <span class="tech-pill">Python</span>
+              <span class="tech-pill">PostgreSQL</span>
+            </div>
+            <div class="featured-impact">
+              <div class="impact-badge">
+                <span class="impact-number">3–5 hrs/wk</span>
+                <span class="impact-label">Time Saved</span>
+              </div>
+              <div class="impact-badge">
+                <span class="impact-number">Auto</span>
+                <span class="impact-label">Classification</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 3: Fintech Pipeline -->
+          <article class="featured-card">
+            <div class="featured-badge">🏗️ Architecture</div>
+            <h3 class="featured-title">Fintech Transaction Pipeline</h3>
+            <p class="featured-desc">
+              End-to-end batch pipeline using medallion architecture (Bronze → Silver → Gold) with Airflow 
+              orchestration, Spark transformations, partitioned S3 storage, and 5 analytics-ready gold tables. 
+              Fully Dockerized and production-tested.
+            </p>
+            <div class="featured-tech">
+              <span class="tech-pill">Airflow</span>
+              <span class="tech-pill">Spark</span>
+              <span class="tech-pill">AWS S3</span>
+              <span class="tech-pill">Docker</span>
+              <span class="tech-pill">Parquet</span>
+            </div>
+            <div class="featured-impact">
+              <div class="impact-badge">
+                <span class="impact-number">5</span>
+                <span class="impact-label">Gold Tables</span>
+              </div>
+              <div class="impact-badge">
+                <span class="impact-number">Bronze→Gold</span>
+                <span class="impact-label">Medallion</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 4: Data Warehouse -->
+          <article class="featured-card">
+            <div class="featured-badge">📊 Enterprise</div>
+            <h3 class="featured-title">Multi-Source Data Warehouse</h3>
+            <p class="featured-desc">
+              Designed and implemented production ETL pipelines ingesting from MySQL and internal systems 
+              into PostgreSQL and Snowflake. Built dimensional models (fact/dimension tables) supporting 
+              product analytics and operational reporting.
+            </p>
+            <div class="featured-tech">
+              <span class="tech-pill">Airflow</span>
+              <span class="tech-pill">Snowflake</span>
+              <span class="tech-pill">PostgreSQL</span>
+              <span class="tech-pill">MySQL</span>
+              <span class="tech-pill">Dimensional Modeling</span>
+            </div>
+            <div class="featured-impact">
+              <div class="impact-badge">
+                <span class="impact-number">Multi</span>
+                <span class="impact-label">Data Sources</span>
+              </div>
+              <div class="impact-badge">
+                <span class="impact-number">Fact/Dim</span>
+                <span class="impact-label">Star Schema</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 5: Future - Real-time CDC -->
+          <article class="featured-card featured-upcoming">
+            <div class="featured-badge upcoming">🚀 In Development</div>
+            <h3 class="featured-title">Real-time CDC Pipeline</h3>
+            <p class="featured-desc">
+              Building a laptop-friendly real-time Change Data Capture pipeline using Debezium + Kafka + 
+              PostgreSQL. Captures database changes as events, streams through Kafka, and maintains 
+              synchronized downstream analytics. Demonstrates streaming architecture expertise.
+            </p>
+            <div class="featured-tech">
+              <span class="tech-pill">Debezium</span>
+              <span class="tech-pill">Apache Kafka</span>
+              <span class="tech-pill">PostgreSQL</span>
+              <span class="tech-pill">Docker</span>
+              <span class="tech-pill">CDC</span>
+            </div>
+            <div class="featured-status">
+              <span class="status-text">📅 Starting: February 2026</span>
+              <span class="status-text">🎯 Target: Production-ready in 4 weeks</span>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- View All CTA -->
+        <div class="featured-cta">
+          <a class="btn primary large" href="projects.html">
+            View All Projects
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- BLOG PREVIEW                   -->
+    <!-- ============================== -->
+    <section class="section blog-section" id="blog">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Writing</span>
+          <h2 class="section-title">Latest from the Blog</h2>
+          <p class="section-desc">Deep dives on data engineering patterns, career lessons, and production war stories.</p>
+        </div>
+
+        <div class="blog-grid">
+          
+          <article class="blog-card">
+            <div class="blog-header">
+              <span class="blog-date">Feb 2026</span>
+              <div class="blog-tags">
+                <span class="blog-tag">AI + Data</span>
+                <span class="blog-tag">pgvector</span>
+              </div>
+            </div>
+            <h3 class="blog-title">
+              <a href="blog/semantic-search.html" style="text-decoration: none; color: inherit;">
+                Building Semantic Search Without Ripping Out Your Database
+              </a>
+            </h3>
+            <p class="blog-excerpt">
+              How I added AI-powered similarity search to a production PostgreSQL system using pgvector, 
+              Azure OpenAI embeddings, and careful indexing strategy — without a complete rewrite.
+            </p>
+            <div class="blog-topics">
+              <span>RAG Architecture</span>
+              <span>Vector Embeddings</span>
+              <span>PostgreSQL Extensions</span>
+            </div>
+            <a class="btn primary small" href="blog/semantic-search.html" style="margin-top: 16px;">Read Article</a>
+          </article>
+
+          <article class="blog-card">
+            <div class="blog-header">
+              <span class="blog-date">Feb 2026</span>
+              <div class="blog-tags">
+                <span class="blog-tag">Architecture</span>
+                <span class="blog-tag">Lessons Learned</span>
+              </div>
+            </div>
+            <h3 class="blog-title">
+              <a href="blog/medallion-architecture.html" style="text-decoration: none; color: inherit;">
+                Why Medallion Architecture Saved My Pipeline (And My Sanity)
+              </a>
+            </h3>
+            <p class="blog-excerpt">
+              Bronze → Silver → Gold isn't just enterprise buzzwords. It's the pattern that gave me 
+              debuggability, data lineage, and the ability to sleep at night. Here's what I learned 
+              implementing it from scratch.
+            </p>
+            <div class="blog-topics">
+              <span>Data Quality</span>
+              <span>Testing Strategies</span>
+              <span>Incremental Rollout</span>
+            </div>
+            <a class="btn primary small" href="blog/medallion-architecture.html" style="margin-top: 16px;">Read Article</a>
+          </article>
+
+          <article class="blog-card">
+            <div class="blog-header">
+              <span class="blog-date">Feb 2026</span>
+              <div class="blog-tags">
+                <span class="blog-tag">Airflow</span>
+                <span class="blog-tag">Production</span>
+              </div>
+            </div>
+            <h3 class="blog-title">
+              <a href="blog/airflow-mistakes.html" style="text-decoration: none; color: inherit;">
+                5 Airflow Mistakes That Cost Me Hours (So You Don't Have To)
+              </a>
+            </h3>
+            <p class="blog-excerpt">
+              Circular dependencies. Silent task failures. Memory leaks in long-running DAGs. These are 
+              the production Airflow gotchas I learned the hard way — with the fixes that actually work.
+            </p>
+            <div class="blog-topics">
+              <span>DAG Design</span>
+              <span>Debugging</span>
+              <span>Monitoring</span>
+            </div>
+            <a class="btn primary small" href="blog/airflow-mistakes.html" style="margin-top: 16px;">Read Article</a>
+          </article>
+
+        </div>
+
+        <div class="blog-cta">
+          <a class="btn ghost" href="blog/index.html">View All Articles</a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- HOW I BUILD                    -->
+    <!-- ============================== -->
+    <section class="section principles-section" id="principles">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Philosophy</span>
+          <h2 class="section-title">How I Build</h2>
+          <p class="section-desc">Production engineering principles I've learned from 5 years of shipping data systems.</p>
+        </div>
+
+        <div class="principles-grid">
+          
+          <div class="principle-card">
+            <div class="principle-icon">🛡️</div>
+            <h3 class="principle-title">Data Quality First</h3>
+            <p class="principle-desc">
+              Validation at ingestion and transformation layers. Schema checks, null handling, and 
+              deduplication logic before data reaches downstream systems. Quality gates prevent bad 
+              data from cascading.
+            </p>
+          </div>
+
+          <div class="principle-card">
+            <div class="principle-icon">⚙️</div>
+            <h3 class="principle-title">Orchestration as Code</h3>
+            <p class="principle-desc">
+              Deterministic schedules with Airflow. Clear task dependencies, retries with backoff, 
+              and idempotent operations. Every DAG run should be reproducible and debuggable.
+            </p>
+          </div>
+
+          <div class="principle-card">
+            <div class="principle-icon">📊</div>
+            <h3 class="principle-title">Built for Observability</h3>
+            <p class="principle-desc">
+              Record counts at every layer. Pipeline metrics exposed through monitoring. Failed tasks 
+              trigger alerts. If something breaks at 3 AM, I know exactly where and why.
+            </p>
+          </div>
+
+          <div class="principle-card">
+            <div class="principle-icon">📐</div>
+            <h3 class="principle-title">Dimensional Modeling</h3>
+            <p class="principle-desc">
+              Star schemas with clear fact and dimension tables. Slowly changing dimensions handled 
+              properly. Analytics-ready models that BI tools and analysts can actually use.
+            </p>
+          </div>
+
+          <div class="principle-card">
+            <div class="principle-icon">🔄</div>
+            <h3 class="principle-title">Incremental Processing</h3>
+            <p class="principle-desc">
+              Process only what changed since last run. Partitioning by date for efficient queries. 
+              Backfill strategies that don't reprocess the entire dataset every time.
+            </p>
+          </div>
+
+          <div class="principle-card">
+            <div class="principle-icon">📝</div>
+            <h3 class="principle-title">Documentation as Artifact</h3>
+            <p class="principle-desc">
+              Architecture diagrams, data lineage, and setup instructions committed alongside code. 
+              Not optional — it's how the next engineer (or future me) understands the system.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="principles-cta">
+          <div class="cta-box">
+            <h3>What I'm Looking For</h3>
+            <p>
+              Data Engineer roles where I can build scalable pipelines, design warehouse-ready models, 
+              and integrate AI capabilities into production systems. I want to work on data infrastructure 
+              that analysts and product teams actually trust.
+            </p>
+            <div class="cta-row">
+              <a class="btn primary" href="about.html">Read More About Me</a>
+              <a class="btn ghost" href="contact.html">Get in Touch</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- CTA BANNER                     -->
+    <!-- ============================== -->
+    <section class="section cta-section">
+      <div class="container">
+        <div class="cta-card">
+          <h2 class="cta-title">Let's Build Something Reliable</h2>
+          <p class="cta-desc">
+            I'm looking for Data Engineer roles where I can design AI-integrated pipelines and 
+            data systems teams actually trust. If you're building something that needs production-grade 
+            data infrastructure — let's talk.
+          </p>
+          <div class="cta-card-actions">
+            <a class="btn primary large" href="contact.html">
+              Get in Touch
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a class="btn ghost" href="assets/resume/Sajal_Bhattarai_Resume.pdf" download>Download Resume</a>
+            <a class="btn outline" href="projects.html">View All Projects</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <!-- ============================== -->
+  <!-- FOOTER                         -->
+  <!-- ============================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <!-- Connect -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Connect</h4>
+          <div class="footer-connect-links">
+            <a href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/sajal-bhattarai-912347216" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+              LinkedIn
+            </a>
+            <a href="mailto:jobsajalbhattarai@gmail.com" class="footer-connect-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+              Email
+            </a>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Status</h4>
+          <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>Open to Work</span>
+          </div>
+          <div class="footer-location">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hicksville, NY
+          </div>
+        </div>
+
+        <!-- Core Stack -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Core Stack</h4>
+          <div class="footer-stack-pills">
+            <span class="footer-pill">Python</span>
+            <span class="footer-pill">Airflow</span>
+            <span class="footer-pill">Spark</span>
+            <span class="footer-pill">SQL</span>
+            <span class="footer-pill">Azure OpenAI</span>
+            <span class="footer-pill">AWS</span>
+          </div>
+        </div>
+
+        <!-- Star on GitHub -->
+        <div class="footer-card footer-star-card">
+          <h4 class="footer-card-title">Like This Portfolio?</h4>
+          <p class="footer-star-desc">If you enjoyed browsing, consider giving it a star on GitHub.</p>
+          <a class="btn primary small" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+            Star on GitHub
+          </a>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Quick Links</h4>
+          <div class="footer-quick-links">
+            <a href="main.html">Home</a>
+            <a href="projects.html">Projects</a>
+            <a href="about.html">About</a>
+            <a href="resume.html">Resume</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-left">
+          <span class="footer-brand">Sajal Bhattarai</span>
+          <span class="footer-sep">·</span>
+          <span class="footer-role">Data Engineer</span>
+        </div>
+        <div class="footer-bottom-center">
+          <p>Built with precision — like a well-orchestrated pipeline.</p>
+        </div>
+        <div class="footer-bottom-right">
+          <p>© <span id="year"></span> Sajal Bhattarai. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <a href="#top" class="back-to-top" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>

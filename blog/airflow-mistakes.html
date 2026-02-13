@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5 Airflow Mistakes That Cost Me Hours (So You Don't Have To) | Sajal Bhattarai</title>
+  <meta name="description" content="Circular dependencies, silent task failures, and memory leaks. Production Airflow gotchas I learned the hard way — with the fixes that actually work." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+  <!-- ============================== -->
+  <!-- NAVIGATION                     -->
+  <!-- ============================== -->
+  <header class="topbar" id="top">
+    <nav class="nav container">
+      <a class="brand" href="/" aria-label="Go to Home">
+        <span class="brand-badge">SB</span>
+        <span class="brand-text">Sajal Bhattarai</span>
+      </a>
+
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/projects/">Projects</a>
+        <a class="nav-link active" href="/blog/">Blog</a>
+        <a class="nav-link" href="/about/">About</a>
+        <a class="nav-link" href="/resume/">Resume</a>
+        <a class="nav-link" href="/contact/">Contact</a>
+
+        <a class="btn-star" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" title="Star on GitHub">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+          Star
+        </a>
+
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============================== -->
+    <!-- ARTICLE HEADER                 -->
+    <!-- ============================== -->
+    <article class="blog-article">
+      <div class="container" style="max-width: 800px;">
+        
+        <!-- Back Link -->
+        <a href="index.html" class="blog-back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          Back to Blog
+        </a>
+
+        <!-- Article Header -->
+        <header class="blog-article-header">
+          <div class="blog-article-meta">
+            <span class="blog-article-date">February 12, 2026</span>
+            <span class="blog-article-separator">•</span>
+            <span class="blog-article-readtime">9 min read</span>
+          </div>
+
+          <h1 class="blog-article-title">5 Airflow Mistakes That Cost Me Hours (So You Don't Have To)</h1>
+
+          <p class="blog-article-subtitle">
+            Circular dependencies. Silent task failures. Memory leaks in long-running DAGs. These are 
+            the production Airflow gotchas I learned the hard way — with the fixes that actually work.
+          </p>
+
+          <div class="blog-article-tags">
+            <span class="article-tag">Airflow</span>
+            <span class="article-tag">Production</span>
+            <span class="article-tag">Debugging</span>
+            <span class="article-tag">Best Practices</span>
+          </div>
+        </header>
+
+        <!-- Article Content -->
+        <div class="blog-article-content">
+
+          <p>Airflow is brilliant when it works. When it doesn't, you're staring at a DAG that should have finished three hours ago, wondering why <code>task_3</code> is stuck in "running" state while <code>task_4</code> silently failed without triggering an alert.</p>
+
+          <p>I've been there. Multiple times. Here are the five mistakes that cost me the most debugging time — and the fixes that actually work in production.</p>
+
+          <hr>
+
+          <h2>Mistake #1: Using <code>depends_on_past=True</code> Without Understanding It</h2>
+
+          <h3>The Problem</h3>
+
+          <p>I set <code>depends_on_past=True</code> thinking it would make my pipeline more resilient. Instead, it caused a cascading failure that took down three days of scheduled runs.</p>
+
+          <div class="blog-code-block">
+            <pre><code>dag = DAG(
+    dag_id="my_pipeline",
+    default_args={
+        "depends_on_past": True,  # ❌ Dangerous
+        "retries": 3
+    }
+)</code></pre>
+          </div>
+
+          <p><strong>What happened:</strong></p>
+          <ul>
+            <li>Monday's run failed at 11 PM</li>
+            <li>Tuesday's run <strong>never started</strong> because Monday didn't succeed</li>
+            <li>Wednesday's run also blocked</li>
+            <li>By Thursday, we had a three-day backlog</li>
+          </ul>
+
+          <h3>Why It's Dangerous</h3>
+
+          <p><code>depends_on_past=True</code> means: "Don't run today's task unless yesterday's task succeeded."</p>
+
+          <p>This sounds safe until:</p>
+          <ul>
+            <li>One failure blocks all future runs</li>
+            <li>You can't manually trigger a "catch-up" run without clearing previous failures</li>
+            <li>Backfilling becomes a nightmare</li>
+          </ul>
+
+          <h3>The Fix</h3>
+
+          <p><strong>Use <code>wait_for_downstream=True</code> instead</strong> for most cases:</p>
+
+          <div class="blog-code-block">
+            <pre><code>dag = DAG(
+    dag_id="my_pipeline",
+    default_args={
+        "wait_for_downstream": True,  # ✅ Better
+    }
+)</code></pre>
+          </div>
+
+          <p>This ensures that if you have <code>task_a >> task_b</code>, today's <code>task_a</code> waits for yesterday's <code>task_b</code> to finish. It prevents data inconsistency without blocking the entire DAG.</p>
+
+          <p><strong>Only use <code>depends_on_past=True</code> when:</strong></p>
+          <ul>
+            <li>Your pipeline is strictly sequential (each day builds on the previous)</li>
+            <li>You have a plan for handling failures (auto-retry or alert-based recovery)</li>
+          </ul>
+
+          <hr>
+
+          <h2>Mistake #2: Calling <code>Variable.get()</code> at DAG Definition Time</h2>
+
+          <h3>The Problem</h3>
+
+          <p>I loaded an Airflow Variable at the top of my DAG file:</p>
+
+          <div class="blog-code-block">
+            <pre><code>from airflow.models import Variable
+
+# ❌ This runs every time the scheduler parses the DAG
+API_KEY = Variable.get("my_api_key")
+
+dag = DAG(...)
+
+@task
+def call_api():
+    requests.get(url, headers={"Authorization": API_KEY})</code></pre>
+          </div>
+
+          <p><strong>What went wrong:</strong></p>
+          <ul>
+            <li>The scheduler parses every DAG file <strong>every 30 seconds</strong> (default)</li>
+            <li>Each parse hit the Airflow metadata database to fetch the variable</li>
+            <li>With 20 DAGs doing this, we were hitting the DB 40 times per minute</li>
+            <li>The scheduler slowed to a crawl</li>
+          </ul>
+
+          <h3>Why It's Bad</h3>
+
+          <p>DAG files are parsed frequently. Any code at the module level (outside task functions) runs on every parse. This includes:</p>
+          <ul>
+            <li><code>Variable.get()</code></li>
+            <li><code>Connection.get()</code></li>
+            <li>Database queries</li>
+            <li>API calls</li>
+          </ul>
+
+          <h3>The Fix</h3>
+
+          <p><strong>Move <code>Variable.get()</code> inside the task function:</strong></p>
+
+          <div class="blog-code-block">
+            <pre><code>@task
+def call_api():
+    from airflow.models import Variable
+    
+    # ✅ Only fetched when the task actually runs
+    api_key = Variable.get("my_api_key")
+    requests.get(url, headers={"Authorization": api_key})</code></pre>
+          </div>
+
+          <p>Or use Jinja templating:</p>
+
+          <div class="blog-code-block">
+            <pre><code>BashOperator(
+    task_id="run_script",
+    bash_command="python script.py --key {{ var.value.my_api_key }}"
+)</code></pre>
+          </div>
+
+          <p><strong>Result:</strong> Scheduler parse time dropped from 8 seconds to under 1 second.</p>
+
+          <hr>
+
+          <h2>Mistake #3: Not Setting Proper Retries and Retry Delays</h2>
+
+          <h3>The Problem</h3>
+
+          <p>My pipeline failed at 2 AM because an external API was down for 30 seconds. The task didn't retry. I woke up to a Slack alert.</p>
+
+          <div class="blog-code-block">
+            <pre><code>dag = DAG(
+    dag_id="api_pipeline",
+    default_args={
+        # ❌ No retries configured
+    }
+)</code></pre>
+          </div>
+
+          <h3>The Fix</h3>
+
+          <p><strong>Always set retries and exponential backoff:</strong></p>
+
+          <div class="blog-code-block">
+            <pre><code>from datetime import timedelta
+
+default_args = {
+    "retries": 3,                      # ✅ Retry up to 3 times
+    "retry_delay": timedelta(minutes=5), # ✅ Wait 5 min between retries
+    "retry_exponential_backoff": True,   # ✅ Increase delay exponentially
+    "max_retry_delay": timedelta(minutes=30)
+}</code></pre>
+          </div>
+
+          <p><strong>How it works:</strong></p>
+          <ul>
+            <li>First retry: 5 minutes</li>
+            <li>Second retry: 10 minutes</li>
+            <li>Third retry: 20 minutes</li>
+            <li>After 3 failures: Task marked failed, alert triggered</li>
+          </ul>
+
+          <p><strong>When to skip retries:</strong></p>
+          <ul>
+            <li>Tasks that are idempotent but expensive (re-running costs money)</li>
+            <li>Tasks where a retry won't help (schema validation errors)</li>
+          </ul>
+
+          <p>For those cases, set <code>retries=0</code> explicitly so it's intentional.</p>
+
+          <hr>
+
+          <h2>Mistake #4: Creating Circular Dependencies by Accident</h2>
+
+          <h3>The Problem</h3>
+
+          <p>I refactored a DAG and accidentally created a circular dependency. Airflow refused to run it:</p>
+
+          <div class="blog-code-block">
+            <pre><code># ❌ Circular dependency
+task_a >> task_b >> task_c >> task_a
+
+# Error: "DAG has a cycle"</code></pre>
+          </div>
+
+          <p>Obvious, right? Except mine was hidden across multiple files and dynamic task generation:</p>
+
+          <div class="blog-code-block">
+            <pre><code>for i in range(5):
+    task = PythonOperator(task_id=f"task_{i}", ...)
+    previous_task >> task
+    previous_task = task
+
+# ❌ If I later add: task_0 >> task  (circular!)</code></pre>
+          </div>
+
+          <h3>The Fix</h3>
+
+          <p><strong>Use Airflow's built-in DAG validation:</strong></p>
+
+          <div class="blog-code-block">
+            <pre><code># Test your DAG locally before deploying
+python dags/my_dag.py
+
+# Airflow will immediately catch cycles:
+# "Cycle detected in DAG: task_a -> task_b -> task_a"</code></pre>
+          </div>
+
+          <p><strong>CI/CD check:</strong></p>
+
+          <div class="blog-code-block">
+            <pre><code># In your CI pipeline
+airflow dags test my_dag_id 2024-01-01</code></pre>
+          </div>
+
+          <p>This catches circular dependencies before they reach production.</p>
+
+          <hr>
+
+          <h2>Mistake #5: Not Cleaning Up XCom Data</h2>
+
+          <h3>The Problem</h3>
+
+          <p>After six months, my Airflow metadata database grew to 50 GB. Queries were slow. The culprit? XCom data.</p>
+
+          <div class="blog-code-block">
+            <pre><code>@task
+def process_data():
+    # ❌ Accidentally storing 10 MB of data in XCom
+    return huge_dataframe.to_dict()  # Bad idea</code></pre>
+          </div>
+
+          <p><strong>What happened:</strong></p>
+          <ul>
+            <li>XCom stores task return values in the metadata DB</li>
+            <li>My task returned a 10 MB dictionary</li>
+            <li>The DAG ran daily for 6 months</li>
+            <li>10 MB × 180 days = 1.8 GB just for this one task</li>
+          </ul>
+
+          <h3>Why It's Bad</h3>
+
+          <p>XCom is designed for small metadata (task IDs, file paths, status flags). Not for large payloads.</p>
+
+          <h3>The Fix</h3>
+
+          <p><strong>Option 1: Store data externally, pass references via XCom</strong></p>
+
+          <div class="blog-code-block">
+            <pre><code>@task
+def process_data():
+    df = load_data()
+    
+    # ✅ Save to S3, return path
+    s3_path = "s3://bucket/processed_data.parquet"
+    df.to_parquet(s3_path)
+    
+    return s3_path  # Only ~50 bytes in XCom
+
+@task
+def consume_data(s3_path: str):
+    df = pd.read_parquet(s3_path)
+    # Process df...</code></pre>
+          </div>
+
+          <p><strong>Option 2: Enable automatic XCom cleanup</strong></p>
+
+          <div class="blog-code-block">
+            <pre><code># In airflow.cfg
+[core]
+max_xcom_data_size = 50000  # 50 KB limit
+
+[scheduler]
+xcom_cleanup_interval = 86400  # Clean up daily</code></pre>
+          </div>
+
+          <p><strong>Option 3: Manual cleanup DAG</strong></p>
+
+          <div class="blog-code-block">
+            <pre><code>from airflow.models import XCom
+
+@task
+def cleanup_old_xcoms():
+    session = settings.Session()
+    session.query(XCom).filter(
+        XCom.timestamp < datetime.now() - timedelta(days=30)
+    ).delete()
+    session.commit()</code></pre>
+          </div>
+
+          <p><strong>Result:</strong> Database size dropped from 50 GB to 12 GB after cleanup.</p>
+
+          <hr>
+
+          <h2>Bonus: Monitor Your Scheduler</h2>
+
+          <p>None of these mistakes would've taken hours to fix if I'd had proper monitoring. Here's what I added:</p>
+
+          <h3>1. DAG Run Duration SLA</h3>
+
+          <div class="blog-code-block">
+            <pre><code>dag = DAG(
+    dag_id="my_pipeline",
+    default_args={
+        "sla": timedelta(hours=2)  # Alert if run takes > 2 hours
+    }
+)</code></pre>
+          </div>
+
+          <h3>2. Scheduler Health Check</h3>
+
+          <div class="blog-code-block">
+            <pre><code>airflow jobs check --job-type SchedulerJob
+
+# Returns non-zero exit code if scheduler is down
+# Integrate with monitoring (Datadog, Prometheus)</code></pre>
+          </div>
+
+          <h3>3. Task Failure Alerts</h3>
+
+          <div class="blog-code-block">
+            <pre><code>def slack_alert(context):
+    slack_msg = f"""
+    :red_circle: Task Failed
+    *DAG*: {context['task_instance'].dag_id}
+    *Task*: {context['task_instance'].task_id}
+    *Execution Time*: {context['execution_date']}
+    *Log*: {context['task_instance'].log_url}
+    """
+    send_to_slack(slack_msg)
+
+default_args = {
+    "on_failure_callback": slack_alert
+}</code></pre>
+          </div>
+
+          <p><strong>Result:</strong> Went from discovering issues hours later to getting notified within 5 minutes.</p>
+
+          <hr>
+
+          <h2>Key Takeaways</h2>
+
+          <ol>
+            <li><strong><code>depends_on_past=True</code> blocks everything.</strong> Use <code>wait_for_downstream=True</code> instead.</li>
+            <li><strong>Never call <code>Variable.get()</code> at DAG definition time.</strong> Move it inside tasks or use Jinja templates.</li>
+            <li><strong>Always configure retries.</strong> Exponential backoff saves you from transient failures.</li>
+            <li><strong>Test DAGs locally for circular dependencies.</strong> Catch them before production.</li>
+            <li><strong>XCom is not a data store.</strong> Store large data externally, pass paths via XCom.</li>
+            <li><strong>Monitor everything.</strong> SLAs, scheduler health, and task failure alerts are non-negotiable.</li>
+          </ol>
+
+          <p>Airflow is powerful, but it has sharp edges. These five mistakes cost me hours of debugging. Learn from my pain.</p>
+
+          <hr>
+
+          <div class="blog-article-footer">
+            <p><strong>Tech Stack:</strong> Apache Airflow 2.x, Python, PostgreSQL (metadata DB)</p>
+            <p><strong>Monitoring:</strong> Slack alerts, SLA tracking, scheduler health checks</p>
+            <p><strong>Production Uptime:</strong> 99.8% (after implementing these fixes)</p>
+          </div>
+
+        </div>
+
+        <!-- Article Navigation -->
+        <div class="blog-article-nav">
+          <a href="medallion-architecture.html" class="blog-nav-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Previous article
+          </a>
+          <a href="index.html" class="blog-nav-link">
+            Back to all articles
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+
+      </div>
+    </article>
+  </main>
+
+  <!-- ============================== -->
+  <!-- FOOTER                         -->
+  <!-- ============================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <!-- Connect -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Connect</h4>
+          <div class="footer-connect-links">
+            <a href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/sajal-bhattarai-912347216" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+              LinkedIn
+            </a>
+            <a href="mailto:jobsajalbhattarai@gmail.com" class="footer-connect-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+              Email
+            </a>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Status</h4>
+          <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>Open to Work</span>
+          </div>
+          <div class="footer-location">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hicksville, NY
+          </div>
+        </div>
+
+        <!-- Core Stack -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Core Stack</h4>
+          <div class="footer-stack-pills">
+            <span class="footer-pill">Python</span>
+            <span class="footer-pill">Airflow</span>
+            <span class="footer-pill">Spark</span>
+            <span class="footer-pill">SQL</span>
+            <span class="footer-pill">Azure OpenAI</span>
+            <span class="footer-pill">AWS</span>
+          </div>
+        </div>
+
+        <!-- Star on GitHub -->
+        <div class="footer-card footer-star-card">
+          <h4 class="footer-card-title">Like This Portfolio?</h4>
+          <p class="footer-star-desc">If you enjoyed browsing, consider giving it a star on GitHub.</p>
+          <a class="btn primary small" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+            Star on GitHub
+          </a>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Quick Links</h4>
+          <div class="footer-quick-links">
+            <a href="/">Home</a>
+            <a href="/projects/">Projects</a>
+            <a href="/blog/">Blog</a>
+            <a href="/about/">About</a>
+            <a href="/resume/">Resume</a>
+            <a href="/contact/">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-left">
+          <span class="footer-brand">Sajal Bhattarai</span>
+          <span class="footer-sep">·</span>
+          <span class="footer-role">Data Engineer</span>
+        </div>
+        <div class="footer-bottom-center">
+          <p>Built with precision — like a well-orchestrated pipeline.</p>
+        </div>
+        <div class="footer-bottom-right">
+          <p>© <span id="year"></span> Sajal Bhattarai. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <a href="#top" class="back-to-top" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </a>
+
+  <script src="/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building Semantic Search Without Ripping Out Your Database | Sajal Bhattarai</title>
+  <meta name="description" content="How I added AI-powered similarity search to a production PostgreSQL system using pgvector and Azure OpenAI embeddings." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <!-- ============================== -->
+  <!-- NAVIGATION                     -->
+  <!-- ============================== -->
+  <header class="topbar" id="top">
+    <nav class="nav container">
+      <a class="brand" href="/" aria-label="Go to Home">
+        <span class="brand-badge">SB</span>
+        <span class="brand-text">Sajal Bhattarai</span>
+      </a>
+
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/projects/">Projects</a>
+        <a class="nav-link active" href="/blog/">Blog</a>
+        <a class="nav-link" href="/about/">About</a>
+        <a class="nav-link" href="/resume/">Resume</a>
+        <a class="nav-link" href="/contact/">Contact</a>
+
+        <a class="btn-star" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" title="Star on GitHub">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+          Star
+        </a>
+
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============================== -->
+    <!-- ARTICLE HEADER                 -->
+    <!-- ============================== -->
+    <article class="blog-article">
+      <div class="container" style="max-width: 800px;">
+        
+        <!-- Back Link -->
+        <a href="index.html" class="blog-back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          Back to Blog
+        </a>
+
+        <!-- Article Header -->
+        <header class="blog-article-header">
+          <div class="blog-article-meta">
+            <span class="blog-article-date">February 12, 2026</span>
+            <span class="blog-article-separator">•</span>
+            <span class="blog-article-readtime">10 min read</span>
+          </div>
+
+          <h1 class="blog-article-title">Building Semantic Search Without Ripping Out Your Database</h1>
+
+          <p class="blog-article-subtitle">
+            How I added AI-powered similarity search to a production PostgreSQL system using pgvector, 
+            Azure OpenAI embeddings, and careful indexing strategy — without a complete rewrite.
+          </p>
+
+          <div class="blog-article-tags">
+            <span class="article-tag">AI + Data</span>
+            <span class="article-tag">pgvector</span>
+            <span class="article-tag">PostgreSQL</span>
+            <span class="article-tag">Azure OpenAI</span>
+          </div>
+        </header>
+
+        <!-- Article Content -->
+        <div class="blog-article-content">
+
+          <p>When the team asked for "semantic search" on our 1,700+ product feedback records, my first thought was: <em>Great, time to introduce a vector database, migrate everything, and hope nothing breaks.</em></p>
+
+          <p>But we already had PostgreSQL. It was stable. It had our data. And more importantly, it had <strong>pgvector</strong> — a PostgreSQL extension that turns your existing database into a vector store.</p>
+
+          <p>Here's how I built a production RAG (Retrieval-Augmented Generation) system without ripping out our infrastructure.</p>
+
+          <hr>
+
+          <h2>The Problem: Keyword Search Wasn't Cutting It</h2>
+
+          <p>Our product team was drowning in feedback. Thousands of customer comments, feature requests, and bug reports spread across different channels. When they searched for "slow performance," they missed feedback saying "takes forever to load" or "laggy experience."</p>
+
+          <p>Keyword search is literal. It doesn't understand meaning. We needed something that could find conceptually similar feedback, even when the exact words didn't match.</p>
+
+          <p>Enter semantic search.</p>
+
+          <hr>
+
+          <h2>Why pgvector Over a Dedicated Vector DB</h2>
+
+          <p>Before jumping into a new database, I evaluated our constraints:</p>
+
+          <ol>
+            <li><strong>Our data was already in PostgreSQL</strong> — customer records, feedback entries, metadata</li>
+            <li><strong>We needed transactional consistency</strong> — feedback updates needed to sync with embeddings</li>
+            <li><strong>Our team knew PostgreSQL</strong> — no learning curve for a new database</li>
+            <li><strong>We had 1,700 records</strong> — not billions, this was manageable scale</li>
+          </ol>
+
+          <p>A dedicated vector database like Pinecone or Weaviate would've been overkill. More importantly, it would've introduced:</p>
+
+          <ul>
+            <li>Data sync challenges between PostgreSQL and the vector DB</li>
+            <li>Another service to monitor and maintain</li>
+            <li>Eventual consistency issues</li>
+          </ul>
+
+          <p><strong>pgvector let us add vector similarity search as a PostgreSQL extension.</strong> Same database, new capability.</p>
+
+          <hr>
+
+          <h2>The Architecture</h2>
+
+          <p>Here's what I built:</p>
+
+          <div class="blog-code-block">
+            <pre><code>┌─────────────────┐
+│  Product        │
+│  Feedback       │
+│  (existing)     │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐      ┌──────────────────┐
+│  Azure OpenAI   │◄─────┤  Embedding       │
+│  (text-embed)   │      │  Generation      │
+└────────┬────────┘      │  Pipeline        │
+         │               └──────────────────┘
+         ▼
+┌─────────────────┐
+│  PostgreSQL     │
+│  + pgvector     │
+│  (embeddings)   │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Similarity     │
+│  Search Queries │
+└─────────────────┘</code></pre>
+          </div>
+
+          <p><strong>Key components:</strong></p>
+
+          <ol>
+            <li><strong>Azure OpenAI</strong> for generating embeddings (1536-dimensional vectors)</li>
+            <li><strong>PostgreSQL + pgvector</strong> for storing and querying vectors</li>
+            <li><strong>Airflow pipeline</strong> to process feedback and generate embeddings</li>
+            <li><strong>Cosine similarity search</strong> to find semantically related entries</li>
+          </ol>
+
+          <hr>
+
+          <h2>Implementation: The Details That Matter</h2>
+
+          <h3>1. Installing pgvector</h3>
+
+          <p>First, enable the extension:</p>
+
+          <div class="blog-code-block">
+            <pre><code>CREATE EXTENSION IF NOT EXISTS vector;</code></pre>
+          </div>
+
+          <p>Then, add a vector column to the existing table:</p>
+
+          <div class="blog-code-block">
+            <pre><code>ALTER TABLE product_feedback
+ADD COLUMN embedding vector(1536);</code></pre>
+          </div>
+
+          <p>Why 1536? That's the dimension size for Azure OpenAI's <code>text-embedding-ada-002</code> model.</p>
+
+          <h3>2. Generating Embeddings with Azure OpenAI</h3>
+
+          <p>I built an Airflow DAG to process feedback in batches:</p>
+
+          <div class="blog-code-block">
+            <pre><code>from openai import AzureOpenAI
+
+client = AzureOpenAI(
+    api_key=os.getenv("AZURE_OPENAI_KEY"),
+    api_version="2023-05-15",
+    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+)
+
+def generate_embedding(text):
+    response = client.embeddings.create(
+        input=text,
+        model="text-embedding-ada-002"
+    )
+    return response.data[0].embedding</code></pre>
+          </div>
+
+          <p><strong>Key decision:</strong> I combined the feedback title and body into a single text field before embedding. This gave better semantic matches than embedding them separately.</p>
+
+          <h3>3. Indexing for Performance</h3>
+
+          <p>With 1,700 records, I created an HNSW (Hierarchical Navigable Small World) index:</p>
+
+          <div class="blog-code-block">
+            <pre><code>CREATE INDEX ON product_feedback
+USING hnsw (embedding vector_cosine_ops);</code></pre>
+          </div>
+
+          <p><strong>Why HNSW?</strong></p>
+          <ul>
+            <li>Fast approximate nearest neighbor search</li>
+            <li>Good recall even on larger datasets</li>
+            <li>Trades perfect accuracy for speed (acceptable for our use case)</li>
+          </ul>
+
+          <p><strong>Alternative:</strong> IVFFlat index for exact results but slower queries.</p>
+
+          <h3>4. Querying for Similar Feedback</h3>
+
+          <p>The actual similarity search query:</p>
+
+          <div class="blog-code-block">
+            <pre><code>SELECT 
+    feedback_id,
+    title,
+    body,
+    1 - (embedding <=> query_embedding) AS similarity
+FROM product_feedback
+WHERE 1 - (embedding <=> query_embedding) > 0.7
+ORDER BY embedding <=> query_embedding
+LIMIT 10;</code></pre>
+          </div>
+
+          <p><strong>That <code>&lt;=&gt;</code> operator is cosine distance.</strong> pgvector provides:</p>
+          <ul>
+            <li><code>&lt;-&gt;</code> for L2 distance</li>
+            <li><code>&lt;#&gt;</code> for inner product</li>
+            <li><code>&lt;=&gt;</code> for cosine distance (best for text embeddings)</li>
+          </ul>
+
+          <hr>
+
+          <h2>The Gotchas I Learned</h2>
+
+          <h3>1. Null Embeddings Break Everything</h3>
+
+          <p>If embedding generation failed for a record, the null vector caused query errors. Solution:</p>
+
+          <div class="blog-code-block">
+            <pre><code>WHERE embedding IS NOT NULL
+AND 1 - (embedding <=> query_embedding) > 0.7</code></pre>
+          </div>
+
+          <h3>2. Batch Processing Saves API Costs</h3>
+
+          <p>Azure OpenAI charges per token. I batched 20 records per API call instead of one-by-one:</p>
+
+          <div class="blog-code-block">
+            <pre><code># Before: 1,700 API calls
+# After: 85 API calls</code></pre>
+          </div>
+
+          <p>This cut embedding generation time from 15 minutes to 2 minutes.</p>
+
+          <h3>3. Similarity Threshold Matters</h3>
+
+          <p>A similarity score of 0.7 worked for us, but this is dataset-dependent. I tested:</p>
+          <ul>
+            <li>0.6 → too many irrelevant results</li>
+            <li>0.8 → missed related feedback</li>
+            <li>0.7 → sweet spot</li>
+          </ul>
+
+          <p><strong>Always tune this based on your data.</strong></p>
+
+          <hr>
+
+          <h2>Production Results</h2>
+
+          <p>After deploying:</p>
+
+          <ul>
+            <li><strong>1,700+ records indexed</strong> for semantic search</li>
+            <li><strong>Sub-second query times</strong> with HNSW index</li>
+            <li><strong>Product team found 40% more related feedback</strong> compared to keyword search</li>
+            <li><strong>Zero infrastructure changes</strong> — same PostgreSQL, new feature</li>
+          </ul>
+
+          <p>The system runs in production today, processing new feedback daily through our Airflow pipeline.</p>
+
+          <hr>
+
+          <h2>When Should You Use pgvector?</h2>
+
+          <p><strong>pgvector is great when:</strong></p>
+          <ul>
+            <li>You already have PostgreSQL</li>
+            <li>Your dataset is &lt;1M vectors</li>
+            <li>You need transactional consistency</li>
+            <li>Your team knows SQL</li>
+          </ul>
+
+          <p><strong>Consider a dedicated vector DB when:</strong></p>
+          <ul>
+            <li>You're working with millions of vectors</li>
+            <li>You need advanced features (hybrid search, multi-tenancy)</li>
+            <li>You're building a pure vector search product</li>
+            <li>Latency is critical (sub-10ms queries)</li>
+          </ul>
+
+          <hr>
+
+          <h2>Key Takeaways</h2>
+
+          <ol>
+            <li><strong>Don't over-engineer.</strong> A PostgreSQL extension solved our problem better than introducing a new database.</li>
+            <li><strong>Batch your API calls.</strong> Embedding generation can get expensive fast.</li>
+            <li><strong>Test similarity thresholds.</strong> 0.7 worked for us, but your mileage will vary.</li>
+            <li><strong>Index early.</strong> Even at 1,700 records, HNSW made queries noticeably faster.</li>
+            <li><strong>Handle nulls.</strong> Failed embeddings will break your queries if you're not careful.</li>
+          </ol>
+
+          <p>Semantic search doesn't require a complete rewrite. Sometimes, the best solution is the one that fits what you already have.</p>
+
+          <hr>
+
+          <div class="blog-article-footer">
+            <p><strong>Tech Stack:</strong> PostgreSQL, pgvector, Azure OpenAI, Apache Airflow, Python</p>
+            <p><strong>Lines of Code:</strong> ~200 (embedding pipeline + search queries)</p>
+            <p><strong>Time to Production:</strong> 2 weeks</p>
+          </div>
+
+        </div>
+
+        <!-- Article Navigation -->
+        <div class="blog-article-nav">
+          <a href="index.html" class="blog-nav-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Back to all articles
+          </a>
+          <a href="medallion-architecture.html" class="blog-nav-link">
+            Next article
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+
+      </div>
+    </article>
+  </main>
+
+  <!-- ============================== -->
+  <!-- FOOTER                         -->
+  <!-- ============================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <!-- Connect -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Connect</h4>
+          <div class="footer-connect-links">
+            <a href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/sajal-bhattarai-912347216" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+              LinkedIn
+            </a>
+            <a href="mailto:jobsajalbhattarai@gmail.com" class="footer-connect-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+              Email
+            </a>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Status</h4>
+          <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>Open to Work</span>
+          </div>
+          <div class="footer-location">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hicksville, NY
+          </div>
+        </div>
+
+        <!-- Core Stack -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Core Stack</h4>
+          <div class="footer-stack-pills">
+            <span class="footer-pill">Python</span>
+            <span class="footer-pill">Airflow</span>
+            <span class="footer-pill">Spark</span>
+            <span class="footer-pill">SQL</span>
+            <span class="footer-pill">Azure OpenAI</span>
+            <span class="footer-pill">AWS</span>
+          </div>
+        </div>
+
+        <!-- Star on GitHub -->
+        <div class="footer-card footer-star-card">
+          <h4 class="footer-card-title">Like This Portfolio?</h4>
+          <p class="footer-star-desc">If you enjoyed browsing, consider giving it a star on GitHub.</p>
+          <a class="btn primary small" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+            Star on GitHub
+          </a>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Quick Links</h4>
+          <div class="footer-quick-links">
+            <a href="/">Home</a>
+            <a href="/projects/">Projects</a>
+            <a href="/blog/">Blog</a>
+            <a href="/about/">About</a>
+            <a href="/resume/">Resume</a>
+            <a href="/contact/">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-left">
+          <span class="footer-brand">Sajal Bhattarai</span>
+          <span class="footer-sep">·</span>
+          <span class="footer-role">Data Engineer</span>
+        </div>
+        <div class="footer-bottom-center">
+          <p>Built with precision — like a well-orchestrated pipeline.</p>
+        </div>
+        <div class="footer-bottom-right">
+          <p>© <span id="year"></span> Sajal Bhattarai. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <a href="#top" class="back-to-top" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </a>
+
+  <script src="/script.js"></script>
+</body>
+</html>

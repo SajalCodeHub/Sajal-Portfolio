@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects | Sajal Bhattarai — Data Engineer</title>
+  <meta name="description" content="Data engineering projects by Sajal Bhattarai — Fintech pipeline with Airflow & Spark, business dashboards, customer segmentation, and semantic search." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- ============================== -->
+  <!-- NAVIGATION                     -->
+  <!-- ============================== -->
+  <header class="topbar" id="top">
+    <nav class="nav container">
+      <a class="brand" href="main.html" aria-label="Go to Home">
+        <span class="brand-badge">SB</span>
+        <span class="brand-text">Sajal Bhattarai</span>
+      </a>
+
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a class="nav-link" href="main.html">Home</a>
+        <a class="nav-link active" href="projects.html">Projects</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="resume.html">Resume</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+
+        <a class="btn-star" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" title="Star on GitHub">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+          Star
+        </a>
+
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============================== -->
+    <!-- PAGE HEADER                    -->
+    <!-- ============================== -->
+    <section class="section page-header">
+      <div class="container">
+        <span class="section-tag">Portfolio</span>
+        <h1 class="page-title">Projects</h1>
+        <p class="page-subtitle">
+          Real pipelines, real architecture decisions, real results. Each project below represents
+          a problem I broke down, a system I designed, and something I'd be proud to walk through
+          in a technical interview.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- FINTECH PIPELINE — CASE STUDY  -->
+    <!-- ============================== -->
+    <section class="section" id="fintech-pipeline">
+      <div class="container">
+        <article class="project-hero">
+          <div class="project-hero-header">
+            <span class="project-label">Featured Case Study</span>
+            <h2 class="project-hero-title">Fintech Transaction Pipeline</h2>
+            <p class="project-hero-subtitle">
+              A production-style batch pipeline that processes daily fintech transactions through a
+              medallion architecture (Bronze → Silver → Gold), orchestrated by Airflow, transformed
+              by Spark, and stored as partitioned Parquet in AWS S3. This is the project I'd walk
+              you through in an interview — it represents how I think about data systems.
+            </p>
+            <div class="project-hero-tags">
+              <span class="tag">Airflow</span>
+              <span class="tag">Spark</span>
+              <span class="tag tech">AWS S3</span>
+              <span class="tag tech">Docker</span>
+              <span class="tag">Parquet</span>
+              <span class="tag tech">Python</span>
+              <span class="tag">Medallion Architecture</span>
+              <span class="tag tech">PostgreSQL</span>
+            </div>
+          </div>
+
+          <div class="project-hero-content">
+
+            <!-- THE PROBLEM -->
+            <div class="project-section">
+              <h3 class="project-section-title">The Problem</h3>
+              <p class="project-body">
+                Raw fintech transaction data arrives daily as CSV files — messy, unvalidated, and
+                completely unusable for analytics. Duplicates slip in from retry logic, critical fields
+                come through as null, and there's no partitioning strategy, meaning every query has to
+                scan the entire dataset. Business teams need reliable daily aggregates for merchant revenue,
+                fraud patterns, user volume, and payment method distribution — but they can't trust what
+                they're looking at.
+              </p>
+            </div>
+
+            <!-- THE APPROACH -->
+            <div class="project-section">
+              <h3 class="project-section-title">The Approach</h3>
+              <p class="project-body">
+                I designed a medallion architecture with clear contracts at each layer. The idea is simple:
+                raw data lands in Bronze untouched, gets cleaned and validated in Silver, then gets
+                aggregated into business-ready tables in Gold. Each layer is independently testable,
+                and if anything breaks, you know exactly where to look.
+              </p>
+
+              <div class="feature-grid">
+                <div class="feature-card">
+                  <span class="feature-icon">🏗️</span>
+                  <h5>Architecture</h5>
+                  <p>Docker-compose environment with Airflow webserver, scheduler, PostgreSQL metadata store, Spark master, and a worker node with 2 cores and 2GB RAM.</p>
+                </div>
+                <div class="feature-card">
+                  <span class="feature-icon">📡</span>
+                  <h5>Orchestration</h5>
+                  <p>4-task Airflow DAG — <code>bronze_ingest</code> → <code>silver_transform</code> → <code>gold_aggregations</code> → <code>success_notification</code>. Scheduled daily at 2 AM UTC with retry logic.</p>
+                </div>
+                <div class="feature-card">
+                  <span class="feature-icon">⚙️</span>
+                  <h5>Processing</h5>
+                  <p>PySpark jobs handle deduplication by transaction_id, null filtering on critical fields, and derived column generation (hour_of_day, is_weekend, is_high_value, is_cross_border).</p>
+                </div>
+                <div class="feature-card">
+                  <span class="feature-icon">📊</span>
+                  <h5>Output</h5>
+                  <p>5 gold-layer analytics tables partitioned by date: merchant_revenue_daily, fraud_analysis_by_country, user_transaction_volume, payment_method_distribution, high_value_transactions.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- SYSTEM ARCHITECTURE -->
+            <div class="project-section">
+              <h3 class="project-section-title">System Architecture</h3>
+              <div class="project-image-wrapper">
+                <img class="project-image" src="assets/img/Architecture.png" alt="Fintech Pipeline Architecture — Docker environment with Airflow and Spark writing to partitioned S3 storage across Bronze, Silver, and Gold layers" loading="lazy" />
+              </div>
+              <p class="project-caption">
+                Full system: Docker-compose runs Airflow (webserver + scheduler + PostgreSQL) alongside a Spark cluster (master + worker).
+                The DAG reads raw CSV from S3, processes through Bronze → Silver → Gold, and writes partitioned Parquet back to S3 at each layer.
+                AWS credentials are mounted via Docker .env file.
+              </p>
+            </div>
+
+            <!-- MEDALLION LAYERS -->
+            <div class="project-section">
+              <h3 class="project-section-title">Medallion Architecture — Layer by Layer</h3>
+
+              <div class="layer-card bronze">
+                <div class="layer-header">
+                  <span class="layer-badge">Bronze</span>
+                  <span class="layer-path">s3a://bucket/bronze/transactions/dt=YYYY-MM-DD/</span>
+                </div>
+                <p class="layer-desc">
+                  Raw CSV ingested as Parquet with added metadata columns (ingestion_timestamp, dt partition key).
+                  No transformations applied — this is the untouched source of truth. If anything downstream
+                  breaks, we replay from Bronze.
+                </p>
+              </div>
+
+              <div class="layer-card silver">
+                <div class="layer-header">
+                  <span class="layer-badge">Silver</span>
+                  <span class="layer-path">s3a://bucket/silver/transactions/dt=YYYY-MM-DD/</span>
+                </div>
+                <p class="layer-desc">
+                  Deduplicated by transaction_id (keeps first occurrence), null-filtered on critical fields
+                  (amount, merchant_id, user_id), and enriched with derived columns: hour_of_day, day_of_week,
+                  is_weekend, is_high_value (amount > $1,000), is_cross_border (currency ≠ merchant_country).
+                  This is the "trusted" layer analysts can query directly.
+                </p>
+              </div>
+
+              <div class="layer-card gold">
+                <div class="layer-header">
+                  <span class="layer-badge">Gold</span>
+                  <span class="layer-path">s3a://bucket/gold/&lt;table_name&gt;/dt=YYYY-MM-DD/</span>
+                </div>
+                <p class="layer-desc">
+                  5 business analytics tables, each partitioned by date and optimized for BI consumption:
+                  <strong>merchant_revenue_daily</strong> (revenue by merchant per day),
+                  <strong>fraud_analysis_by_country</strong> (flagged transactions by geography),
+                  <strong>user_transaction_volume</strong> (transaction counts per user),
+                  <strong>payment_method_distribution</strong> (volume by payment type),
+                  <strong>high_value_transactions</strong> (transactions > $1,000 for review).
+                  Ready for Tableau, Power BI, or SQL queries.
+                </p>
+              </div>
+            </div>
+
+            <!-- AIRFLOW DAG VIEWS -->
+            <div class="project-section">
+              <h3 class="project-section-title">Airflow DAG — Orchestration in Action</h3>
+              <p class="project-body">
+                The DAG runs on a cron schedule (<code>0 2 * * *</code> — daily at 2 AM UTC) with clear
+                linear dependencies. Each task submits a PySpark job via BashOperator, except the final
+                success_notification which uses a PythonOperator to log completion metrics.
+              </p>
+
+              <div class="project-image-grid">
+                <div>
+                  <div class="project-image-wrapper">
+                    <img class="project-image" src="assets/img/dag-graph-view.png" alt="Airflow DAG graph view showing the 4-task dependency chain" loading="lazy" />
+                  </div>
+                  <p class="project-caption">
+                    DAG Graph View — Clear linear dependency: bronze_ingest → silver_transform → gold_aggregations → success_notification.
+                    All tasks showing green (success) status.
+                  </p>
+                </div>
+                <div>
+                  <div class="project-image-wrapper">
+                    <img class="project-image" src="assets/img/Gridview.png" alt="Airflow grid view showing 2 successful DAG runs with duration metrics" loading="lazy" />
+                  </div>
+                  <p class="project-caption">
+                    Grid View — 2 consecutive successful runs. Max run duration: 4m 41s. Mean: 3m 49s.
+                    All 4 tasks consistently green across runs.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- KEY DECISIONS -->
+            <div class="project-section">
+              <h3 class="project-section-title">Key Decisions & Why</h3>
+              <div class="decisions-grid">
+                <div class="decision-card">
+                  <h5>Why Parquet over CSV?</h5>
+                  <p>Columnar storage means faster analytical queries, built-in compression (reduced storage by ~70%), and schema enforcement that catches type mismatches at write time instead of downstream.</p>
+                </div>
+                <div class="decision-card">
+                  <h5>Why date partitioning?</h5>
+                  <p>Queries almost always filter by date. Partitioning by <code>dt=YYYY-MM-DD</code> means Spark and BI tools only scan relevant partitions instead of the full dataset. This matters at scale.</p>
+                </div>
+                <div class="decision-card">
+                  <h5>Why BashOperator for Spark?</h5>
+                  <p>Direct spark-submit via BashOperator gives full control over Spark configuration (memory, cores, packages) and keeps the DAG file clean. Each PySpark script is independently testable outside Airflow.</p>
+                </div>
+                <div class="decision-card">
+                  <h5>Why Docker-compose?</h5>
+                  <p>One <code>docker-compose up</code> spins up the entire environment — Airflow, Spark, PostgreSQL. Anyone can clone the repo and have a working pipeline in minutes. Reproducibility matters.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- RESULTS -->
+            <div class="project-section">
+              <h3 class="project-section-title">Results</h3>
+              <div class="results-strip">
+                <div class="result-item">
+                  <span class="result-number">5</span>
+                  <span class="result-label">Gold analytics tables</span>
+                </div>
+                <div class="result-item">
+                  <span class="result-number">~70%</span>
+                  <span class="result-label">Storage reduction (CSV → Parquet)</span>
+                </div>
+                <div class="result-item">
+                  <span class="result-number">3m 49s</span>
+                  <span class="result-label">Mean pipeline run time</span>
+                </div>
+                <div class="result-item">
+                  <span class="result-number">100%</span>
+                  <span class="result-label">DAG success rate (2/2 runs)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- WHAT I'D IMPROVE -->
+            <div class="project-section">
+              <h3 class="project-section-title">What I'd Improve With More Time</h3>
+              <p class="project-body">
+                No project is done — there's always the next iteration. Here's what I'd tackle:
+              </p>
+              <ul class="project-list">
+                <li><strong>Data quality framework:</strong> Add Great Expectations or custom validation checks between layers with automated alerting on schema drift or null threshold breaches.</li>
+                <li><strong>Incremental processing:</strong> Currently does full reprocessing each run. Would implement change data capture (CDC) to process only new/changed records.</li>
+                <li><strong>Monitoring dashboard:</strong> Build a Grafana or CloudWatch dashboard tracking record counts per layer, run durations, and failure rates over time.</li>
+                <li><strong>CI/CD pipeline:</strong> GitHub Actions to run PySpark unit tests on PR, lint DAG files, and auto-deploy to a staging environment before production.</li>
+                <li><strong>Partitioning strategy:</strong> Evaluate adding secondary partitions (by merchant or region) for the gold tables that get queried most heavily.</li>
+              </ul>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="project-hero-actions">
+              <a class="btn primary" href="https://github.com/SajalCodeHub/fintech-pipeline" target="_blank" rel="noopener">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+                View on GitHub
+              </a>
+              <a class="btn ghost" href="main.html">← Back to Home</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- ANALYTICS PROJECTS             -->
+    <!-- ============================== -->
+    <section class="section" id="analytics">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Analytics</span>
+          <h2 class="section-title">Analytics Projects</h2>
+          <p class="section-desc">
+            Business intelligence and data analysis projects that demonstrate strong SQL, Python,
+            and visualization fundamentals. These were built during internship work — I don't have
+            screenshots, but I can walk through the approach and outcomes in detail.
+          </p>
+        </div>
+
+        <div class="projects-grid">
+
+          <!-- PROJECT: Business Performance Dashboard -->
+          <article class="project-card">
+            <div class="project-card-top">
+              <div class="project-card-labels">
+                <span class="project-label-pill">Analytics</span>
+                <span class="project-label-pill accent">Power BI</span>
+              </div>
+              <h3 class="project-card-title">Business Performance Dashboard</h3>
+              <div class="project-tags" style="margin-top: 12px;">
+                <span class="tag">Python</span>
+                <span class="tag">SQL</span>
+                <span class="tag tech">Pandas</span>
+                <span class="tag tech">Power BI</span>
+              </div>
+            </div>
+
+            <div class="project-card-body">
+              <h4 class="project-card-subtitle">The Problem</h4>
+              <p>
+                Retail leadership needed visibility into revenue performance, but the raw transactional
+                data was scattered across multiple sources with inconsistent formats, missing values,
+                and no standardized date handling. Reports were being built manually in Excel, taking
+                hours and prone to errors.
+              </p>
+
+              <h4 class="project-card-subtitle">What I Built</h4>
+              <p>
+                I wrote Python scripts using Pandas to clean, normalize, and merge the transactional
+                data — handling null values, standardizing date formats, and creating derived metrics.
+                Then I loaded the cleaned data into Power BI and built an interactive dashboard tracking
+                four core KPIs: revenue trends over time, month-over-month growth rates, order volume
+                patterns, and average order value (AOV) by segment.
+              </p>
+
+              <h4 class="project-card-subtitle">Key Decisions</h4>
+              <ul class="project-list">
+                <li><strong>Python over Excel:</strong> Automated the cleaning pipeline so it could be re-run on new data without manual effort.</li>
+                <li><strong>Derived metrics in code:</strong> Calculated MoM growth, running averages, and cohort tags in Python before loading into Power BI — kept the BI layer focused on visualization, not computation.</li>
+                <li><strong>Interactive filters:</strong> Date range, product category, and region slicers so leadership could self-serve their own questions.</li>
+              </ul>
+
+              <h4 class="project-card-subtitle">Impact</h4>
+              <p>
+                Replaced a manual, error-prone Excel process with a repeatable Python + Power BI workflow.
+                Leadership could track revenue trends and identify underperforming segments in real time
+                instead of waiting for weekly manual reports.
+              </p>
+            </div>
+
+            <div class="project-card-footer">
+              <span class="project-card-note">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Built during internship — no screenshots available, but happy to walk through the approach in detail.
+              </span>
+            </div>
+          </article>
+
+          <!-- PROJECT: Customer Segmentation & Retention -->
+          <article class="project-card">
+            <div class="project-card-top">
+              <div class="project-card-labels">
+                <span class="project-label-pill">Analytics</span>
+                <span class="project-label-pill accent">Segmentation</span>
+              </div>
+              <h3 class="project-card-title">Customer Segmentation & Retention Analysis</h3>
+              <div class="project-tags" style="margin-top: 12px;">
+                <span class="tag">Python</span>
+                <span class="tag">SQL</span>
+                <span class="tag tech">Pandas</span>
+                <span class="tag tech">Power BI</span>
+              </div>
+            </div>
+
+            <div class="project-card-body">
+              <h4 class="project-card-subtitle">The Problem</h4>
+              <p>
+                Marketing was treating all customers the same — same campaigns, same messaging,
+                same budget allocation. There was no data-driven segmentation, which meant high-value
+                customers weren't getting retained and at-risk customers were quietly churning.
+                Nobody knew when or where the drop-off was happening.
+              </p>
+
+              <h4 class="project-card-subtitle">What I Built</h4>
+              <p>
+                I ran RFM analysis (Recency, Frequency, Monetary) on 50,000+ transactions using Python
+                and SQL to segment customers into actionable groups — Champions, Loyal, At-Risk,
+                Hibernating, and New. Then I built a 12-month cohort retention analysis to track
+                when customers were dropping off after their first purchase.
+              </p>
+
+              <h4 class="project-card-subtitle">Key Decisions</h4>
+              <ul class="project-list">
+                <li><strong>RFM scoring:</strong> Used quintile-based scoring (1–5) for each dimension, then mapped composite scores to named segments. This made the output immediately understandable for non-technical stakeholders.</li>
+                <li><strong>Cohort definition:</strong> Grouped customers by first-purchase month, then tracked what percentage returned in months 1–12. This revealed the exact "cliff" where retention dropped hardest.</li>
+                <li><strong>Power BI heatmap:</strong> Built a retention heatmap in Power BI where each cell showed the percentage of a cohort still active — leadership could visually spot problem months instantly.</li>
+              </ul>
+
+              <h4 class="project-card-subtitle">Impact</h4>
+              <p>
+                Identified that the biggest retention drop happened between month 1 and month 3 —
+                the "post-first-purchase cliff." Also discovered that the top 15% of customers
+                (Champions segment) drove ~45% of total revenue. This gave marketing concrete targets
+                for retention campaigns and loyalty programs.
+              </p>
+            </div>
+
+            <div class="project-card-footer">
+              <span class="project-card-note">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Built during internship — no screenshots available, but happy to walk through the approach in detail.
+              </span>
+            </div>
+          </article>
+
+          <!-- PROJECT: Semantic Search (KWI) -->
+          <article class="project-card">
+            <div class="project-card-top">
+              <div class="project-card-labels">
+                <span class="project-label-pill">AI + Data</span>
+                <span class="project-label-pill accent">Production</span>
+              </div>
+              <h3 class="project-card-title">AI-Powered Semantic Search & Classification</h3>
+              <div class="project-tags" style="margin-top: 12px;">
+                <span class="tag">Python</span>
+                <span class="tag">SQL</span>
+                <span class="tag tech">pgvector</span>
+                <span class="tag tech">PostgreSQL</span>
+                <span class="tag">RAG</span>
+                <span class="tag tech">OpenAI API</span>
+              </div>
+            </div>
+
+            <div class="project-card-body">
+              <h4 class="project-card-subtitle">The Problem</h4>
+              <p>
+                Internal teams were spending 3–5 hours per week manually searching through and
+                classifying support tickets, product requests, and internal documents. The existing
+                keyword-based search missed semantically similar items, and classification was
+                inconsistent across team members.
+              </p>
+
+              <h4 class="project-card-subtitle">What I Built</h4>
+              <p>
+                I implemented a semantic search system using PostgreSQL with pgvector extension to store
+                and query vector embeddings. Indexed 1,700+ records with OpenAI embeddings, enabling
+                similarity search that understands meaning rather than just matching keywords. Added
+                an AI-powered classification layer using RAG (Retrieval-Augmented Generation) to
+                automatically categorize and prioritize incoming items.
+              </p>
+
+              <h4 class="project-card-subtitle">Key Decisions</h4>
+              <ul class="project-list">
+                <li><strong>pgvector over dedicated vector DB:</strong> The existing stack already ran PostgreSQL. Adding pgvector meant zero infrastructure overhead — just an extension install. No need to introduce Pinecone or Weaviate for this scale.</li>
+                <li><strong>RAG for classification:</strong> Instead of fine-tuning a model, I used retrieval-augmented generation — pull the most similar past examples, feed them as context to the LLM, and let it classify. Cheaper, more maintainable, and easy to update when categories change.</li>
+                <li><strong>Batch + on-demand:</strong> New records get embedded on insert. Existing records were batch-processed in a one-time migration script.</li>
+              </ul>
+
+              <h4 class="project-card-subtitle">Impact</h4>
+              <p>
+                Saved 3–5 hours per week in manual search and classification time. Search quality
+                improved significantly — users could describe what they were looking for in natural
+                language instead of guessing at exact keywords. Classification consistency went from
+                "depends who's doing it" to automated and reproducible.
+              </p>
+            </div>
+
+            <div class="project-card-footer">
+              <span class="project-card-note">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Built at KWI — proprietary system, no public repo or screenshots.
+              </span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- WHAT'S NEXT                    -->
+    <!-- ============================== -->
+    <section class="section" id="whats-next">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Roadmap</span>
+          <h2 class="section-title">What I'm Building Next</h2>
+          <p class="section-desc">
+            The pipeline doesn't stop. Here's what's on my workbench.
+          </p>
+        </div>
+
+        <div class="roadmap-grid">
+          <div class="roadmap-card">
+            <span class="roadmap-status upcoming">In Progress</span>
+            <h4>Real-Time Streaming Pipeline</h4>
+            <p>Kafka + Spark Structured Streaming for near-real-time transaction processing. Moving from batch to stream to handle higher throughput and lower latency requirements.</p>
+            <div class="roadmap-stack">
+              <span class="stack-pill">Kafka</span>
+              <span class="stack-pill">Spark Streaming</span>
+              <span class="stack-pill">Delta Lake</span>
+            </div>
+          </div>
+
+          <div class="roadmap-card">
+            <span class="roadmap-status planned">Planned</span>
+            <h4>dbt + Snowflake Data Warehouse</h4>
+            <p>Modern analytics engineering stack — dbt for transformations, Snowflake as the warehouse, with automated testing and documentation built into the workflow.</p>
+            <div class="roadmap-stack">
+              <span class="stack-pill">dbt</span>
+              <span class="stack-pill">Snowflake</span>
+              <span class="stack-pill">GitHub Actions</span>
+            </div>
+          </div>
+
+          <div class="roadmap-card">
+            <span class="roadmap-status planned">Planned</span>
+            <h4>Data Quality Monitoring Framework</h4>
+            <p>Building a reusable data quality layer with Great Expectations — automated validation, alerting on anomalies, and a dashboard tracking data health over time.</p>
+            <div class="roadmap-stack">
+              <span class="stack-pill">Great Expectations</span>
+              <span class="stack-pill">Airflow</span>
+              <span class="stack-pill">Grafana</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================== -->
+    <!-- CTA                            -->
+    <!-- ============================== -->
+    <section class="section cta-section">
+      <div class="container">
+        <div class="cta-card">
+          <h2 class="cta-title">Want to Talk Through Any of These?</h2>
+          <p class="cta-desc">
+            I can walk through the architecture decisions, the trade-offs, and the code
+            for any project here. Let's connect.
+          </p>
+          <div class="cta-card-actions">
+            <a class="btn primary" href="contact.html">
+              Get in Touch
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a class="btn ghost" href="main.html">← Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <!-- ============================== -->
+  <!-- FOOTER                         -->
+  <!-- ============================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-card">
+          <h4 class="footer-card-title">Connect</h4>
+          <div class="footer-connect-links">
+            <a href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/sajal-bhattarai-912347216" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+              LinkedIn
+            </a>
+            <a href="mailto:jobsajalbhattarai@gmail.com" class="footer-connect-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+              Email
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-card">
+          <h4 class="footer-card-title">Status</h4>
+          <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>Open to Work</span>
+          </div>
+          <div class="footer-location">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hicksville, NY
+          </div>
+        </div>
+
+        <div class="footer-card footer-star-card">
+          <h4 class="footer-card-title">Like This Portfolio?</h4>
+          <p class="footer-star-desc">If you enjoyed browsing, consider giving it a star on GitHub.</p>
+          <a class="btn primary small" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+            Star on GitHub
+          </a>
+        </div>
+
+        <div class="footer-card">
+          <h4 class="footer-card-title">Quick Links</h4>
+          <div class="footer-quick-links">
+            <a href="main.html">Home</a>
+            <a href="projects.html">Projects</a>
+            <a href="about.html">About</a>
+            <a href="resume.html">Resume</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-left">
+          <span class="footer-brand">Sajal Bhattarai</span>
+          <span class="footer-sep">·</span>
+          <span class="footer-role">Data Engineer</span>
+        </div>
+        <div class="footer-bottom-center">
+          <p>Built with precision — like a well-orchestrated pipeline.</p>
+        </div>
+        <div class="footer-bottom-right">
+          <p>© <span id="year"></span> Sajal Bhattarai. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#top" class="back-to-top" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>

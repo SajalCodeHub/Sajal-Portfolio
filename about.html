@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | Sajal Bhattarai — Data Engineer</title>
+  <meta name="description" content="From Janakpur to New York — the story of a kid who loved solving problems and became a data engineer. Also: dancer, poet, and problem solver." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="page-about">
+  <!-- NAVIGATION -->
+  <header class="topbar" id="top">
+    <nav class="nav container">
+      <a class="brand" href="main.html" aria-label="Go to Home">
+        <span class="brand-badge">SB</span>
+        <span class="brand-text">Sajal Bhattarai</span>
+      </a>
+
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a class="nav-link" href="main.html">Home</a>
+        <a class="nav-link" href="projects.html">Projects</a>
+        <a class="nav-link active" href="about.html">About</a>
+        <a class="nav-link" href="resume.html">Resume</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+
+        <a class="btn-star" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" title="Star on GitHub">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+          Star
+        </a>
+
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="about-hero">
+      <div class="container">
+        <div class="about-hero-content">
+          <span class="hero-tag">About Me</span>
+          <h1 class="about-hero-title">The Story Behind the Pipelines</h1>
+          <p class="about-hero-desc">
+            Before the DAGs, the Docker containers, and the Spark jobs — there was a kid in Janakpur who loved solving problems.
+          </p>
+        </div>
+
+        <div class="about-hero-stats">
+          <div class="hero-stat-pill">
+            <span class="stat-emoji">🇳🇵</span>
+            <span>Born in Janakpur</span>
+          </div>
+          <div class="hero-stat-pill">
+            <span class="stat-emoji">✈️</span>
+            <span>7 Days to Leave</span>
+          </div>
+          <div class="hero-stat-pill">
+            <span class="stat-emoji">🎓</span>
+            <span>BS Computer Science</span>
+          </div>
+          <div class="hero-stat-pill">
+            <span class="stat-emoji">💻</span>
+            <span>5+ Years Building</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE JOURNEY IN CARDS -->
+    <section class="section journey-cards-section">
+      <div class="container">
+
+        <!-- Chapter 1: Janakpur -->
+        <div class="journey-card">
+          <div class="journey-card-header">
+            <span class="journey-emoji">🏠</span>
+            <div>
+              <h3 class="journey-card-title">Where It Started</h3>
+              <span class="journey-location">Janakpur, Nepal</span>
+            </div>
+          </div>
+          <div class="journey-card-body">
+            <p>I grew up in a household of teachers. My parents gave me discipline, curiosity, and the quiet belief that education changes everything. We had family roots in Biratnagar, so I spent my childhood moving between cities — absorbing different worlds before I ever left the country.</p>
+
+            <div class="moment-highlight">
+              <span class="highlight-icon">🚲</span>
+              <p><strong>The bicycle rides:</strong> My friends and I used to ride for over an hour to reach our tuition teacher's house — sometimes racing down dusty roads, sometimes just talking. Those were really good days.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter 2: First Computer -->
+        <div class="journey-card accent-blue">
+          <div class="journey-card-header">
+            <span class="journey-emoji">💻</span>
+            <div>
+              <h3 class="journey-card-title">The Machine</h3>
+              <span class="journey-location">Class 9</span>
+            </div>
+          </div>
+          <div class="journey-card-body">
+            <p>My parents got me my first computer. Honestly, I didn't use it productively — it was GTA Vice City, Need for Speed, and playing music. But the machine fascinated me. <em>Something about how it worked, what you could make it do if you just knew the right instructions.</em></p>
+
+            <div class="stat-row-inline">
+              <div class="inline-stat">
+                <span class="inline-stat-label">First language</span>
+                <span class="inline-stat-value">QBASIC</span>
+              </div>
+              <div class="inline-stat">
+                <span class="inline-stat-label">SEE Result</span>
+                <span class="inline-stat-value">Grade A</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter 3: The Spark -->
+        <div class="journey-card">
+          <div class="journey-card-header">
+            <span class="journey-emoji">⚡</span>
+            <div>
+              <h3 class="journey-card-title">The Spark</h3>
+              <span class="journey-location">CCRC College, Kathmandu</span>
+            </div>
+          </div>
+          <div class="journey-card-body">
+            <p>I chose science over management, and physics over biology — because I loved solving numerical problems. Chemistry was my favorite, especially the math behind reactions. But the real turning point came in class 11.</p>
+
+            <div class="quote-box">
+              <svg class="quote-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+              <p>That's when I wrote my first lines of QBASIC. Something clicked. The logic of it, the way you could break a problem into steps and watch the computer execute them exactly as you designed — it was addictive.</p>
+            </div>
+
+            <p>In class 12, I moved to C, and from there I started exploring other languages on my own. The curiosity that started with a gaming PC had turned into something real.</p>
+          </div>
+        </div>
+
+        <!-- Chapter 4: The Crossroads -->
+        <div class="journey-card accent-orange">
+          <div class="journey-card-header">
+            <span class="journey-emoji">🔀</span>
+            <div>
+              <h3 class="journey-card-title">The Crossroads</h3>
+              <span class="journey-location">2020 • COVID-19</span>
+            </div>
+          </div>
+          <div class="journey-card-body">
+            <p>After high school, I had two paths: civil engineering or computer science. Then COVID-19 hit Nepal. Schools closed. Plans collapsed. I was sitting at home, trying to figure out what came next.</p>
+
+            <div class="moment-highlight red">
+              <span class="highlight-icon">💔</span>
+              <p><strong>One point:</strong> I scored 65 on the ASCOL entrance exam. You needed 66 to get in. One point away from Nepal's top IT campus.</p>
+            </div>
+
+            <p>I enrolled at Patan Multiple Campus. Lasted two weeks. Something felt off. So I made the decision that changed my life.</p>
+
+            <div class="stat-row-inline">
+              <div class="inline-stat green">
+                <span class="inline-stat-label">SAT Score</span>
+                <span class="inline-stat-value">1320</span>
+              </div>
+              <div class="inline-stat green">
+                <span class="inline-stat-label">Result</span>
+                <span class="inline-stat-value">Accepted to NKU</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter 5: Seven Days -->
+        <div class="journey-card accent-purple">
+          <div class="journey-card-header">
+            <span class="journey-emoji">✈️</span>
+            <div>
+              <h3 class="journey-card-title">Seven Days</h3>
+              <span class="journey-location">August 2021</span>
+            </div>
+          </div>
+          <div class="journey-card-body">
+            <div class="timeline-mini">
+              <div class="timeline-mini-item">
+                <span class="timeline-mini-date">Aug 3</span>
+                <span class="timeline-mini-text">Visa approved</span>
+              </div>
+              <div class="timeline-mini-connector"></div>
+              <div class="timeline-mini-item">
+                <span class="timeline-mini-date">Aug 10</span>
+                <span class="timeline-mini-text">Landed in Kentucky</span>
+              </div>
+            </div>
+
+            <div class="quote-box">
+              <svg class="quote-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+              <p>Seven days to leave my parents, pack my life, and fly to a country I'd never been to. I'm the only son of two teachers who gave me everything — leaving them was the hardest thing I've ever done.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter 6: Building -->
+        <div class="journey-card">
+          <div class="journey-card-header">
+            <span class="journey-emoji">🏗️</span>
+            <div>
+              <h3 class="journey-card-title">Building the Foundation</h3>
+              <span class="journey-location">NKU → SUNY Old Westbury</span>
+            </div>
+          </div>
+          <div class="journey-card-body">
+            <p>I studied at NKU from 2021 to 2023 — adjusting to a new country, a new way of learning. Then I moved to New York to be closer to my sister and transferred to SUNY Old Westbury. Not all my credits transferred, so while my NKU friends were walking at their graduation, I was staying for one more semester.</p>
+
+            <div class="achievement-pills">
+              <span class="achievement-pill">Teaching Assistant</span>
+              <span class="achievement-pill">Data Engineering Courses</span>
+              <span class="achievement-pill">Graduated Dec 2025</span>
+            </div>
+
+            <p>Along the way, I was a Teaching Assistant for graduate-level Data Engineering courses — which taught me as much as any class did. Explaining complex concepts forces you to actually understand them.</p>
+          </div>
+        </div>
+
+        <!-- Chapter 7: Production -->
+        <div class="journey-card accent-green">
+          <div class="journey-card-header">
+            <span class="journey-emoji">💼</span>
+            <div>
+              <h3 class="journey-card-title">Production Systems</h3>
+              <span class="journey-location">KWI • 2024</span>
+            </div>
+          </div>
+          <div class="journey-card-body">
+            <p>In 2024, I joined KWI as a Data Engineer/Analyst. This is where theory met reality — building systems that handle real data, real volume, real failures.</p>
+
+            <div class="work-highlights">
+              <div class="work-highlight-item">
+                <span class="work-icon">🔍</span>
+                <div>
+                  <h4>Semantic Search Platform</h4>
+                  <p>1,700+ records indexed with pgvector + Azure OpenAI</p>
+                </div>
+              </div>
+              <div class="work-highlight-item">
+                <span class="work-icon">🤖</span>
+                <div>
+                  <h4>AI Classification Pipeline</h4>
+                  <p>Automated product feedback analysis, saving 3–5 hrs/week</p>
+                </div>
+              </div>
+              <div class="work-highlight-item">
+                <span class="work-icon">📊</span>
+                <div>
+                  <h4>Multi-Source Data Warehouse</h4>
+                  <p>Dimensional models supporting product analytics</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter 8: Now -->
+        <div class="journey-card accent-cyan">
+          <div class="journey-card-header">
+            <span class="journey-emoji">🎯</span>
+            <div>
+              <h3 class="journey-card-title">Where I Am Now</h3>
+              <span class="journey-location">February 2026</span>
+            </div>
+          </div>
+          <div class="journey-card-body">
+            <p>Today, I'm a data engineer with 5+ years of experience building production-grade systems across AWS, Azure, and GCP. I build infrastructure that teams actually trust — not just dashboards that look good, but systems that work when data gets messy, volume spikes, and stakes are real.</p>
+
+            <div class="cta-inline">
+              <p><strong>I'm looking for my next role</strong> — somewhere I can build scalable pipelines, design warehouse-ready models, and work with teams that care about data quality.</p>
+              <a href="contact.html" class="btn primary">Let's Talk</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- POEM PUBLICATION -->
+    <section class="section poem-section">
+      <div class="container">
+        <div class="poem-feature-card">
+          <div class="poem-content">
+            <span class="poem-tag">Beyond Engineering</span>
+            <h2 class="poem-title">Published Poet</h2>
+            <p class="poem-desc">
+              When I'm not building pipelines, I write poetry. My work has been published in Jharana Sanchar, a Nepali literature publication. Sometimes the best way to solve a problem is to step away from code entirely.
+            </p>
+            <a href="https://jharanasanchar.com/newsauthor/सजल-भट्टराई/" target="_blank" rel="noopener" class="poem-link">
+              <span>Read My Published Poems</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+
+            <!-- Poetry video -->
+            <div style="margin-top: 18px;">
+              <span class="poem-tag">Video</span>
+              <h3 class="poem-title" style="font-size: 1.25rem; margin-top: 8px;">Poetry on Camera</h3>
+              <p class="poem-desc" style="font-size: 0.95rem; opacity: 0.9;">
+                A short clip of me performing one of my poems.
+              </p>
+
+              <video class="dance-video" controls preload="metadata"
+                style="width:100%; aspect-ratio:16/9; object-fit:cover; object-position:50% 15%; border-radius:16px;">
+                <source src="assets/videos/Poetry.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+
+          <div class="poem-visual">
+            <div class="poem-icon-large">✍️</div>
+            <p class="poem-publication">Jharana Sanchar</p>
+            <p class="poem-language">Poetry in Nepali</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DANCE VIDEOS -->
+    <section class="section dance-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Beyond the Code</span>
+          <h2 class="section-title">I Dance</h2>
+          <p class="section-desc">
+            Not a professional. Not even great, honestly. But I love it. It's the best way I know to decompress after debugging a DAG for three hours. Here are some recent videos.
+          </p>
+        </div>
+
+        <div class="dance-grid">
+          <div class="dance-video-card">
+            <video class="dance-video" controls preload="metadata">
+              <source src="assets/videos/Video%201.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          <div class="dance-video-card">
+            <video class="dance-video" controls preload="metadata">
+              <source src="assets/videos/Video%202.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          <div class="dance-video-card">
+            <video class="dance-video" controls preload="metadata">
+              <source src="assets/videos/Video%203.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          <div class="dance-video-card">
+            <video class="dance-video" controls preload="metadata">
+              <source src="assets/videos/Video%204.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          <div class="dance-video-card">
+            <video class="dance-video" controls preload="metadata">
+              <source src="assets/videos/Video%205.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+
+        <!-- Singing -->
+        <div class="section-header" style="margin-top: 34px;">
+          <span class="section-tag">Music</span>
+          <h2 class="section-title">I Sing Too</h2>
+          <p class="section-desc">
+            One take. No studio. Just me enjoying music.
+          </p>
+        </div>
+
+        <div class="dance-grid">
+          <div class="dance-video-card">
+            <video class="dance-video" controls preload="metadata">
+              <source src="assets/videos/sing.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHOTO MEMORIES -->
+    <section class="section photos-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Memories</span>
+          <h2 class="section-title">The Journey in Pictures</h2>
+          <p class="section-desc">
+            From dusty roads in Janakpur to the streets of New York — a few snapshots that remind me how far the road has been.
+          </p>
+        </div>
+
+        <!-- GROUP 1: Childhood -->
+        <div class="section-header" style="margin-top: 28px;">
+          <h3 class="section-title" style="font-size: 1.25rem; margin-bottom: 6px;">Childhood Photos</h3>
+          <p class="section-desc" style="font-size: 0.95rem; opacity: 0.9;">
+            A few moments from the early days.
+          </p>
+        </div>
+
+        <div class="photos-grid-layout">
+          <div class="photo-memory-card">
+            <div class="photo-placeholder">
+              <img class="photo-img" src="./assets/img/with%20mom.jpeg" alt="With mom" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="photo-memory-card">
+            <div class="photo-placeholder">
+              <img class="photo-img" src="./assets/img/Gala%20pukka.jpeg" alt="Gala pukka" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="photo-memory-card">
+            <div class="photo-placeholder">
+              <img class="photo-img" src="./assets/img/Lumbini.jpeg" alt="Lumbini" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="photo-memory-card">
+            <div class="photo-placeholder">
+              <img class="photo-img" src="./assets/img/with%20sister.jpeg" alt="With sister" loading="lazy" />
+            </div>
+          </div>
+        </div>
+
+        <!-- GROUP 2: Grown now -->
+        <div class="section-header" style="margin-top: 34px;">
+          <h3 class="section-title" style="font-size: 1.25rem; margin-bottom: 6px;">Grown Now</h3>
+          <p class="section-desc" style="font-size: 0.95rem; opacity: 0.9;">
+            Where I am today — new places, new people, new memories.
+          </p>
+        </div>
+
+        <div class="photos-grid-layout">
+          <div class="photo-memory-card">
+            <div class="photo-placeholder">
+              <img class="photo-img" src="./assets/img/Photo%201.jpeg" alt="Photo 1" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="photo-memory-card">
+            <div class="photo-placeholder">
+              <img class="photo-img" src="./assets/img/Photo%204.jpeg" alt="Photo 4" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="photo-memory-card">
+            <div class="photo-placeholder">
+              <img class="photo-img" src="./assets/img/Photo%203.jpeg" alt="Photo 3" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="photo-memory-card">
+            <div class="photo-placeholder">
+              <img class="photo-img" src="./assets/img/Photo%205.jpeg" alt="Photo 5" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW I BUILD -->
+    <section class="section principles-compact-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Philosophy</span>
+          <h2 class="section-title">How I Build</h2>
+          <p class="section-desc">
+            The principles I bring to every pipeline, every data model, every system I design.
+          </p>
+        </div>
+
+        <div class="principles-compact-grid">
+          <div class="principle-compact">
+            <span class="principle-number">01</span>
+            <h4>Data Quality First</h4>
+            <p>Validation at ingestion and transformation — not as an afterthought.</p>
+          </div>
+
+          <div class="principle-compact">
+            <span class="principle-number">02</span>
+            <h4>Deterministic Orchestration</h4>
+            <p>Schedules should be predictable. Dependencies explicit. Retries automatic.</p>
+          </div>
+
+          <div class="principle-compact">
+            <span class="principle-number">03</span>
+            <h4>Observability by Default</h4>
+            <p>If something breaks at 3 AM, the logs tell me where to look before I finish my coffee.</p>
+          </div>
+
+          <div class="principle-compact">
+            <span class="principle-number">04</span>
+            <h4>Reproducibility</h4>
+            <p>"Works on my machine" isn't engineering — it's luck.</p>
+          </div>
+
+          <div class="principle-compact">
+            <span class="principle-number">05</span>
+            <h4>Build for the Next Person</h4>
+            <p>Clear naming. Helpful READMEs. Architecture diagrams that explain decisions.</p>
+          </div>
+
+          <div class="principle-compact">
+            <span class="principle-number">06</span>
+            <h4>Ship, Then Iterate</h4>
+            <p>Perfect is the enemy of deployed. Real feedback beats theoretical optimization.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="section cta-section">
+      <div class="container">
+        <div class="cta-card">
+          <h2 class="cta-title">Now You Know the Story</h2>
+          <p class="cta-desc">
+            If you've read this far, I'd love to connect. Whether it's about a role, a project, or just to say hi — my inbox is open.
+          </p>
+          <div class="cta-card-actions">
+            <a class="btn primary large" href="contact.html">
+              Get in Touch
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a class="btn ghost" href="projects.html">See My Work</a>
+            <a class="btn outline" href="assets/resume/Sajal Resume.pdf" download>Download Resume</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-card">
+          <h4 class="footer-card-title">Connect</h4>
+          <div class="footer-connect-links">
+            <a href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/sajal-bhattarai-912347216" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+              LinkedIn
+            </a>
+            <a href="mailto:jobsajalbhattarai@gmail.com" class="footer-connect-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+              Email
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-card">
+          <h4 class="footer-card-title">Status</h4>
+          <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>Open to Work</span>
+          </div>
+          <div class="footer-location">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hicksville, NY
+          </div>
+        </div>
+
+        <div class="footer-card">
+          <h4 class="footer-card-title">Core Stack</h4>
+          <div class="footer-stack-pills">
+            <span class="footer-pill">Python</span>
+            <span class="footer-pill">Airflow</span>
+            <span class="footer-pill">Spark</span>
+            <span class="footer-pill">SQL</span>
+            <span class="footer-pill">Azure OpenAI</span>
+            <span class="footer-pill">AWS</span>
+          </div>
+        </div>
+
+        <div class="footer-card footer-star-card">
+          <h4 class="footer-card-title">Like This Portfolio?</h4>
+          <p class="footer-star-desc">If you enjoyed browsing, consider giving it a star on GitHub.</p>
+          <a class="btn primary small" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+            Star on GitHub
+          </a>
+        </div>
+
+        <div class="footer-card">
+          <h4 class="footer-card-title">Quick Links</h4>
+          <div class="footer-quick-links">
+            <a href="main.html">Home</a>
+            <a href="projects.html">Projects</a>
+            <a href="blog/index.html">Blog</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-left">
+          <span class="footer-brand">Sajal Bhattarai</span>
+          <span class="footer-sep">·</span>
+          <span class="footer-role">Data Engineer</span>
+        </div>
+        <div class="footer-bottom-right">
+          <p>© <span id="year"></span> Sajal Bhattarai. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#top" class="back-to-top" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>

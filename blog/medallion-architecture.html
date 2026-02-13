@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why Medallion Architecture Saved My Pipeline (And My Sanity) | Sajal Bhattarai</title>
+  <meta name="description" content="Bronze → Silver → Gold isn't just enterprise buzzwords. Here's what I learned implementing medallion architecture from scratch." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+  <!-- ============================== -->
+  <!-- NAVIGATION                     -->
+  <!-- ============================== -->
+  <header class="topbar" id="top">
+    <nav class="nav container">
+      <a class="brand" href="/" aria-label="Go to Home">
+        <span class="brand-badge">SB</span>
+        <span class="brand-text">Sajal Bhattarai</span>
+      </a>
+
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span class="hamburger" aria-hidden="true"></span>
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/projects/">Projects</a>
+        <a class="nav-link active" href="/blog/">Blog</a>
+        <a class="nav-link" href="/about/">About</a>
+        <a class="nav-link" href="/resume/">Resume</a>
+        <a class="nav-link" href="/contact/">Contact</a>
+
+        <a class="btn-star" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" title="Star on GitHub">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+          Star
+        </a>
+
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============================== -->
+    <!-- ARTICLE HEADER                 -->
+    <!-- ============================== -->
+    <article class="blog-article">
+      <div class="container" style="max-width: 800px;">
+        
+        <!-- Back Link -->
+        <a href="index.html" class="blog-back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          Back to Blog
+        </a>
+
+        <!-- Article Header -->
+        <header class="blog-article-header">
+          <div class="blog-article-meta">
+            <span class="blog-article-date">February 12, 2026</span>
+            <span class="blog-article-separator">•</span>
+            <span class="blog-article-readtime">11 min read</span>
+          </div>
+
+          <h1 class="blog-article-title">Why Medallion Architecture Saved My Pipeline (And My Sanity)</h1>
+
+          <p class="blog-article-subtitle">
+            Bronze → Silver → Gold isn't just enterprise buzzwords. It's the pattern that gave me 
+            debuggability, data lineage, and the ability to sleep at night. Here's what I learned 
+            implementing it from scratch.
+          </p>
+
+          <div class="blog-article-tags">
+            <span class="article-tag">Architecture</span>
+            <span class="article-tag">Data Quality</span>
+            <span class="article-tag">Airflow</span>
+            <span class="article-tag">Spark</span>
+          </div>
+        </header>
+
+        <!-- Article Content -->
+        <div class="blog-article-content">
+
+          <p>I spent four hours debugging a data quality issue once. The problem? A duplicate transaction that shouldn't have existed. The root cause? It was introduced in the raw ingestion layer, but I only discovered it three transformations later in the final analytics table.</p>
+
+          <p>That's when I decided to implement medallion architecture.</p>
+
+          <p>Not because it's trendy. Not because Databricks says so. But because I was tired of untangling pipelines where <strong>one bad record could cascade through five layers of transformations</strong> before anyone noticed.</p>
+
+          <hr>
+
+          <h2>What Is Medallion Architecture, Actually?</h2>
+
+          <p>Medallion architecture organizes your data pipeline into three layers:</p>
+
+          <ul>
+            <li><strong>Bronze (Raw)</strong> — Ingest data exactly as received. No transformations. This is your source of truth.</li>
+            <li><strong>Silver (Cleaned)</strong> — Deduplicate, validate, and enrich. Fix schema issues. Filter nulls. Make it queryable.</li>
+            <li><strong>Gold (Analytics-Ready)</strong> — Aggregate, join, and structure for specific use cases. This is what BI tools and analysts consume.</li>
+          </ul>
+
+          <p>Think of it like cooking:</p>
+          <ul>
+            <li>Bronze = raw ingredients from the grocery store</li>
+            <li>Silver = prepped ingredients (chopped, marinated, cleaned)</li>
+            <li>Gold = finished dish ready to serve</li>
+          </ul>
+
+          <p>If something's wrong with the final dish, you can trace it back to prep or raw ingredients.</p>
+
+          <hr>
+
+          <h2>The Problem I Was Solving</h2>
+
+          <p>Before medallion, my fintech transaction pipeline looked like this:</p>
+
+          <div class="blog-code-block">
+            <pre><code>CSV files → One massive Spark job → Final tables
+
+❌ No intermediate checkpoints
+❌ No quality gates
+❌ Hard to debug issues
+❌ Reprocessing meant rerunning everything</code></pre>
+          </div>
+
+          <p>When something broke, I had to:</p>
+          <ol>
+            <li>Re-run the entire pipeline with debug logs</li>
+            <li>Guess which transformation introduced the issue</li>
+            <li>Hope I could reproduce the bug</li>
+          </ol>
+
+          <p>It was exhausting.</p>
+
+          <hr>
+
+          <h2>What Medallion Architecture Gave Me</h2>
+
+          <h3>1. Data Lineage Without Extra Tools</h3>
+
+          <p>With three distinct layers, I could trace any issue backwards:</p>
+
+          <div class="blog-code-block">
+            <pre><code>Gold table shows $500 duplicate → Check Silver → Found in Bronze
+
+Root cause: Upstream system sent duplicate files</code></pre>
+          </div>
+
+          <p>Each layer preserved the previous state. If Silver was clean but Gold had issues, I knew the bug was in aggregation logic.</p>
+
+          <h3>2. Checkpoints That Actually Saved Time</h3>
+
+          <p>Before: "The pipeline failed. Re-run everything."</p>
+
+          <p>After: "Silver succeeded. Only re-run Gold layer."</p>
+
+          <p>Bronze and Silver ran daily. Gold ran hourly based on new Silver data. If Gold failed, I could fix and re-run just that layer without re-ingesting 50GB of raw CSVs.</p>
+
+          <h3>3. Built-In Quality Gates</h3>
+
+          <p>I added validation at each layer:</p>
+
+          <div class="blog-code-block">
+            <pre><code>Bronze → Silver:
+✓ Check for duplicates (drop 1,356 rows)
+✓ Validate critical columns not null
+✓ Ensure transaction_id is unique
+
+Silver → Gold:
+✓ Verify aggregation totals match Silver
+✓ Check for unexpected date ranges
+✓ Alert if record counts drop > 10%</code></pre>
+          </div>
+
+          <p>These checks caught issues <strong>before</strong> bad data reached production dashboards.</p>
+
+          <h3>4. Debuggability That Actually Works</h3>
+
+          <p>Here's a real example. I got a Slack alert: "Revenue numbers off by $14K."</p>
+
+          <p><strong>Old approach:</strong> Panic. Re-run everything with verbose logging. Spend hours.</p>
+
+          <p><strong>Medallion approach:</strong></p>
+          <ol>
+            <li>Check Gold aggregation queries → Logic looks correct</li>
+            <li>Check Silver source data → Found 3 transactions with negative amounts</li>
+            <li>Check Bronze raw files → Negative amounts present in source CSV</li>
+            <li>Root cause: Refund transactions had wrong sign convention</li>
+          </ol>
+
+          <p><strong>Debug time: 15 minutes.</strong></p>
+
+          <p>I could query each layer independently to isolate exactly where the issue entered the pipeline.</p>
+
+          <hr>
+
+          <h2>How I Implemented It</h2>
+
+          <h3>Layer 1: Bronze (Raw Ingestion)</h3>
+
+          <p><strong>Goal:</strong> Preserve raw data exactly as received.</p>
+
+          <div class="blog-code-block">
+            <pre><code>Location: s3://bucket/bronze/transactions/dt=YYYY-MM-DD/
+Format: Parquet (partitioned by date)
+Schema: Same as source CSV + ingestion metadata
+
+# Added columns:
+- ingestion_timestamp (when we read the file)
+- source_file (which CSV it came from)
+- _rescued_data (Spark's way of capturing bad rows)</code></pre>
+          </div>
+
+          <p><strong>Airflow task:</strong></p>
+          <div class="blog-code-block">
+            <pre><code>bronze_ingest = BashOperator(
+    task_id="bronze_ingest",
+    bash_command="spark-submit bronze_ingest.py"
+)</code></pre>
+          </div>
+
+          <p><strong>Key principle:</strong> No transformations. Not even type casting. If the CSV says <code>"null"</code> as a string, Bronze keeps it as <code>"null"</code>.</p>
+
+          <h3>Layer 2: Silver (Cleaned and Validated)</h3>
+
+          <p><strong>Goal:</strong> Make data clean and queryable.</p>
+
+          <div class="blog-code-block">
+            <pre><code>Location: s3://bucket/silver/transactions/dt=YYYY-MM-DD/
+Format: Parquet (partitioned by date)
+Transformations:
+- Deduplicate by transaction_id
+- Cast columns to correct types
+- Filter nulls in critical fields
+- Add derived columns (hour_of_day, day_of_week)
+- Quality checks (record count, unique IDs)</code></pre>
+          </div>
+
+          <p><strong>Spark code snippet:</strong></p>
+          <div class="blog-code-block">
+            <pre><code>silver_df = (
+    bronze_df
+    .dropDuplicates(["transaction_id"])
+    .filter(col("transaction_id").isNotNull())
+    .withColumn("amount", col("amount").cast("decimal(10,2)"))
+    .withColumn("hour_of_day", hour(col("transaction_time")))
+)</code></pre>
+          </div>
+
+          <p><strong>Airflow task:</strong></p>
+          <div class="blog-code-block">
+            <pre><code>silver_transform = BashOperator(
+    task_id="silver_transform",
+    bash_command="spark-submit silver_transform.py"
+)
+
+bronze_ingest >> silver_transform</code></pre>
+          </div>
+
+          <h3>Layer 3: Gold (Analytics-Ready Tables)</h3>
+
+          <p><strong>Goal:</strong> Build aggregated, business-specific tables.</p>
+
+          <p>I created 5 gold tables:</p>
+          <ol>
+            <li><strong>merchant_revenue_daily</strong> — Daily revenue per merchant</li>
+            <li><strong>fraud_analysis_by_country</strong> — Fraud patterns by region</li>
+            <li><strong>user_transaction_volume</strong> — User activity metrics</li>
+            <li><strong>payment_method_distribution</strong> — Payment method trends</li>
+            <li><strong>high_value_transactions</strong> — Transactions > $10K with alerts</li>
+          </ol>
+
+          <div class="blog-code-block">
+            <pre><code>Location: s3://bucket/gold/<table_name>/dt=YYYY-MM-DD/
+Format: Parquet
+Schema: Business-specific (merchant_id, date, revenue, etc.)</code></pre>
+          </div>
+
+          <p><strong>Example Gold aggregation:</strong></p>
+          <div class="blog-code-block">
+            <pre><code>merchant_revenue = (
+    silver_df
+    .groupBy("merchant_id", "date")
+    .agg(
+        sum("amount").alias("total_revenue"),
+        count("transaction_id").alias("transaction_count"),
+        avg("amount").alias("avg_transaction_value")
+    )
+)</code></pre>
+          </div>
+
+          <p><strong>Airflow DAG structure:</strong></p>
+          <div class="blog-code-block">
+            <pre><code>bronze_ingest >> silver_transform >> [
+    gold_merchant_revenue,
+    gold_fraud_analysis,
+    gold_user_volume,
+    gold_payment_distribution,
+    gold_high_value_alerts
+]</code></pre>
+          </div>
+
+          <hr>
+
+          <h2>The Gotchas I Learned</h2>
+
+          <h3>1. Bronze Isn't Cheap Storage</h3>
+
+          <p>I initially thought: "Bronze is just raw CSVs copied to S3."</p>
+
+          <p>Wrong. I needed:</p>
+          <ul>
+            <li><strong>Partitioning by date</strong> — or queries were scanning terabytes</li>
+            <li><strong>Parquet format</strong> — CSV was too slow for downstream reads</li>
+            <li><strong>Metadata columns</strong> — to track which file and when</li>
+          </ul>
+
+          <h3>2. Silver Layer Does Heavy Lifting</h3>
+
+          <p>Silver deduplication caught 1,356 duplicate records in one run. Without Silver, those would've inflated Gold metrics.</p>
+
+          <p>Silver also handled schema drift. When the upstream CSV added a new column, Bronze ingested it fine, but Silver enforced a stable schema for downstream consumption.</p>
+
+          <h3>3. Gold Tables Should Be Small and Specific</h3>
+
+          <p>My first mistake: "Let's make one massive Gold table with everything."</p>
+
+          <p>Better approach: Multiple small Gold tables, each optimized for one use case.</p>
+
+          <p>Example:</p>
+          <ul>
+            <li><code>gold_merchant_revenue_daily</code> → 5 columns, 10K rows/day</li>
+            <li><code>gold_fraud_analysis_by_country</code> → 8 columns, 200 rows/day</li>
+          </ul>
+
+          <p>Queries were faster. Analysts could understand the schema immediately.</p>
+
+          <h3>4. Don't Skip Bronze for "Simple" Pipelines</h3>
+
+          <p>I was tempted: "This is just a small CSV. I'll load it directly into Silver."</p>
+
+          <p>Don't. Six months later, I needed to reprocess historical data because of a schema change. Bronze saved me because it preserved the original CSVs in Parquet.</p>
+
+          <hr>
+
+          <h2>How to Roll It Out Without Breaking Everything</h2>
+
+          <p>I didn't rebuild the entire pipeline overnight. Here's how I did it incrementally:</p>
+
+          <h3>Week 1: Add Bronze Layer</h3>
+          <ul>
+            <li>Ingest raw CSVs to S3 Bronze</li>
+            <li>Existing pipeline still runs from CSVs</li>
+            <li>Bronze runs in parallel, no risk</li>
+          </ul>
+
+          <h3>Week 2: Build Silver from Bronze</h3>
+          <ul>
+            <li>Create Silver transformations</li>
+            <li>Validate Silver output matches old pipeline</li>
+            <li>Still not switching production yet</li>
+          </ul>
+
+          <h3>Week 3: Migrate One Gold Table</h3>
+          <ul>
+            <li>Pick the simplest Gold use case</li>
+            <li>Build it from Silver</li>
+            <li>Compare results to old pipeline</li>
+            <li>Switch production traffic after validation</li>
+          </ul>
+
+          <h3>Week 4: Migrate Remaining Gold Tables</h3>
+          <ul>
+            <li>Repeat for each analytics table</li>
+            <li>Deprecate old pipeline</li>
+          </ul>
+
+          <p><strong>Total migration time: 4 weeks, zero downtime.</strong></p>
+
+          <hr>
+
+          <h2>Production Results</h2>
+
+          <p>After implementing medallion:</p>
+
+          <ul>
+            <li><strong>Debugging time dropped from hours to minutes</strong></li>
+            <li><strong>Data quality issues caught at Silver layer</strong> before reaching analysts</li>
+            <li><strong>Reprocessing became selective</strong> — only re-run failed layers</li>
+            <li><strong>Analysts trusted the data</strong> because they could see lineage</li>
+            <li><strong>Pipeline runtime: 3m 49s mean</strong> (Bronze + Silver + Gold)</li>
+          </ul>
+
+          <p>The best part? <strong>I could sleep.</strong> When the on-call alert fired, I knew exactly where to look.</p>
+
+          <hr>
+
+          <h2>When Should You Use Medallion?</h2>
+
+          <p><strong>Use medallion architecture when:</strong></p>
+          <ul>
+            <li>You have multi-stage transformations (raw → cleaned → aggregated)</li>
+            <li>Data quality issues are hard to trace</li>
+            <li>You need to reprocess selectively (not the entire pipeline)</li>
+            <li>Analysts need consistent, validated data</li>
+            <li>You're building a data lake or lakehouse</li>
+          </ul>
+
+          <p><strong>Skip it when:</strong></p>
+          <ul>
+            <li>Your pipeline is a simple one-step transformation</li>
+            <li>You're just moving data from A to B (pure ETL)</li>
+            <li>You have fewer than 3 transformation stages</li>
+          </ul>
+
+          <hr>
+
+          <h2>Key Takeaways</h2>
+
+          <ol>
+            <li><strong>Bronze = Source of Truth.</strong> Preserve raw data exactly as received.</li>
+            <li><strong>Silver = Quality Gate.</strong> Catch bad data before it reaches production.</li>
+            <li><strong>Gold = Use Case Specific.</strong> Build small, focused tables for analytics.</li>
+            <li><strong>Debugging becomes layered.</strong> Trace issues backwards through Bronze → Silver → Gold.</li>
+            <li><strong>Incremental rollout is key.</strong> Migrate one layer at a time, validate, then switch.</li>
+            <li><strong>Partitioning matters.</strong> Even Bronze needs date-partitioned Parquet for performance.</li>
+          </ol>
+
+          <p>Medallion architecture isn't about following trends. It's about building pipelines you can actually debug at 3 AM.</p>
+
+          <hr>
+
+          <div class="blog-article-footer">
+            <p><strong>Tech Stack:</strong> Apache Airflow, Apache Spark, AWS S3, Parquet, Python</p>
+            <p><strong>Pipeline Layers:</strong> Bronze (raw) → Silver (cleaned) → Gold (5 analytics tables)</p>
+            <p><strong>Mean Runtime:</strong> 3m 49s (end-to-end)</p>
+          </div>
+
+        </div>
+
+        <!-- Article Navigation -->
+        <div class="blog-article-nav">
+          <a href="semantic-search.html" class="blog-nav-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Previous article
+          </a>
+          <a href="airflow-mistakes.html" class="blog-nav-link">
+            Next article
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+
+      </div>
+    </article>
+  </main>
+
+  <!-- ============================== -->
+  <!-- FOOTER                         -->
+  <!-- ============================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <!-- Connect -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Connect</h4>
+          <div class="footer-connect-links">
+            <a href="https://github.com/SajalCodeHub" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/sajal-bhattarai-912347216" target="_blank" rel="noopener" class="footer-connect-link">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+              LinkedIn
+            </a>
+            <a href="mailto:jobsajalbhattarai@gmail.com" class="footer-connect-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+              Email
+            </a>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Status</h4>
+          <div class="footer-status">
+            <span class="status-dot"></span>
+            <span>Open to Work</span>
+          </div>
+          <div class="footer-location">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hicksville, NY
+          </div>
+        </div>
+
+        <!-- Core Stack -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Core Stack</h4>
+          <div class="footer-stack-pills">
+            <span class="footer-pill">Python</span>
+            <span class="footer-pill">Airflow</span>
+            <span class="footer-pill">Spark</span>
+            <span class="footer-pill">SQL</span>
+            <span class="footer-pill">Azure OpenAI</span>
+            <span class="footer-pill">AWS</span>
+          </div>
+        </div>
+
+        <!-- Star on GitHub -->
+        <div class="footer-card footer-star-card">
+          <h4 class="footer-card-title">Like This Portfolio?</h4>
+          <p class="footer-star-desc">If you enjoyed browsing, consider giving it a star on GitHub.</p>
+          <a class="btn primary small" href="https://github.com/SajalCodeHub" target="_blank" rel="noopener">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg>
+            Star on GitHub
+          </a>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-card">
+          <h4 class="footer-card-title">Quick Links</h4>
+          <div class="footer-quick-links">
+            <a href="/">Home</a>
+            <a href="/projects/">Projects</a>
+            <a href="/blog/">Blog</a>
+            <a href="/about/">About</a>
+            <a href="/resume/">Resume</a>
+            <a href="/contact/">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-left">
+          <span class="footer-brand">Sajal Bhattarai</span>
+          <span class="footer-sep">·</span>
+          <span class="footer-role">Data Engineer</span>
+        </div>
+        <div class="footer-bottom-center">
+          <p>Built with precision — like a well-orchestrated pipeline.</p>
+        </div>
+        <div class="footer-bottom-right">
+          <p>© <span id="year"></span> Sajal Bhattarai. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <a href="#top" class="back-to-top" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </a>
+
+  <script src="/script.js"></script>
+</body>
+</html>
