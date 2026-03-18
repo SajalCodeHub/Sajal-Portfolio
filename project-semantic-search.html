@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" autocomplete="off">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="KWI AI Semantic Search — Production RAG pipeline using pgvector and Google Gemini embeddings. Sub-second similarity search across 1,700+ products, 3–5 hrs/week saved, Recall@3 above 90%." />
+  <meta name="author" content="Sajal Bhattarai" />
+  <title>AI Semantic Search — Sajal Bhattarai</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+</head>
+<body spellcheck="false">
+
+  <div class="aurora-center" aria-hidden="true"></div>
+  <div class="aurora-br"     aria-hidden="true"></div>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <header role="banner">
+    <nav aria-label="Primary navigation">
+      <a href="index.html" aria-label="Sajal Bhattarai — home">
+        <span class="logo-wordmark">Sajal</span>
+      </a>
+      <ul role="list" id="nav-links">
+        <li><a href="index.html#systems">Systems</a></li>
+        <li><a href="projects.html" aria-current="page">Case Studies</a></li>
+        <li><a href="index.html#playbook">Playbook</a></li>
+        <li><a href="index.html#writing">Writing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <button id="theme-toggle" type="button" aria-label="Toggle light and dark mode" aria-pressed="false">
+          <span aria-hidden="true"></span>
+        </button>
+        <button class="nav-mobile-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    
+    <section id="cs-hero" aria-labelledby="cs-hero-title">
+
+      <div class="reveal">
+        <nav aria-label="Breadcrumb">
+          <ol role="list">
+            <li><a href="projects.html">Case Studies</a></li>
+            <li aria-current="page">AI Semantic Search</li>
+          </ol>
+        </nav>
+
+        <div style="display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-4);">
+          <span class="proof-chip">Production</span>
+          <span class="proof-chip">KWI · 2024–Present</span>
+          <span class="proof-chip">AI · RAG · Vector Search</span>
+          <span class="proof-chip">KWI's First AI System</span>
+        </div>
+
+        <h1 id="cs-hero-title" style="margin-top:var(--space-4);">AI Semantic Search Platform</h1>
+
+        <p style="font-size:var(--text-xl);color:var(--color-text-secondary);max-width:62ch;margin-top:var(--space-4);">
+          A production retrieval system that replaced brittle keyword lookups with vector similarity search —
+          indexing 1,700+ products with Google Gemini embeddings, serving sub-second queries via pgvector,
+          and operating with monitoring, evaluation gates, and fallback modes from day one.
+        </p>
+
+        <p style="font-size:var(--text-sm);color:var(--color-text-tertiary);margin-top:var(--space-3);">
+          Some implementation details anonymized per employer policy. Architecture, metrics, and design decisions preserved in full.
+        </p>
+      </div>
+
+      
+      <dl aria-label="Key metrics" style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:60ms;">
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">Query Latency p95</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-text-primary);max-width:none;margin-top:var(--space-1);">&lt;800ms</dd>
+        </div>
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">Recall@3</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-accent);max-width:none;margin-top:var(--space-1);">&gt;90%</dd>
+        </div>
+      </dl>
+
+      
+      <nav aria-label="On-page navigation" style="margin-top:var(--space-8);">
+        <ul role="list" style="display:flex;flex-wrap:wrap;gap:var(--space-2);">
+          <li><a href="#problem" class="chip">Problem</a></li>
+          <li><a href="#architecture" class="chip">Architecture</a></li>
+          <li><a href="#indexing" class="chip">Indexing Pipeline</a></li>
+          <li><a href="#query" class="chip">Query Path</a></li>
+          <li><a href="#monitoring" class="chip">Monitoring</a></li>
+          <li><a href="#evaluation" class="chip">Evaluation</a></li>
+          <li><a href="#results" class="chip">Results</a></li>
+          <li><a href="#tradeoffs" class="chip">Tradeoffs</a></li>
+        </ul>
+      </nav>
+
+    </section>
+
+    
+    <section id="problem" aria-labelledby="problem-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Problem</p>
+        <h2 id="problem-heading">Why Keyword Search Was Failing</h2>
+        <p>Search failures were a retrieval infrastructure problem — not a data availability problem.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        Product data lived in a relational store with free-text fields. Users searched with exact-match and
+        <code style="font-family:var(--font-mono);color:var(--color-text-code);font-size:var(--text-sm);">LIKE</code> queries, which failed completely on synonyms, abbreviations, typos, and natural language phrasing.
+        The same product would return no results under one name and dozens under another. Staff spent
+        3–5 hours per week resolving search misses manually — looking up products, correcting queries,
+        and manually matching results.
+      </p>
+      <p class="reveal" style="--reveal-delay:80ms;">
+        Vector search was the right approach because it increases recall under imperfect and varied input.
+        The goal was operational: return the right product fast enough to be used interactively, with the
+        reliability behaviors — fallbacks, monitoring, evaluation gates — that production systems require.
+        This could not be a prototype that worked in a notebook but broke under real usage patterns.
+      </p>
+
+    </section>
+
+    
+    <section id="architecture" aria-labelledby="arch-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Architecture</p>
+        <h2 id="arch-heading">Two-Path Design: Offline + Online</h2>
+        <p>Separating indexing from querying was the most important architectural decision — it's what makes the system resilient.</p>
+      </header>
+
+      
+      <figure class="reveal" style="--reveal-delay:40ms;margin:0 0 var(--space-8);padding:var(--space-6);background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-2xl);backdrop-filter:blur(var(--glass-blur));">
+        <svg role="img" aria-labelledby="search-arch-title search-arch-desc" viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <title id="search-arch-title">AI Semantic Search Architecture</title>
+          <desc id="search-arch-desc">Offline path: Gold layer product data → text preparation → Gemini embedding → pgvector upsert. Online path: user query → embed → pgvector similarity search → ranked results, with trigram fallback.</desc>
+
+          
+          <text x="10" y="20" font-size="10" font-weight="700" fill="var(--color-text-tertiary)">OFFLINE INDEXING PATH</text>
+
+          
+          <g class="arch-node">
+            <rect x="10" y="30" width="100" height="60" rx="10" class="highlight"></rect>
+            <text x="60" y="55" text-anchor="middle" font-size="11" font-weight="700">Gold Layer</text>
+            <text x="60" y="72" text-anchor="middle" font-size="10">Product records</text>
+            <text x="60" y="86" text-anchor="middle" font-size="9">1,700+</text>
+          </g>
+
+          <g class="arch-line"><line x1="110" y1="60" x2="140" y2="60"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="140" y="30" width="100" height="60" rx="10"></rect>
+            <text x="190" y="55" text-anchor="middle" font-size="11" font-weight="700">Text Prep</text>
+            <text x="190" y="72" text-anchor="middle" font-size="10">Normalize</text>
+            <text x="190" y="86" text-anchor="middle" font-size="9">Synonyms · Truncate</text>
+          </g>
+
+          <g class="arch-line"><line x1="240" y1="60" x2="270" y2="60"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="270" y="30" width="110" height="60" rx="10"></rect>
+            <text x="325" y="52" text-anchor="middle" font-size="11" font-weight="700">Gemini</text>
+            <text x="325" y="66" text-anchor="middle" font-size="10">text-embedding-004</text>
+            <text x="325" y="82" text-anchor="middle" font-size="9">768-dim vectors</text>
+          </g>
+
+          <g class="arch-line"><line x1="380" y1="60" x2="410" y2="60"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="410" y="30" width="110" height="60" rx="10" class="highlight"></rect>
+            <text x="465" y="52" text-anchor="middle" font-size="11" font-weight="700">pgvector</text>
+            <text x="465" y="66" text-anchor="middle" font-size="10">HNSW index</text>
+            <text x="465" y="82" text-anchor="middle" font-size="9">Upsert on product_id</text>
+          </g>
+
+          
+          <line x1="10" y1="115" x2="750" y2="115" stroke="var(--color-border-subtle)" stroke-width="1" stroke-dasharray="4,4"></line>
+
+          
+          <text x="10" y="132" font-size="10" font-weight="700" fill="var(--color-text-tertiary)">ONLINE QUERY PATH</text>
+
+          
+          <g class="arch-node">
+            <rect x="10" y="142" width="100" height="45" rx="10"></rect>
+            <text x="60" y="162" text-anchor="middle" font-size="11" font-weight="700">User Query</text>
+            <text x="60" y="178" text-anchor="middle" font-size="9">Natural language</text>
+          </g>
+
+          <g class="arch-line"><line x1="110" y1="164" x2="140" y2="164"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="140" y="142" width="100" height="45" rx="10"></rect>
+            <text x="190" y="162" text-anchor="middle" font-size="11">Embed</text>
+            <text x="190" y="178" text-anchor="middle" font-size="9">Gemini API</text>
+          </g>
+
+          <g class="arch-line"><line x1="240" y1="164" x2="270" y2="164"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="270" y="142" width="110" height="45" rx="10" class="highlight"></rect>
+            <text x="325" y="162" text-anchor="middle" font-size="11">pgvector</text>
+            <text x="325" y="178" text-anchor="middle" font-size="9">cosine similarity</text>
+          </g>
+
+          <g class="arch-line"><line x1="380" y1="164" x2="410" y2="164"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="410" y="142" width="100" height="45" rx="10"></rect>
+            <text x="460" y="162" text-anchor="middle" font-size="11">Top-K Results</text>
+            <text x="460" y="178" text-anchor="middle" font-size="9">Ranked · Scored</text>
+          </g>
+
+          
+          <g class="arch-node">
+            <rect x="560" y="142" width="100" height="45" rx="10"></rect>
+            <text x="610" y="162" text-anchor="middle" font-size="10">Trigram Fallback</text>
+            <text x="610" y="178" text-anchor="middle" font-size="9">On embed failure</text>
+          </g>
+          <line x1="510" y1="164" x2="560" y2="164" stroke="var(--color-border-default)" stroke-width="1.5" stroke-dasharray="4,3"></line>
+
+          
+          <g class="arch-bar">
+            <rect x="10" y="195" width="510" height="0" rx="0"></rect>
+          </g>
+
+        </svg>
+        <figcaption>Two-path RAG architecture: offline indexing pipeline (Airflow-scheduled) and online query path. Dashed line indicates trigram fallback on embedding failures.</figcaption>
+      </figure>
+
+      <p class="reveal" style="--reveal-delay:80ms;">
+        The offline and online paths are fully decoupled. The indexing DAG can fail, be rerun, or be paused
+        for maintenance without affecting query availability. This was a deliberate design choice —
+        a reindexing failure should not mean zero search results for users.
+      </p>
+
+    </section>
+
+    
+    <section id="indexing" aria-labelledby="indexing-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Offline Path</p>
+        <h2 id="indexing-heading">The Indexing Pipeline</h2>
+        <p>Scheduled, incremental, and designed to handle catalog changes without full rebuilds.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        The indexing pipeline runs on an Airflow schedule — reading product records from the Gold layer,
+        preparing text for embedding, calling the Gemini embedding API, and upserting vectors into
+        PostgreSQL pgvector on <code style="font-family:var(--font-mono);color:var(--color-text-code);font-size:var(--text-sm);">product_id</code>. Upserts allow incremental indexing
+        without full rebuilds when only a subset of products changes.
+      </p>
+
+      <div class="callout reveal" role="region" aria-label="Indexing design decisions" style="--reveal-delay:80ms;margin-top:var(--space-8);">
+        <ul role="list">
+          <li><strong>Incremental upserts:</strong> Only changed products are re-embedded. The catalog changes daily — a full rebuild each run would be wasteful and introduce unnecessary API costs</li>
+          <li><strong>Text preparation step:</strong> Product text is normalized, synonyms expanded, and long descriptions truncated before embedding — text quality directly determines retrieval quality</li>
+          <li><strong>Embedding consistency:</strong> All vectors use the same model version (<code style="font-size:var(--text-xs);">text-embedding-004</code>) and text prep pipeline. Model version changes require a full rebuild triggered intentionally</li>
+          <li><strong>Staleness monitoring:</strong> The pipeline records a last-indexed timestamp per product. Staleness beyond threshold triggers an alert before users notice degraded results</li>
+          <li><strong>HNSW index:</strong> Approximate nearest neighbor via HNSW provides sub-millisecond retrieval at 1,700 records — significantly faster than exact IVFFlat at this scale</li>
+        </ul>
+      </div>
+
+    </section>
+
+    
+    <section id="query" aria-labelledby="query-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Online Path</p>
+        <h2 id="query-heading">The Query Path</h2>
+        <p>Fast, observable, and designed to fail gracefully — not silently.</p>
+      </header>
+
+      <dl style="display:flex;flex-direction:column;gap:var(--space-5);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Query Embedding</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            User query text goes through the same preparation pipeline as product text before embedding.
+            Embedding is the dominant latency contributor at ~60% of p95 end-to-end time.
+            A timeout on the Gemini API call triggers the trigram fallback — users always get results,
+            even when the embedding endpoint is degraded.
+          </dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">pgvector Similarity Search</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            Cosine similarity search against the HNSW index returns Top-K candidates with their similarity
+            scores. At 1,700 vectors, retrieval is sub-millisecond. The similarity score is surfaced
+            alongside results to give the caller context on retrieval confidence.
+          </dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Trigram Fallback</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            When embedding fails (API timeout, rate limit), the system automatically falls back to
+            PostgreSQL trigram search. The response includes a <code style="font-family:var(--font-mono);font-size:var(--text-xs);">search_mode</code> field
+            indicating which path was used — making degraded behavior explicit and observable rather than silent.
+          </dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="monitoring" aria-labelledby="monitoring-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Observability</p>
+        <h2 id="monitoring-heading">Production Monitoring</h2>
+        <p>Designed to surface problems before users find them.</p>
+      </header>
+
+      <dl style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--space-4);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Index Freshness</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Last-indexed timestamp monitored per product. Staleness beyond configured threshold triggers an alert — degraded results surface proactively, not after a user reports a search miss.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Score Distribution</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Top-1 similarity scores tracked across queries. A sustained drop in average scores indicates embedding drift, text prep regression, or catalog changes that need attention.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Latency SLOs</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">p50 / p95 / p99 query latency logged. A p95 spike typically indicates Gemini endpoint degradation before error rates rise — giving time to respond before user experience degrades.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Fallback Rate</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Trigram fallback activation rate tracked separately. A spike in fallback usage signals embedding API instability before it becomes an outage — allowing proactive response.</dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="evaluation" aria-labelledby="evaluation-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Evaluation</p>
+        <h2 id="evaluation-heading">Deployment Gates Based on Retrieval Quality</h2>
+        <p>Not "it feels better" — a fixed evaluation set that runs before any indexing change or model update ships.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        A fixed set of 120 query–product pairs was assembled from historical search logs and staff-verified matches.
+        This evaluation set runs before every indexing change, text prep update, or embedding model version change
+        is deployed to production. Regressions block deployment.
+      </p>
+
+      <dl style="display:flex;flex-direction:column;gap:var(--space-5);" class="reveal" style="--reveal-delay:80ms;">
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Recall@k</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            Primary metric: does the correct product appear in top-k results? Recall@3 and Recall@5 are both
+            tracked. A Recall@3 regression below the configured threshold blocks deployment. Currently
+            maintained above 90% through catalog changes and text prep iterations.
+          </dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">MRR (Mean Reciprocal Rank)</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            Measures average rank position of the correct result. Useful when recall is stable but ranking quality
+            degrades — catching cases where the right product is always in the results but ranked 4th instead of 1st,
+            which still degrades user experience.
+          </dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Failure Case Analysis</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            Every query missing the correct result in top-5 is reviewed manually. Most failures traced to
+            text preparation — missing synonyms, overly aggressive truncation — rather than embedding model quality.
+            This guided iterative improvements to the text prep pipeline.
+          </dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Latency Regression Fixture</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            The same 120-pair evaluation set runs as a p95 latency baseline. Consistent load against a
+            fixed dataset allows apples-to-apples performance comparison across model versions,
+            infrastructure changes, and index size growth.
+          </dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="results" aria-labelledby="results-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Results</p>
+        <h2 id="results-heading">Measurable Outcomes</h2>
+      </header>
+
+      <ul role="list" aria-label="Measured outcomes" style="display:flex;flex-direction:column;gap:var(--space-4);" class="reveal" style="--reveal-delay:40ms;">
+        <li class="card" style="padding:var(--space-5);">3–5 hours per week of manual product lookup work eliminated — operations staff no longer spend time resolving search misses by hand</li>
+        <li class="card" style="padding:var(--space-5);">Zero silent failures — every degraded query is explicitly flagged via <code style="font-family:var(--font-mono);font-size:var(--text-xs);">search_mode</code> field, so fallback behavior is always observable rather than invisible</li>
+        <li class="card" style="padding:var(--space-5);">Index staleness alerts surfaced and resolved multiple times before any user-visible quality degradation — the monitoring caught real problems before users did</li>
+        <li class="card" style="padding:var(--space-5);">KWI's first AI-powered system in production — established that RAG is viable on the existing data infrastructure, which opened the door for the feedback classification work that followed</li>
+      </ul>
+
+    </section>
+
+    
+    <section id="tradeoffs" aria-labelledby="tradeoffs-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Tradeoffs</p>
+        <h2 id="tradeoffs-heading">Tradeoffs &amp; What I'd Improve Next</h2>
+      </header>
+
+      <dl style="display:flex;flex-direction:column;gap:var(--space-5);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Embedding latency is the bottleneck</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Query-time embedding is ~60% of end-to-end latency. Next step: cache frequently embedded queries, or move to a locally hosted embedding model to eliminate the external API dependency and reduce p95 significantly.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Single-stage retrieval</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Current ranking is pure vector similarity. A lightweight re-ranker — cross-encoder or business rules on structured product fields — would improve precision when multiple candidates score similarly close.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Evaluation set coverage</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">The 120-pair set covers common patterns well but misses long-tail edge cases. Logging implicit feedback (which result the user actually selected) would expand ground truth organically without manual labeling effort.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">pgvector at scale</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">HNSW on PostgreSQL performs excellently at 1,700 records. At 100K+, memory and latency would need re-assessment. The indexing pipeline is designed so swapping the vector store (to Pinecone, Weaviate, etc.) doesn't require rewriting any pipeline logic.</dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="stack" aria-labelledby="stack-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Stack</p>
+        <h2 id="stack-heading">Technologies</h2>
+      </header>
+
+      <div class="chip-row reveal" style="--reveal-delay:40ms;">
+        <span class="chip">Python</span>
+        <span class="chip">PostgreSQL</span>
+        <span class="chip">pgvector</span>
+        <span class="chip">HNSW</span>
+        <span class="chip">Google Gemini</span>
+        <span class="chip">text-embedding-004</span>
+        <span class="chip">Azure OpenAI</span>
+        <span class="chip">Apache Airflow</span>
+        <span class="chip">SQL</span>
+        <span class="chip">Trigram search</span>
+        <span class="chip">RAG</span>
+      </div>
+
+    </section>
+
+    
+    <section id="cs-cta" aria-labelledby="cs-cta-heading">
+      <h2 id="cs-cta-heading">Want to Go Deeper?</h2>
+      <p>
+        Happy to walk through the latency budget, the evaluation framework, how the fallback mode was designed
+        to be transparent, or the text preparation decisions that most improved Recall@3.
+      </p>
+      <div>
+        <a href="index.html#contact" class="btn btn-primary">Get in Touch</a>
+        <a href="projects.html" class="btn btn-secondary">All Case Studies</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <p><small>© 2026 Sajal Bhattarai. Built with care.</small></p>
+    <nav aria-label="Footer navigation">
+      <ul role="list">
+        <li><a href="projects.html">Case Studies</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!--
+    Sajal Bhattarai — Portfolio Logo Mark
+    Concept: Three data layers (Bronze→Silver→Gold medallion architecture)
+    Stacked parallelograms with rightward offset — suggests pipeline flow direction.
+    Readable at 16×16 favicon and scales cleanly to any size.
+    Single accent color: #2563EB
+  -->
+
+  <!-- Bronze layer — bottom, muted -->
+  <path
+    d="M2 22 L14 22 L18 26 L6 26 Z"
+    fill="#1c2333"
+    stroke="#38445e"
+    stroke-width="1"
+    stroke-linejoin="round"
+  />
+
+  <!-- Silver layer — middle, moderate -->
+  <path
+    d="M5 16 L17 16 L21 20 L9 20 Z"
+    fill="#27304a"
+    stroke="#4f5d7a"
+    stroke-width="1"
+    stroke-linejoin="round"
+  />
+
+  <!-- Gold layer — top, accent -->
+  <path
+    d="M8 10 L20 10 L24 14 L12 14 Z"
+    fill="#2563EB"
+    stroke="#3b7af5"
+    stroke-width="1"
+    stroke-linejoin="round"
+  />
+
+  <!-- Pipeline connector dot — top right, suggests flow continues -->
+  <circle
+    cx="26"
+    cy="9"
+    r="2.5"
+    fill="#2563EB"
+    opacity="0.75"
+  />
+
+  <!-- Connector line from Gold layer to dot -->
+  <line
+    x1="24"
+    y1="12"
+    x2="26"
+    y2="9"
+    stroke="#2563EB"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    opacity="0.6"
+  />
+</svg>

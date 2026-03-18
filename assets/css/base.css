@@ -1,0 +1,732 @@
+/* ═══════════════════════════════════════════════════════════════
+   BASE.CSS — Reset, Global Defaults, Typography
+   Gravity 2026 · Depends on: tokens.css
+═══════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────
+   1. MODERN RESET
+─────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  tab-size: 2;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-height) + var(--space-8));
+  hanging-punctuation: first last;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Remove default list styles */
+ul[role="list"],
+ol[role="list"],
+nav ul,
+nav ol { list-style: none; }
+
+/* Block elements */
+p, h1, h2, h3, h4, h5, h6,
+blockquote, figure, dl, dd {
+  overflow-wrap: break-word;
+}
+
+/* Media */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+img { height: auto; font-style: italic; }
+
+input, button, textarea, select { font: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ───────────────────────────────────────────────
+   2. AURORA BACKGROUND
+   Floating gradient orbs — deep navy canvas with
+   rich indigo / violet / cyan atmosphere.
+─────────────────────────────────────────────────── */
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  pointer-events: none;
+  z-index: var(--z-below);
+  will-change: transform;
+}
+
+/* Indigo blob — top right */
+body::before {
+  top: -10%;
+  right: -8%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(ellipse at center, var(--aurora-1) 0%, transparent 65%);
+  animation: aurora-drift-1 22s ease-in-out infinite alternate;
+}
+
+/* Cyan blob — bottom left */
+body::after {
+  bottom: 5%;
+  left: -12%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(ellipse at center, var(--aurora-3) 0%, transparent 65%);
+  animation: aurora-drift-2 28s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-drift-1 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-50px, 70px) scale(1.10); }
+}
+
+@keyframes aurora-drift-2 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(70px, -50px) scale(1.08); }
+}
+
+/* Violet blob — center */
+.aurora-center {
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(ellipse at center, var(--aurora-2) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: var(--z-below);
+  animation: aurora-drift-3 32s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-drift-3 {
+  from { transform: translate(-50%, -50%) scale(1); }
+  to   { transform: translate(-50%, -50%) scale(1.14); }
+}
+
+/* Extra — bottom-right indigo accent blob */
+.aurora-br {
+  position: fixed;
+  bottom: -10%;
+  right: -5%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, var(--aurora-4) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: var(--z-below);
+  animation: aurora-drift-4 26s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-drift-4 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-30px, -40px) scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before, body::after, .aurora-center, .aurora-br {
+    animation: none;
+  }
+}
+
+
+/* ───────────────────────────────────────────────
+   3. GOOGLE FONTS
+─────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+
+/* ───────────────────────────────────────────────
+   4. SKIP LINK
+─────────────────────────────────────────────────── */
+
+.skip-link {
+  position: fixed;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: var(--z-toast);
+  padding: var(--space-3) var(--space-6);
+  background: var(--gradient-brand);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  font-family: var(--font-sans);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(-120%);
+  transition: opacity var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
+  pointer-events: none;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  outline: none;
+}
+
+
+/* ───────────────────────────────────────────────
+   5. FOCUS STYLES
+─────────────────────────────────────────────────── */
+
+:focus { outline: none; }
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+button:focus-visible,
+[role="button"]:focus-visible {
+  border-radius: var(--radius-lg);
+}
+
+a:focus-visible { border-radius: var(--radius-xs); }
+
+
+/* ───────────────────────────────────────────────
+   6. SCROLLBAR
+─────────────────────────────────────────────────── */
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+
+::-webkit-scrollbar-track { background: transparent; }
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.55); }
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+
+/* ───────────────────────────────────────────────
+   7. SELECTION
+─────────────────────────────────────────────────── */
+
+::selection {
+  background: rgba(99,102,241,0.28);
+  color: var(--color-text-primary);
+}
+
+
+/* ───────────────────────────────────────────────
+   8. GLOBAL TYPOGRAPHY
+─────────────────────────────────────────────────── */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--fluid-h1);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tighter);
+  line-height: var(--leading-none);
+}
+
+h2 {
+  font-size: var(--fluid-h2);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+
+h3 {
+  font-size: var(--fluid-h3);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+
+h4 { font-size: var(--text-lg); font-weight: var(--weight-semibold); }
+h5 { font-size: var(--text-base); font-weight: var(--weight-semibold); }
+
+h6 {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+p {
+  font-size: var(--fluid-body);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+  max-width: 72ch;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: var(--transition-color);
+}
+
+a:hover { color: var(--color-accent-hover); }
+
+/* ── Inline code ── */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  font-weight: var(--weight-medium);
+  color: var(--color-text-code);
+  background: rgba(99,102,241,0.10);
+  border: 1px solid rgba(99,102,241,0.16);
+  padding: 0.1em 0.4em;
+  border-radius: var(--radius-xs);
+  white-space: nowrap;
+}
+
+/* ── Block code ── */
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  background: var(--code-bg, rgba(255,255,255,0.04));
+  border: 1px solid var(--code-border, rgba(255,255,255,0.09));
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  overflow-x: auto;
+  position: relative;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: var(--color-text-primary);
+  white-space: pre;
+}
+
+/* Optional filename / language label above code block */
+pre[data-label]::before {
+  content: attr(data-label);
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-tertiary);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+strong, b {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+em, i { font-style: italic; }
+
+small { font-size: var(--text-xs); color: var(--color-text-tertiary); }
+
+address { font-style: normal; }
+
+abbr[title] { text-decoration: underline dotted; cursor: help; }
+
+dt {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+}
+
+dd {
+  color: var(--color-text-secondary);
+  font-size: var(--fluid-body);
+  line-height: var(--leading-relaxed);
+  max-width: 68ch;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border-subtle);
+  margin: var(--space-12) 0;
+}
+
+blockquote {
+  border-left: 2px solid var(--color-accent);
+  padding-left: var(--space-6);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+time { color: var(--color-text-tertiary); font-size: var(--text-sm); }
+
+figure { display: block; }
+
+figcaption {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  line-height: var(--leading-normal);
+  margin-top: var(--space-3);
+  text-align: center;
+  max-width: 60ch;
+  margin-inline: auto;
+}
+
+@supports (text-wrap: pretty) {
+  p { text-wrap: pretty; }
+}
+
+
+/* ───────────────────────────────────────────────
+   9. LAYOUT PRIMITIVES
+─────────────────────────────────────────────────── */
+
+.page-wrapper {
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--content-padding);
+}
+
+.container--narrow { max-width: var(--content-narrow); }
+.container--wide   { max-width: var(--content-wide); }
+
+main {
+  flex: 1;
+  padding-top: var(--nav-height);
+}
+
+/* All sections share padding and constrain width */
+section {
+  padding-block: var(--section-gap);
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--content-padding);
+}
+
+/* Remove double top padding between consecutive sections */
+section + section { padding-top: 0; }
+
+/* Section dividers — very subtle rule between sections */
+section + section::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-border-subtle) 20%,
+    var(--color-border-subtle) 80%,
+    transparent
+  );
+  margin-bottom: var(--section-gap);
+  margin-inline: var(--content-padding);
+}
+
+.section-header { margin-bottom: var(--content-gap); }
+
+.section-header p {
+  margin-top: var(--space-3);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-lg);
+  max-width: none;
+}
+
+/* Section eyebrow label */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--color-accent);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+}
+
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: var(--gradient-brand);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Flex utilities */
+.flex             { display: flex; }
+.flex-col         { flex-direction: column; }
+.items-center     { align-items: center; }
+.justify-between  { justify-content: space-between; }
+.gap-2            { gap: var(--space-2); }
+.gap-3            { gap: var(--space-3); }
+.gap-4            { gap: var(--space-4); }
+.gap-6            { gap: var(--space-6); }
+.gap-8            { gap: var(--space-8); }
+
+/* Grid utilities */
+.grid   { display: grid; }
+.grid-2 { grid-template-columns: var(--grid-cols-2); gap: var(--grid-gap); }
+.grid-3 { grid-template-columns: var(--grid-cols-3); gap: var(--grid-gap); }
+
+/* Text utilities */
+.text-primary   { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary  { color: var(--color-text-tertiary); }
+.text-accent    { color: var(--color-accent); }
+.text-mono      { font-family: var(--font-mono); }
+.text-center    { text-align: center; }
+.text-gradient  {
+  background: var(--gradient-hero-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hidden { display: none; }
+
+@media (max-width: 767px)  { .hide-mobile  { display: none; } }
+@media (min-width: 768px)  { .hide-desktop { display: none; } }
+
+
+/* ───────────────────────────────────────────────
+   10. THEME TRANSITION
+─────────────────────────────────────────────────── */
+
+html.theme-transitioning,
+html.theme-transitioning * {
+  transition:
+    background-color var(--duration-slow) var(--ease-default),
+    border-color var(--duration-slow) var(--ease-default),
+    color var(--duration-slow) var(--ease-default),
+    box-shadow var(--duration-slow) var(--ease-default) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transitioning,
+  html.theme-transitioning * { transition: none !important; }
+}
+
+
+/* ───────────────────────────────────────────────
+   11. SVG DIAGRAM THEMING
+─────────────────────────────────────────────────── */
+
+svg[role="img"] rect     { fill: var(--svg-fill); stroke: var(--svg-stroke); stroke-width: 1; }
+svg[role="img"] text     { fill: var(--svg-text); }
+svg[role="img"] line     { stroke: var(--svg-arrow); stroke-width: 1.5; }
+svg[role="img"] path     { fill: var(--svg-arrow); }
+svg[role="img"] rect.highlight { fill: var(--svg-highlight); stroke: var(--color-accent); }
+svg[role="img"] rect.bar { fill: var(--svg-bar-fill); stroke: var(--color-border-default); }
+
+
+/* ───────────────────────────────────────────────
+   12. BREADCRUMB
+─────────────────────────────────────────────────── */
+
+nav[aria-label="Breadcrumb"] ol {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+nav[aria-label="Breadcrumb"] li {
+  display: flex;
+  align-items: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+nav[aria-label="Breadcrumb"] li:not(:last-child)::after {
+  content: '/';
+  margin-left: var(--space-2);
+  color: var(--color-border-strong);
+}
+
+nav[aria-label="Breadcrumb"] a {
+  color: var(--color-text-tertiary);
+  transition: var(--transition-color);
+}
+
+nav[aria-label="Breadcrumb"] a:hover { color: var(--color-text-primary); }
+
+nav[aria-label="Breadcrumb"] [aria-current="page"] {
+  color: var(--color-text-primary);
+  font-weight: var(--weight-medium);
+}
+
+
+/* ───────────────────────────────────────────────
+   13. FOOTER
+─────────────────────────────────────────────────── */
+
+footer[role="contentinfo"] {
+  padding-block: var(--space-10);
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--content-padding);
+}
+
+footer[role="contentinfo"] small {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+footer[role="contentinfo"] nav ul {
+  display: flex;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+footer[role="contentinfo"] nav a {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  font-weight: var(--weight-medium);
+  transition: var(--transition-color);
+}
+
+footer[role="contentinfo"] nav a:hover,
+footer[role="contentinfo"] nav a[aria-current="page"] {
+  color: var(--color-text-primary);
+}
+
+
+/* ───────────────────────────────────────────────
+   14. DIAGRAM FIGURE — Generic utility
+   Use .diagram-figure on <figure> wrapping any
+   SVG diagram in ANY case study section.
+   (Architecture sections have their own styles
+   in components.css; this handles all others.)
+─────────────────────────────────────────────────── */
+
+.diagram-figure {
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-8);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  overflow-x: auto;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.diagram-figure svg {
+  width: 100%;
+  height: auto;
+  min-width: 520px;
+  max-width: 100%;
+}
+
+.diagram-figure figcaption {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  margin-top: var(--space-4);
+  margin-inline: 0;
+  letter-spacing: var(--tracking-wide);
+}
+
+@media (max-width: 600px) {
+  .diagram-figure { padding: var(--space-4); }
+}
+
+
+/* ───────────────────────────────────────────────
+   15. RESPONSIVE BREAKPOINTS
+   NOTE: We intentionally keep section-gap modest —
+   do NOT override back to --space-40 or --space-48.
+   Sections should feel rhythmic, not cavernous.
+─────────────────────────────────────────────────── */
+
+@media (min-width: 480px) {
+  :root { --grid-gap: var(--space-6); }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --section-gap:    var(--space-24);
+    --section-gap-sm: var(--space-16);
+    --card-padding:   var(--space-10);
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --section-gap:    var(--space-28);
+    --grid-gap:       var(--space-8);
+    --grid-gap-lg:    var(--space-10);
+  }
+}
+
+/* Intentionally no --space-48 override at 1280px */

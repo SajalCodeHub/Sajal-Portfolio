@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" autocomplete="off">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Verisk Enterprise Warehouse — Hybrid batch and streaming pipeline processing 1M+ insurance records daily on Amazon Redshift. +30% throughput via Spark tuning, Kafka streaming under 5 minutes, 98%+ on-time delivery." />
+  <meta name="author" content="Sajal Bhattarai" />
+  <title>Enterprise Warehouse — Sajal Bhattarai</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+</head>
+<body spellcheck="false">
+
+  <div class="aurora-center" aria-hidden="true"></div>
+  <div class="aurora-br"     aria-hidden="true"></div>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <header role="banner">
+    <nav aria-label="Primary navigation">
+      <a href="index.html" aria-label="Sajal Bhattarai — home">
+        <span class="logo-wordmark">Sajal</span>
+      </a>
+      <ul role="list" id="nav-links">
+        <li><a href="index.html#systems">Systems</a></li>
+        <li><a href="projects.html" aria-current="page">Case Studies</a></li>
+        <li><a href="index.html#playbook">Playbook</a></li>
+        <li><a href="index.html#writing">Writing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <button id="theme-toggle" type="button" aria-label="Toggle light and dark mode" aria-pressed="false">
+          <span aria-hidden="true"></span>
+        </button>
+        <button class="nav-mobile-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    
+    <section id="cs-hero" aria-labelledby="cs-hero-title">
+
+      <div class="reveal">
+        <nav aria-label="Breadcrumb">
+          <ol role="list">
+            <li><a href="projects.html">Case Studies</a></li>
+            <li aria-current="page">Enterprise Warehouse</li>
+          </ol>
+        </nav>
+
+        <div style="display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-4);">
+          <span class="proof-chip">Production</span>
+          <span class="proof-chip">Verisk Analytics · 2019–2021</span>
+          <span class="proof-chip">Warehousing · Batch · Streaming</span>
+        </div>
+
+        <h1 id="cs-hero-title" style="margin-top:var(--space-4);">Enterprise Warehouse</h1>
+
+        <p style="font-size:var(--text-xl);color:var(--color-text-secondary);max-width:62ch;margin-top:var(--space-4);">
+          A hybrid warehouse architecture handling 1M+ insurance records daily — bulk historical loads via
+          Spark batch, time-sensitive operational data via Kafka streaming, converging in Amazon Redshift
+          with WLM queue isolation, SLA monitoring, and idempotent writes throughout.
+        </p>
+
+        <p style="font-size:var(--text-sm);color:var(--color-text-tertiary);margin-top:var(--space-3);">
+          Some implementation details anonymized per employer policy. Architecture and measurable outcomes preserved in full.
+        </p>
+
+        <div class="btn-group" style="margin-top:var(--space-8);" role="group">
+          <a href="index.html#contact" class="btn btn-primary">Discuss This System</a>
+          <a href="projects.html" class="btn btn-secondary">All Case Studies</a>
+        </div>
+      </div>
+
+      
+      <dl aria-label="Key metrics" style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:60ms;">
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">Records / Day</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-text-primary);max-width:none;margin-top:var(--space-1);">1M+</dd>
+        </div>
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">Stream Latency</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-text-primary);max-width:none;margin-top:var(--space-1);">&lt;5 min</dd>
+        </div>
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">On-Time Delivery</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-accent);max-width:none;margin-top:var(--space-1);">98%+</dd>
+        </div>
+      </dl>
+
+      
+      <nav aria-label="On-page navigation" style="margin-top:var(--space-8);">
+        <ul role="list" style="display:flex;flex-wrap:wrap;gap:var(--space-2);">
+          <li><a href="#problem" class="chip">Problem</a></li>
+          <li><a href="#architecture" class="chip">Architecture</a></li>
+          <li><a href="#batch" class="chip">Batch Path</a></li>
+          <li><a href="#streaming" class="chip">Streaming Path</a></li>
+          <li><a href="#reliability" class="chip">Reliability</a></li>
+          <li><a href="#performance" class="chip">Performance</a></li>
+          <li><a href="#results" class="chip">Results</a></li>
+          <li><a href="#tradeoffs" class="chip">Tradeoffs</a></li>
+        </ul>
+      </nav>
+
+    </section>
+
+    
+    <section id="problem" aria-labelledby="problem-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Problem</p>
+        <h2 id="problem-heading">A Single Batch Path That Couldn't Scale</h2>
+        <p>The nightly batch job couldn't satisfy both volume growth and freshness requirements simultaneously.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        The existing pipeline was batch-only. As daily insurance record volume grew to 1M+, the nightly job
+        started overrunning its completion window — delaying downstream reporting that had hard start times.
+        At the same time, operational use cases needed data in minutes, not hours. Risk modeling teams
+        were working with data that was up to 24 hours stale.
+      </p>
+      <p class="reveal" style="--reveal-delay:80ms;">
+        The solution wasn't "make batch faster" in isolation. It was workload separation: keep Spark batch
+        for high-volume historical loads and complex multi-source joins, introduce Kafka streaming for
+        latency-sensitive operational events, and isolate both paths with Redshift WLM so neither could
+        degrade the other or impact BI analysts running concurrent queries.
+      </p>
+
+    </section>
+
+    
+    <section id="architecture" aria-labelledby="arch-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Architecture</p>
+        <h2 id="arch-heading">Hybrid Batch + Streaming Architecture</h2>
+        <p>Two independent ingestion paths converge at Redshift with explicit isolation and different write semantics.</p>
+      </header>
+
+      <figure class="reveal" style="--reveal-delay:40ms;margin:0 0 var(--space-8);padding:var(--space-6);background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-2xl);backdrop-filter:blur(var(--glass-blur));">
+        <svg role="img" aria-labelledby="ew-arch-title ew-arch-desc" viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <title id="ew-arch-title">Enterprise Warehouse Hybrid Architecture</title>
+          <desc id="ew-arch-desc">Two paths feed Amazon Redshift. Batch: source systems to S3 to Spark to Redshift COPY. Streaming: operational events to Kafka to micro-batch staging to Redshift merge. WLM isolates batch, streaming, and BI queues. Analytics and BI tools consume from Redshift.</desc>
+
+          
+          <text x="10" y="18" font-size="10" font-weight="700" fill="var(--color-text-tertiary)">BATCH PATH (Spark · Airflow · 200GB+ / day)</text>
+
+          
+          <g class="arch-node">
+            <rect x="10" y="26" width="110" height="55" rx="10"></rect>
+            <text x="65" y="48" text-anchor="middle" font-size="11" font-weight="700">Source Systems</text>
+            <text x="65" y="63" text-anchor="middle" font-size="10">Carriers · Vendors</text>
+            <text x="65" y="76" text-anchor="middle" font-size="9">1M+ records/day</text>
+          </g>
+          <g class="arch-line"><line x1="120" y1="53" x2="154" y2="53"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="154" y="26" width="100" height="55" rx="10"></rect>
+            <text x="204" y="50" text-anchor="middle" font-size="11" font-weight="700">S3 Staging</text>
+            <text x="204" y="65" text-anchor="middle" font-size="10">Partitioned by date</text>
+            <text x="204" y="78" text-anchor="middle" font-size="9">Raw landing zone</text>
+          </g>
+          <g class="arch-line"><line x1="254" y1="53" x2="288" y2="53"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="288" y="26" width="110" height="55" rx="10"></rect>
+            <text x="343" y="48" text-anchor="middle" font-size="11" font-weight="700">Spark on EMR</text>
+            <text x="343" y="63" text-anchor="middle" font-size="10">Dedup · Transform</text>
+            <text x="343" y="76" text-anchor="middle" font-size="9">Partition-tuned</text>
+          </g>
+          <g class="arch-line"><line x1="398" y1="53" x2="445" y2="100"></line></g>
+
+          
+          <text x="10" y="138" font-size="10" font-weight="700" fill="var(--color-text-tertiary)">STREAMING PATH (Kafka · &lt;5 min end-to-end latency)</text>
+
+          
+          <g class="arch-node">
+            <rect x="10" y="148" width="110" height="55" rx="10"></rect>
+            <text x="65" y="170" text-anchor="middle" font-size="11" font-weight="700">Operational</text>
+            <text x="65" y="185" text-anchor="middle" font-size="10">Events · Risk feeds</text>
+            <text x="65" y="198" text-anchor="middle" font-size="9">Time-sensitive</text>
+          </g>
+          <g class="arch-line"><line x1="120" y1="175" x2="154" y2="175"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="154" y="148" width="100" height="55" rx="10"></rect>
+            <text x="204" y="170" text-anchor="middle" font-size="11" font-weight="700">Apache Kafka</text>
+            <text x="204" y="185" text-anchor="middle" font-size="10">Topics · Consumers</text>
+            <text x="204" y="198" text-anchor="middle" font-size="9">At-least-once</text>
+          </g>
+          <g class="arch-line"><line x1="254" y1="175" x2="288" y2="175"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="288" y="148" width="110" height="55" rx="10"></rect>
+            <text x="343" y="170" text-anchor="middle" font-size="11" font-weight="700">Micro-batch</text>
+            <text x="343" y="185" text-anchor="middle" font-size="10">Stage + idempotent</text>
+            <text x="343" y="198" text-anchor="middle" font-size="9">merge on key</text>
+          </g>
+          <g class="arch-line"><line x1="398" y1="175" x2="445" y2="148"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="445" y="60" width="150" height="130" rx="14" class="highlight"></rect>
+            <text x="520" y="88" text-anchor="middle" font-size="13" font-weight="700">Amazon Redshift</text>
+            <text x="520" y="108" text-anchor="middle" font-size="10">WLM queue isolation</text>
+            <text x="520" y="124" text-anchor="middle" font-size="10">Batch · Streaming · BI</text>
+            <text x="520" y="140" text-anchor="middle" font-size="10">COPY from S3</text>
+            <text x="520" y="156" text-anchor="middle" font-size="10">DISTKEY / SORTKEY tuned</text>
+            <text x="520" y="172" text-anchor="middle" font-size="10">Idempotent merge</text>
+          </g>
+          <g class="arch-line"><line x1="595" y1="125" x2="630" y2="125"></line></g>
+
+          
+          <g class="arch-node">
+            <rect x="630" y="80" width="120" height="45" rx="10"></rect>
+            <text x="690" y="101" text-anchor="middle" font-size="11" font-weight="700">Analytics Teams</text>
+            <text x="690" y="116" text-anchor="middle" font-size="9">Risk · Actuarial</text>
+          </g>
+          <g class="arch-node">
+            <rect x="630" y="145" width="120" height="45" rx="10"></rect>
+            <text x="690" y="166" text-anchor="middle" font-size="11" font-weight="700">BI Dashboards</text>
+            <text x="690" y="181" text-anchor="middle" font-size="9">Reporting · Execs</text>
+          </g>
+
+          
+          <g class="arch-bar">
+            <rect x="10" y="220" width="435" height="24" rx="8"></rect>
+            <text x="222" y="236" text-anchor="middle" font-size="10">Apache Airflow · Batch orchestration · SLA monitoring · 98%+ on-time delivery</text>
+          </g>
+
+        </svg>
+        <figcaption>Hybrid architecture: Spark batch path for volume and completeness, Kafka streaming path for freshness — isolated by Redshift WLM so neither affects the other</figcaption>
+      </figure>
+
+    </section>
+
+    
+    <section id="batch" aria-labelledby="batch-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Batch Path</p>
+        <h2 id="batch-heading">Spark Batch — Volume, Joins, Completeness</h2>
+        <p>The batch path handles everything where completeness matters more than freshness.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        Source systems write raw data to S3 staging, partitioned by date. Spark reads from S3, performs
+        multi-source joins, deduplication, and schema normalization, then loads into Redshift via
+        <code style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--color-text-code);">COPY</code> for maximum throughput. Airflow orchestrates the schedule with SLA monitoring
+        and retry logic.
+      </p>
+
+      <div class="callout reveal" role="region" aria-label="Batch path design decisions" style="--reveal-delay:80ms;margin-top:var(--space-8);">
+        <ul role="list">
+          <li><strong>COPY from S3:</strong> Bulk load via COPY is 10–100x faster than row-by-row INSERT for Redshift. Batch files are sized to minimize COPY overhead while respecting Redshift's MPP distribution</li>
+          <li><strong>Spark deduplication pre-load:</strong> Duplicates removed in Spark before hitting Redshift — prevents downstream consumers from seeing duplicate records and avoids expensive post-load dedup operations</li>
+          <li><strong>Partition alignment:</strong> S3 partitions aligned with Redshift SORTKEY — reduces data movement during scan-heavy queries and preserves MPP parallelism</li>
+          <li><strong>p99 window guarantee:</strong> Downstream reporting has hard start times. Airflow SLA monitoring fires on "running late" — not just "failed" — giving time to resolve before the window closes</li>
+        </ul>
+      </div>
+
+    </section>
+
+    
+    <section id="streaming" aria-labelledby="streaming-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Streaming Path</p>
+        <h2 id="streaming-heading">Kafka Streaming — Freshness Under 5 Minutes</h2>
+        <p>Operational events where sub-5-minute delivery has real business value — risk modeling and real-time alerting.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        Operational event sources publish to Kafka topics. Consumers read micro-batches and write to
+        Redshift staging tables. A controlled merge process then promotes staged records into target tables
+        on a schedule — providing freshness without the performance penalty of row-by-row inserts or
+        COPY lock conflicts with the batch path.
+      </p>
+
+      <dl style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:80ms;">
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Idempotent Merges</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Kafka delivers at-least-once. Streaming merges are keyed on stable record identifiers — reprocessing a batch never creates duplicate rows in financial/actuarial tables.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Dead-Letter Topics</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Records failing schema validation route to DLQ topics with structured failure reasons. DLQ volume is monitored — spikes indicate source schema drift before it becomes a data loss event.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Consumer Lag Tracking</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Consumer lag thresholds alert before a consumer falls critically behind. Lag spikes typically indicate downstream write slowdown or schema mismatch — caught proactively.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">WLM Queue Isolation</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Streaming merges run in a dedicated WLM queue — separate from batch COPY loads and BI analyst queries. Neither path can saturate the others' concurrency slots.</dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="reliability" aria-labelledby="reliability-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Reliability</p>
+        <h2 id="reliability-heading">Reliability &amp; Observability</h2>
+        <p>Designed to surface problems before stakeholders notice stale or missing data.</p>
+      </header>
+
+      <dl style="display:flex;flex-direction:column;gap:var(--space-4);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">SLA monitoring via Airflow callbacks</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">SLA miss callbacks fire on "running late" — not just "failed." Slow-running batch jobs get caught before the downstream reporting window closes, giving time to investigate and resolve.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Row count reconciliation</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Batch loads reconcile source record counts against Redshift counts per partition. Discrepancies beyond tolerance halt downstream consumption — no silent partial loads reaching BI reports.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Explicit dependency graph</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Every transformation declares its upstream dependencies. No step runs on data that hasn't passed reconciliation. Failed reconciliation propagates correctly through the Airflow dependency chain.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">AWS CloudWatch alerting</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Custom Python validation scripts and CloudWatch alerts monitor for schema drift, late-arriving data, and volume anomalies — catching issues before they impact downstream consumers.</dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="performance" aria-labelledby="performance-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Performance Engineering</p>
+        <h2 id="performance-heading">+30% Throughput — Without Infrastructure Upgrades</h2>
+        <p>Every gain came from tuning and schema design — not from throwing more hardware at the problem.</p>
+      </header>
+
+      <dl style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--space-4);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Spark partition sizing</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Repartitioning aligned task sizes with executor memory and target S3 file sizes — reducing Spark scheduler overhead and improving throughput on the largest daily loads significantly.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Broadcast join optimization</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Broadcast hints for small dimension tables eliminated expensive shuffle joins identified in Spark UI execution plan analysis — the single largest driver of the 30% throughput improvement.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Redshift DIST/SORT alignment</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Join-heavy tables aligned on DISTKEY; scan-heavy tables received compound SORTKEY patterns — reducing node-to-node data movement and improving BI query speed by 40%.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Vacuum/analyze scheduling</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">High-churn tables vacuumed during off-peak windows using targeted operations — preserving query performance on tables with high delete/update rates without runaway compute costs.</dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="results" aria-labelledby="results-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Results</p>
+        <h2 id="results-heading">Measurable Outcomes</h2>
+      </header>
+
+      <ul role="list" aria-label="Measured outcomes" style="display:flex;flex-direction:column;gap:var(--space-4);" class="reveal" style="--reveal-delay:40ms;">
+        <li class="card" style="padding:var(--space-5);">+30% throughput on the 200GB+ daily Spark batch — achieved through partition tuning and broadcast join optimization, without touching infrastructure or increasing compute spend</li>
+        <li class="card" style="padding:var(--space-5);">40% improvement in BI query performance through star and snowflake schema redesign — DIST/SORT key alignment in Redshift alone cut join-heavy query times significantly</li>
+        <li class="card" style="padding:var(--space-5);">Zero duplicates in critical financial and actuarial tables — idempotent merge semantics on stable record identifiers held across both batch and streaming paths</li>
+        <li class="card" style="padding:var(--space-5);">AWS IAM access policies, column-level encryption, and data masking in place — required for handling sensitive policyholder records under enterprise governance standards</li>
+      </ul>
+
+    </section>
+
+    
+    <section id="tradeoffs" aria-labelledby="tradeoffs-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Tradeoffs</p>
+        <h2 id="tradeoffs-heading">Tradeoffs &amp; What I'd Improve Next</h2>
+      </header>
+
+      <dl style="display:flex;flex-direction:column;gap:var(--space-5);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Two paths = two operational surfaces</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Batch + streaming doubles failure modes and on-call complexity. A unified Spark Structured Streaming platform with configurable micro-batch intervals could reduce operational surface while preserving the freshness/completeness tradeoff.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Schema evolution is coordinated manually</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Source changes require synchronized updates across Spark jobs, S3 schemas, and Redshift table definitions. A schema registry and dbt-managed migrations would make schema evolution safer, auditable, and reviewable via PR.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Row-level lineage requires manual correlation</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Lineage exists at the pipeline level. Tracing a specific record from source through Spark to Redshift requires manually correlating logs. A lightweight audit table written at ingestion time would make individual record traceability straightforward without heavy tooling.</dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="stack" aria-labelledby="stack-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Stack</p>
+        <h2 id="stack-heading">Technologies</h2>
+      </header>
+
+      <div class="chip-row reveal" style="--reveal-delay:40ms;">
+        <span class="chip">Python</span>
+        <span class="chip">SQL</span>
+        <span class="chip">PySpark</span>
+        <span class="chip">Apache Kafka</span>
+        <span class="chip">Apache Airflow</span>
+        <span class="chip">Amazon Redshift</span>
+        <span class="chip">AWS S3</span>
+        <span class="chip">AWS Glue</span>
+        <span class="chip">AWS IAM</span>
+        <span class="chip">AWS CloudWatch</span>
+        <span class="chip">Docker</span>
+        <span class="chip">Bash</span>
+        <span class="chip">Linux</span>
+        <span class="chip">Git</span>
+      </div>
+
+    </section>
+
+    
+    <section id="cs-cta" aria-labelledby="cs-cta-heading">
+      <h2 id="cs-cta-heading">Want to Go Deeper?</h2>
+      <p>
+        Happy to walk through WLM configuration decisions, the streaming merge correctness guarantees,
+        how the Spark optimizations were identified, or the partition alignment strategy for Redshift.
+      </p>
+      <div>
+        <a href="index.html#contact" class="btn btn-primary">Get in Touch</a>
+        <a href="projects.html" class="btn btn-secondary">All Case Studies</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <p><small>© 2026 Sajal Bhattarai. Built with care.</small></p>
+    <nav aria-label="Footer navigation">
+      <ul role="list">
+        <li><a href="projects.html">Case Studies</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

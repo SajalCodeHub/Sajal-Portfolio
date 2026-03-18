@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" autocomplete="off">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="E-Commerce Data Platform — Full-stack analytics platform streaming e-commerce events from Confluent Kafka into AWS S3, loading into Snowflake via a custom Airflow operator, transforming with dbt, and validating with 30+ automated data quality checks." />
+  <meta name="author" content="Sajal Bhattarai" />
+  <title>E-Commerce Data Platform — Sajal Bhattarai</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+</head>
+<body spellcheck="false">
+
+  <div class="aurora-center" aria-hidden="true"></div>
+  <div class="aurora-br"     aria-hidden="true"></div>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <header role="banner">
+    <nav aria-label="Primary navigation">
+      <a href="index.html" aria-label="Sajal Bhattarai — home">
+        <span class="logo-wordmark">Sajal</span>
+      </a>
+      <ul role="list" id="nav-links">
+        <li><a href="index.html#systems">Systems</a></li>
+        <li><a href="projects.html" aria-current="page">Case Studies</a></li>
+        <li><a href="index.html#playbook">Playbook</a></li>
+        <li><a href="index.html#writing">Writing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <button id="theme-toggle" type="button" aria-label="Toggle light and dark mode" aria-pressed="false">
+          <span aria-hidden="true"></span>
+        </button>
+        <button class="nav-mobile-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    
+    <section id="cs-hero" aria-labelledby="cs-hero-title">
+
+      <nav aria-label="Breadcrumb">
+        <ol role="list">
+          <li><a href="projects.html">Case Studies</a></li>
+          <li aria-current="page">E-Commerce Data Platform</li>
+        </ol>
+      </nav>
+
+      <div style="margin-top:var(--space-6);">
+        <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-4);flex-wrap:wrap;">
+          <span class="proof-chip">Personal Project</span>
+          <span class="proof-chip">Mar 2026</span>
+          <span class="proof-chip">Streaming · Warehouse · dbt · Kafka</span>
+          <span class="proof-chip">Real Cloud Infrastructure</span>
+        </div>
+
+        <h1 id="cs-hero-title">E-Commerce Data Platform</h1>
+
+        <p style="font-size:var(--text-xl);color:var(--color-text-secondary);max-width:62ch;margin-top:var(--space-4);">
+          A full-stack analytics platform that takes e-commerce events from Confluent Kafka, lands
+          them in AWS S3 via a custom Airflow operator, loads into Snowflake, transforms with dbt
+          star schema models, and validates with 30+ automated data quality checks across
+          critical, warning, and info severity tiers.
+        </p>
+      </div>
+
+      
+      <dl aria-label="Key metrics" style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4);margin-top:var(--space-8);" class="reveal">
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">Kafka Topics</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-text-primary);max-width:none;margin-top:var(--space-1);">4</dd>
+        </div>
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">DQ Checks</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-accent);max-width:none;margin-top:var(--space-1);">30+</dd>
+        </div>
+      </dl>
+
+      
+      <nav aria-label="On-page navigation" style="margin-top:var(--space-8);">
+        <ul role="list" style="display:flex;flex-wrap:wrap;gap:var(--space-2);">
+          <li><a href="#problem" class="chip">Problem</a></li>
+          <li><a href="#streaming" class="chip">Kafka Streaming</a></li>
+          <li><a href="#warehouse" class="chip">Snowflake Setup</a></li>
+          <li><a href="#orchestration" class="chip">Orchestration</a></li>
+          <li><a href="#dbt" class="chip">dbt Models</a></li>
+          <li><a href="#quality" class="chip">Data Quality</a></li>
+          <li><a href="#results" class="chip">Results</a></li>
+          <li><a href="#tradeoffs" class="chip">Tradeoffs</a></li>
+        </ul>
+      </nav>
+
+    </section>
+
+    
+    <section id="problem" aria-labelledby="problem-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Problem</p>
+        <h2 id="problem-heading">What This Was Built to Demonstrate</h2>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        The fintech pipeline proved the batch medallion pattern on real infrastructure. This project
+        was built to demonstrate something different: a streaming ingestion layer, a cloud data
+        warehouse, a proper dbt transformation stack, and a tiered data quality framework — all
+        wired together in a single end-to-end platform on real cloud services.
+      </p>
+      <p class="reveal" style="--reveal-delay:80ms;">
+        E-commerce was the right domain for this. It generates multiple event types naturally —
+        orders, products, users, clickstream — which made it a realistic test of a multi-topic
+        Kafka setup and a star schema with real relationships between fact and dimension tables.
+        The 30+ data quality checks came directly from thinking through what would actually fail
+        in a real e-commerce pipeline: late-arriving orders, missing user IDs, clickstream events
+        with no corresponding session, revenue fields with negative values.
+      </p>
+
+    </section>
+
+    
+    <section id="streaming" aria-labelledby="streaming-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Kafka Streaming</p>
+        <h2 id="streaming-heading">Confluent Kafka — 4 Topics, Real Messages</h2>
+        <p>Events produced to Confluent Cloud, consumed via a custom Airflow operator that batches and stages to AWS S3.</p>
+      </header>
+
+      
+      <figure class="cs-screenshot reveal" style="--reveal-delay:40ms;">
+        <img
+          src="assets/img/Kafka1.png"
+          alt="Confluent Kafka ecom-cluster Topics page showing 4 topics: ecom.clickstream (3 partitions, 538KB), ecom.orders (3 partitions, 834KB), ecom.products (1 partition, 68KB), ecom.users (1 partition, 104KB)"
+          loading="lazy"
+        />
+        <figcaption>Confluent Cloud — <code>ecom-cluster</code> with 4 active topics: orders, users, products, clickstream</figcaption>
+      </figure>
+
+      <figure class="cs-screenshot reveal" style="--reveal-delay:60ms;">
+        <img
+          src="assets/img/Kafka2.png"
+          alt="Confluent Kafka ecom.orders topic detail showing 545 total messages, 186 consumed in last hour, message activity histogram with spikes"
+          loading="lazy"
+        />
+        <figcaption><code>ecom.orders</code> topic — 545 total messages, 186 consumed in last hour · Real message activity histogram</figcaption>
+      </figure>
+
+      <p class="reveal" style="--reveal-delay:80ms;">
+        The four topics map directly to the four event types in the e-commerce domain.
+        <code>ecom.orders</code> and <code>ecom.clickstream</code> each use 3 partitions —
+        higher throughput events that benefit from parallel consumption. <code>ecom.products</code>
+        and <code>ecom.users</code> run on 1 partition — lower volume, slower-changing reference data.
+        All topics use 1-week retention.
+      </p>
+      <p class="reveal" style="--reveal-delay:100ms;">
+        A custom Airflow operator handles consumption: it polls each topic, batches messages,
+        serializes to JSON, and stages the batch files to AWS S3 before the Snowflake load step.
+        This decouples the streaming ingestion from the warehouse load — if the Snowflake step
+        fails, the S3 stage is preserved and the load can be retried without re-consuming from Kafka.
+      </p>
+
+    </section>
+
+    
+    <section id="warehouse" aria-labelledby="warehouse-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Snowflake Setup</p>
+        <h2 id="warehouse-heading">ECOM_DB — 6 Schemas, Auto-Suspend Warehouse</h2>
+        <p>Snowflake as the analytics warehouse — schema-per-layer design matching the transformation stages.</p>
+      </header>
+
+      <figure class="cs-screenshot reveal" style="--reveal-delay:40ms;">
+        <img
+          src="assets/img/Snowflake.png"
+          alt="Snowflake SQL worksheet showing ECOM_WH warehouse setup script with CREATE WAREHOUSE, CREATE DATABASE, DROP/CREATE SCHEMA statements, and query results showing 6 schemas in ECOM_DB: INFORMATION_SCHEMA, MARTS, PUBLIC, RAW, SNAPSHOTS, STAGING"
+          loading="lazy"
+        />
+        <figcaption>Snowflake <code>ECOM_DB</code> — 6 schemas confirmed after initialization: RAW, STAGING, MARTS, SNAPSHOTS, plus system schemas · Warehouse: X-Small, auto-suspend 60s</figcaption>
+      </figure>
+
+      <p class="reveal" style="--reveal-delay:60ms;">
+        The warehouse setup is scripted and idempotent — <code>CREATE WAREHOUSE IF NOT EXISTS</code>,
+        <code>CREATE DATABASE IF NOT EXISTS</code>, then schema creation. Running it twice doesn't
+        break anything. The <code>AUTO_SUSPEND = 60</code> setting means the warehouse pauses after
+        60 seconds of inactivity, which keeps costs near zero between runs for a personal project.
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:80ms;">
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">RAW schema</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Kafka messages loaded directly from S3 staging files. Minimal transformation — just what's needed to land data into typed Snowflake tables.</p>
+        </div>
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">STAGING schema</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">dbt staging models — type casting, renaming, light enrichment. One model per source topic. Intermediate cleanup before mart logic.</p>
+        </div>
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">MARTS schema</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Star schema fact and dimension tables. Business logic implemented once, consumed by any downstream analyst or BI tool.</p>
+        </div>
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">SNAPSHOTS schema</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">dbt snapshots capturing slowly changing dimensions — product price history, user profile changes over time.</p>
+        </div>
+      </div>
+
+    </section>
+
+    
+    <section id="orchestration" aria-labelledby="orch-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Orchestration</p>
+        <h2 id="orch-heading">Three DAGs, One Pipeline</h2>
+        <p>Airflow orchestrates the full pipeline across three DAGs — ingestion, loading, and dbt transformation.</p>
+      </header>
+
+      <figure class="cs-screenshot reveal" style="--reveal-delay:40ms;">
+        <img
+          src="assets/img/DAG1.png"
+          alt="Airflow graph view of dbt_run DAG showing 8 tasks in sequence: start (EmptyOperator), dbt_debug, dbt_deps, dbt_run_staging, dbt_run_marts, dbt_test, dbt_generate_docs, end (EmptyOperator)"
+          loading="lazy"
+        />
+        <figcaption><code>dbt_run</code> DAG — 8 tasks: debug → deps → staging → marts → test → generate docs · EmptyOperators bookend the pipeline for clean dependency management</figcaption>
+      </figure>
+
+      <p class="reveal" style="--reveal-delay:60ms;">
+        The <code>dbt_run</code> DAG is the transformation layer — it runs after the Snowflake load
+        completes. The task sequence is deliberate: <code>dbt_debug</code> validates the connection
+        before any work starts; <code>dbt_deps</code> installs package dependencies;
+        <code>dbt_run_staging</code> and <code>dbt_run_marts</code> execute models in dependency order;
+        <code>dbt_test</code> runs the full test suite; <code>dbt_generate_docs</code> refreshes
+        the lineage documentation. If tests fail, the DAG stops — nothing downstream runs on bad data.
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:80ms;">
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">kafka_to_s3</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Consumes all 4 Kafka topics, batches messages, writes JSON staging files to AWS S3. Custom Airflow operator handles backoff and partial batch recovery.</p>
+        </div>
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">s3_to_snowflake</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Loads staged S3 files into Snowflake RAW schema via COPY INTO. Idempotent — files already loaded are skipped via Snowflake's load history tracking.</p>
+        </div>
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">dbt_run</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">8-task DAG transforming RAW → STAGING → MARTS, running dbt tests, and regenerating lineage docs. Triggered downstream of a successful s3_to_snowflake run.</p>
+        </div>
+      </div>
+
+    </section>
+
+    
+    <section id="dbt" aria-labelledby="dbt-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">dbt Modeling</p>
+        <h2 id="dbt-heading">4 Models, Star Schema, 30+ Tests</h2>
+        <p>Staging and mart models that implement the business logic once and expose it consistently to all consumers.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        The dbt project has four mart models built on staging models sourced from each Kafka topic.
+        The staging layer handles type casting, column standardization, and light cleaning.
+        The mart layer implements the dimensional design — a central <code>fct_orders</code> fact table
+        surrounded by <code>dim_users</code>, <code>dim_products</code>, and <code>dim_dates</code>.
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:60ms;">
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">fct_orders</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Central fact table. One row per order, with foreign keys to all dimension tables. Includes derived revenue fields, order status transitions, and fulfillment timing.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">dim_users</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Customer dimension sourced from <code>ecom.users</code> Kafka topic. Slowly changing via dbt snapshots — user profile changes are tracked without overwriting history.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">dim_products</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Product catalog dimension sourced from <code>ecom.products</code>. Price history tracked via snapshots — enables accurate revenue calculation at historical prices.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">dim_dates</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Date spine generated by dbt. Enables period-over-period analysis without relying on Snowflake date functions in every downstream query.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+    
+    <section id="quality" aria-labelledby="quality-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Data Quality</p>
+        <h2 id="quality-heading">30+ Checks, Three Severity Tiers</h2>
+        <p>Not just not-null and unique. Checks that reflect real failure modes in a live e-commerce platform.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        The DQ framework uses three severity tiers: critical checks that fail the pipeline on violation,
+        warning checks that surface alerts without stopping the run, and info checks that log anomalies
+        for review. This distinction matters — you don't want a minor data drift event to halt the
+        entire pipeline, but you do want schema-breaking failures to stop immediately.
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:60ms;">
+
+        <div class="card" style="padding:var(--space-5);border-left:3px solid var(--color-danger);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-danger);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">Critical — pipeline blocking</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Order IDs must be unique and non-null. Revenue fields must be non-negative. Foreign key relationships between fct_orders and all dimensions must hold. Schema columns must match expected types.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);border-left:3px solid var(--color-warning);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-warning);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">Warning — alert, don't stop</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Row count drops more than 20% vs prior run. Clickstream event rate drops below baseline. Product price changes exceed expected variance. User signup rate anomalies.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);border-left:3px solid var(--color-success);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-success);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">Info — log for review</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Late-arriving events outside the expected ingestion window. Orders with no corresponding clickstream session. High-value orders without matching product catalog entries.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+    
+    <section id="results" aria-labelledby="results-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Results</p>
+        <h2 id="results-heading">What This Project Demonstrates</h2>
+      </header>
+
+      <ul role="list" aria-label="Outcomes" style="display:flex;flex-direction:column;gap:var(--space-4);" class="reveal" style="--reveal-delay:40ms;">
+        <li class="card" style="padding:var(--space-5);">Real Confluent Kafka cluster with 4 active topics and live message activity — the ecom.orders screenshot shows 545 actual messages, not generated test data.</li>
+        <li class="card" style="padding:var(--space-5);">Real Snowflake database with 6 schemas confirmed after setup — the SQL worksheet screenshot is from the live ECOM_DB, not a local mock.</li>
+        <li class="card" style="padding:var(--space-5);">Custom Airflow operator decouples Kafka consumption from Snowflake loading — if either step fails, the S3 staging layer preserves the data and the failed step can be retried independently.</li>
+        <li class="card" style="padding:var(--space-5);">Star schema with snapshots tracking slowly changing dimensions — product price history and user profile changes are preserved, so historical revenue calculations stay accurate over time.</li>
+      </ul>
+
+    </section>
+
+    
+    <section id="tradeoffs" aria-labelledby="tradeoffs-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Tradeoffs</p>
+        <h2 id="tradeoffs-heading">Honest Limitations</h2>
+      </header>
+
+      <dl style="display:flex;flex-direction:column;gap:var(--space-5);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Micro-batch, not true streaming</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">The custom Airflow operator polls Kafka on a schedule rather than consuming in real time. For a true streaming architecture, a Kafka Connect sink connector or Spark Structured Streaming would be more appropriate — consuming continuously and landing to S3 with sub-minute latency rather than on a batch interval.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Snowflake X-Small warehouse has limits</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">The auto-suspend warehouse is cost-effective for a personal project but wouldn't be appropriate for concurrent production workloads. A production setup would need workload management — separate warehouses for ingestion, transformation, and BI queries — to prevent contention and guarantee SLAs.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">DQ thresholds are static</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Warning thresholds (row count drops &gt;20%, price variance, signup rate) are hard-coded from expected baseline values. In a real system, these should be statistically derived from rolling historical distributions — making the system self-calibrating and reducing both false positives and missed anomalies over time.</dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="stack" aria-labelledby="stack-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Stack</p>
+        <h2 id="stack-heading">Technologies</h2>
+      </header>
+
+      <div class="chip-row reveal" style="--reveal-delay:40ms;">
+        <span class="chip">Python</span>
+        <span class="chip">Confluent Kafka</span>
+        <span class="chip">AWS S3</span>
+        <span class="chip">Snowflake</span>
+        <span class="chip">dbt</span>
+        <span class="chip">Apache Airflow</span>
+        <span class="chip">Terraform</span>
+        <span class="chip">SQL</span>
+        <span class="chip">BashOperator</span>
+        <span class="chip">EmptyOperator</span>
+        <span class="chip">Docker</span>
+      </div>
+
+    </section>
+
+    
+    <section id="cs-cta" aria-labelledby="cs-cta-heading">
+      <h2 id="cs-cta-heading">Want to Go Deeper?</h2>
+      <p>
+        Happy to walk through the custom Kafka operator design, the dbt model structure,
+        how the three-tier DQ framework was implemented, or the Snowflake schema architecture.
+      </p>
+      <div>
+        <a href="index.html#contact" class="btn btn-primary">Get in Touch</a>
+        <a href="projects.html" class="btn btn-secondary">All Case Studies</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <p><small>© 2026 Sajal Bhattarai. Built with care.</small></p>
+    <nav aria-label="Footer navigation">
+      <ul role="list">
+        <li><a href="projects.html">Case Studies</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

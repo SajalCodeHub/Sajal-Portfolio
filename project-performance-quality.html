@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" autocomplete="off">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Performance and Data Quality Engineering — Systematic Spark tuning, SQL optimization, and automated data quality enforcement. ~35% faster jobs, ~50% faster queries, 95%+ issues caught pre-release." />
+  <meta name="author" content="Sajal Bhattarai" />
+  <title>Performance + Data Quality — Sajal Bhattarai</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+</head>
+<body spellcheck="false">
+
+  <div class="aurora-center" aria-hidden="true"></div>
+  <div class="aurora-br"     aria-hidden="true"></div>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <header role="banner">
+    <nav aria-label="Primary navigation">
+      <a href="index.html" aria-label="Sajal Bhattarai — home">
+        <span class="logo-wordmark">Sajal</span>
+      </a>
+      <ul role="list" id="nav-links">
+        <li><a href="index.html#systems">Systems</a></li>
+        <li><a href="projects.html" aria-current="page">Case Studies</a></li>
+        <li><a href="index.html#playbook">Playbook</a></li>
+        <li><a href="index.html#writing">Writing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <button id="theme-toggle" type="button" aria-label="Toggle light and dark mode" aria-pressed="false">
+          <span aria-hidden="true"></span>
+        </button>
+        <button class="nav-mobile-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    
+    <section id="cs-hero" aria-labelledby="cs-hero-title">
+
+      <div class="reveal">
+        <nav aria-label="Breadcrumb">
+          <ol role="list">
+            <li><a href="projects.html">Case Studies</a></li>
+            <li aria-current="page">Performance + Data Quality</li>
+          </ol>
+        </nav>
+
+        <div style="display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-4);">
+          <span class="proof-chip">Production</span>
+          <span class="proof-chip">KWI · 2024–Present</span>
+          <span class="proof-chip">Performance · Data Quality · Spark · SQL</span>
+        </div>
+
+        <h1 id="cs-hero-title" style="margin-top:var(--space-4);">Performance &amp; Data Quality Engineering</h1>
+
+        <p style="font-size:var(--text-xl);color:var(--color-text-secondary);max-width:62ch;margin-top:var(--space-4);">
+          A systematic program of Spark tuning, SQL optimization, and automated data quality enforcement —
+          built to reduce runtimes, accelerate analytics, and catch failures before bad data ever
+          reaches production consumers.
+        </p>
+
+        <div class="btn-group" style="margin-top:var(--space-8);" role="group">
+          <a href="index.html#contact" class="btn btn-primary">Discuss This Work</a>
+          <a href="projects.html" class="btn btn-secondary">All Case Studies</a>
+        </div>
+      </div>
+
+      
+      <dl aria-label="Key metrics" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:60ms;">
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">Spark Job Runtime</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-text-primary);max-width:none;margin-top:var(--space-1);">~35% faster</dd>
+        </div>
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">Analytics Queries</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-text-primary);max-width:none;margin-top:var(--space-1);">~50% faster</dd>
+        </div>
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">DQ Issues Caught</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-accent);max-width:none;margin-top:var(--space-1);">95%+</dd>
+        </div>
+      </dl>
+
+      
+      <nav aria-label="On-page navigation" style="margin-top:var(--space-8);">
+        <ul role="list" style="display:flex;flex-wrap:wrap;gap:var(--space-2);">
+          <li><a href="#problem" class="chip">Problem</a></li>
+          <li><a href="#methodology" class="chip">Methodology</a></li>
+          <li><a href="#spark" class="chip">Spark Tuning</a></li>
+          <li><a href="#sql" class="chip">SQL Optimization</a></li>
+          <li><a href="#quality" class="chip">Data Quality</a></li>
+          <li><a href="#checklist" class="chip">Production Checklist</a></li>
+          <li><a href="#results" class="chip">Results</a></li>
+          <li><a href="#tradeoffs" class="chip">Tradeoffs</a></li>
+        </ul>
+      </nav>
+
+    </section>
+
+    
+    <section id="problem" aria-labelledby="problem-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Problem</p>
+        <h2 id="problem-heading">Performance Drift and Silent Data Quality Failures</h2>
+        <p>Degradation accumulates quietly — until an SLA miss or a stakeholder incident forces attention.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        Performance drift rarely shows up as a single break. Jobs that once completed comfortably start
+        overrunning their windows — and the cause is usually accumulated inefficiency rather than a single
+        bad change. Analyst queries that used to be instant become unpredictable under concurrent load.
+        Without systematic measurement, the natural response is to request more compute. That's expensive
+        and it doesn't fix the underlying problem.
+      </p>
+      <p class="reveal" style="--reveal-delay:80ms;">
+        Data quality failures behave the same way. Without automated checks, the first signal is often
+        a downstream complaint — wrong totals in a dashboard, missing dimension joins, or nulls propagating
+        into reports that business teams relied on. By the time someone notices, the issue has existed
+        for days.
+      </p>
+      <p class="reveal" style="--reveal-delay:120ms;">
+        This case study documents how I turned performance and quality from reactive firefighting into
+        engineering disciplines with a systematic diagnostic loop, specific optimizations, and automated
+        gates that block bad data before it reaches production consumers.
+      </p>
+
+    </section>
+
+    
+    <section id="methodology" aria-labelledby="methodology-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Diagnostic Methodology</p>
+        <h2 id="methodology-heading">A Repeatable Diagnostic Loop</h2>
+        <p>Performance work without measurement is guesswork. Every change followed the same five steps.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        The most important constraint was evidence-driven changes. No tuning without a baseline.
+        No deployment without a comparable post-change measurement at production-scale volume.
+        One variable changed at a time — so cause and effect are always traceable.
+      </p>
+
+      
+      <figure class="reveal" style="--reveal-delay:60ms;margin:var(--space-8) 0;padding:var(--space-6);background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-2xl);backdrop-filter:blur(var(--glass-blur));">
+        <svg role="img" aria-labelledby="diag-title diag-desc" viewBox="0 0 760 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <title id="diag-title">Performance Diagnostic Loop</title>
+          <desc id="diag-desc">Five-step loop: baseline measurement, identify bottleneck via Spark UI and EXPLAIN plans, apply targeted change one variable at a time, re-measure at same conditions and volume, then validate in staging before promoting to production.</desc>
+
+          <g class="arch-node">
+            <rect x="10" y="40" width="126" height="60" rx="10"></rect>
+            <text x="73" y="63" text-anchor="middle" font-size="12" font-weight="700">1. Baseline</text>
+            <text x="73" y="79" text-anchor="middle" font-size="10">Measure at</text>
+            <text x="73" y="93" text-anchor="middle" font-size="10">production scale</text>
+          </g>
+          <g class="arch-line"><line x1="136" y1="70" x2="162" y2="70"></line></g>
+
+          <g class="arch-node">
+            <rect x="162" y="40" width="126" height="60" rx="10"></rect>
+            <text x="225" y="63" text-anchor="middle" font-size="12" font-weight="700">2. Identify</text>
+            <text x="225" y="79" text-anchor="middle" font-size="10">Spark UI · EXPLAIN</text>
+            <text x="225" y="93" text-anchor="middle" font-size="10">plan analysis</text>
+          </g>
+          <g class="arch-line"><line x1="288" y1="70" x2="314" y2="70"></line></g>
+
+          <g class="arch-node">
+            <rect x="314" y="40" width="126" height="60" rx="10"></rect>
+            <text x="377" y="63" text-anchor="middle" font-size="12" font-weight="700">3. Change</text>
+            <text x="377" y="79" text-anchor="middle" font-size="10">One variable</text>
+            <text x="377" y="93" text-anchor="middle" font-size="10">at a time</text>
+          </g>
+          <g class="arch-line"><line x1="440" y1="70" x2="466" y2="70"></line></g>
+
+          <g class="arch-node">
+            <rect x="466" y="40" width="126" height="60" rx="10"></rect>
+            <text x="529" y="63" text-anchor="middle" font-size="12" font-weight="700">4. Re-measure</text>
+            <text x="529" y="79" text-anchor="middle" font-size="10">Same conditions</text>
+            <text x="529" y="93" text-anchor="middle" font-size="10">same volume</text>
+          </g>
+          <g class="arch-line"><line x1="592" y1="70" x2="618" y2="70"></line></g>
+
+          <g class="arch-node">
+            <rect x="618" y="40" width="130" height="60" rx="10" class="highlight"></rect>
+            <text x="683" y="63" text-anchor="middle" font-size="12" font-weight="700">5. Promote</text>
+            <text x="683" y="79" text-anchor="middle" font-size="10">Staging validate</text>
+            <text x="683" y="93" text-anchor="middle" font-size="10">→ production</text>
+          </g>
+
+        </svg>
+        <figcaption>Every optimization gated by a reproducible before/after measurement at production scale — no guesswork, no untestable changes</figcaption>
+      </figure>
+
+      <p class="reveal" style="--reveal-delay:80ms;">
+        Spark UI (stages + SQL tab) identified shuffle-heavy operations and incorrect join strategies.
+        For warehouse queries, <code style="font-family:var(--font-mono);color:var(--color-text-code);font-size:var(--text-sm);">EXPLAIN</code> plans and query history tables surfaced
+        full scans, missing index coverage, and expensive correlated subqueries. No optimization proceeded
+        without this instrumentation step first.
+      </p>
+
+    </section>
+
+    
+    <section id="spark" aria-labelledby="spark-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Spark Tuning</p>
+        <h2 id="spark-heading">Spark Optimizations — ~35% Runtime Reduction</h2>
+        <p>Three specific bottlenecks identified and eliminated. No hardware changes — only configuration, partition strategy, and join design.</p>
+      </header>
+
+      <dl style="display:flex;flex-direction:column;gap:var(--space-5);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-lg);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-3);">
+            <span style="font-family:var(--font-mono);color:var(--color-accent);font-size:var(--text-sm);margin-right:var(--space-2);">01</span>
+            Shuffle Spill Elimination
+          </dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            Profiling via Spark UI stages tab revealed shuffle spill to disk during sort and join stages on the largest daily jobs. Partition count was miscalibrated — too few partitions meant individual tasks held more data than executor memory could handle, forcing disk I/O.
+            <br><br>
+            Fix: calibrated <code style="font-family:var(--font-mono);color:var(--color-text-code);font-size:var(--text-sm);">spark.sql.shuffle.partitions</code> to actual data volume, and repartitioned inputs before shuffle-heavy operations. Spill went to zero on the highest-cost pipelines.
+          </dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-lg);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-3);">
+            <span style="font-family:var(--font-mono);color:var(--color-accent);font-size:var(--text-sm);margin-right:var(--space-2);">02</span>
+            Selective Broadcast Joins
+          </dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            Small dimension table joins weren't being broadcast automatically due to stale table statistics. Spark was executing expensive sort-merge joins instead of the much cheaper broadcast joins.
+            <br><br>
+            Fix: refreshed statistics on dimension tables and added explicit broadcast hints where auto-broadcast was insufficient. This eliminated the most expensive shuffle stages entirely — the single largest contributor to the 35% runtime improvement.
+          </dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-lg);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-3);">
+            <span style="font-family:var(--font-mono);color:var(--color-accent);font-size:var(--text-sm);margin-right:var(--space-2);">03</span>
+            Small-File Overhead Reduction via Delta Lake Optimization
+          </dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            Fragmented Parquet output from previous pipeline stages created thousands of tiny tasks in subsequent jobs. Small task overhead dominated scheduler time on high-cardinality aggregations.
+            <br><br>
+            Fix: Delta Lake Z-ordering on commonly filtered columns, compaction of small files, and repartitioning before heavy transformations. Task count dropped significantly, scheduler overhead reduced, and daily job completion moved well inside the SLA window.
+          </dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="sql" aria-labelledby="sql-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">SQL Optimization</p>
+        <h2 id="sql-heading">SQL &amp; Query Optimizations — ~50% Faster Analytics</h2>
+        <p>Three specific query plan anti-patterns identified and fixed. Every change validated with EXPLAIN before and after.</p>
+      </header>
+
+      <dl style="display:flex;flex-direction:column;gap:var(--space-5);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-lg);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-3);">
+            <span style="font-family:var(--font-mono);color:var(--color-accent);font-size:var(--text-sm);margin-right:var(--space-2);">01</span>
+            Index Coverage on Filter Columns
+          </dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            Dashboard queries filtered heavily on date range, category, and merchant ID — none of which had index support. EXPLAIN plans confirmed sequential scans on million-row tables for every dashboard load.
+            <br><br>
+            Fix: composite indexes aligned to the actual query shapes used by dashboards. Sequential scans on the largest tables eliminated. Query response times for affected dashboards improved by ~50% on the most-accessed reporting workloads.
+          </dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-lg);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-3);">
+            <span style="font-family:var(--font-mono);color:var(--color-accent);font-size:var(--text-sm);margin-right:var(--space-2);">02</span>
+            Correlated Subquery Elimination
+          </dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            Several reporting queries contained correlated subqueries that re-executed for every row — O(n) nested queries masquerading as simple aggregations. EXPLAIN plans confirmed re-evaluation on every row.
+            <br><br>
+            Fix: rewritten as single-scan CTEs or window functions — same business logic, single table pass. Execution plans became dramatically simpler and query times dropped significantly on the affected reports.
+          </dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-lg);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-3);">
+            <span style="font-family:var(--font-mono);color:var(--color-accent);font-size:var(--text-sm);margin-right:var(--space-2);">03</span>
+            Materialized Intermediate Results
+          </dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">
+            Expensive group-by aggregations were being recomputed on every dashboard load. Multiple reports were independently recalculating the same costly aggregations from raw tables.
+            <br><br>
+            Fix: pre-computed aggregation tables materialized and refreshed by the pipeline on each run. Dashboards query the materialized layer — computation happens once per pipeline run, not once per dashboard load.
+          </dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="quality" aria-labelledby="quality-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Data Quality</p>
+        <h2 id="quality-heading">Automated Quality Framework — 95%+ Catch Rate</h2>
+        <p>Guardrails embedded inside pipelines — with clear blocking vs warning semantics. Not reports. Actual gates.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        Quality checks run as Airflow tasks inside the pipeline flow — not as separate scripts that
+        run afterward or generate reports nobody reads. A critical check failure blocks downstream task
+        execution automatically. Operators discover issues through alerts, not through downstream
+        stakeholder complaints.
+      </p>
+
+      <dl style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:80ms;">
+
+        <div class="card" style="padding:var(--space-5);border-left:3px solid var(--color-danger);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Schema Contract Validation</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Expected columns, data types, and nullability validated per stage. Mismatches fail fast with the specific field that changed — source schema drift caught at Bronze, not discovered at Gold.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);border-left:3px solid var(--color-danger);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Row Count Expectations</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Critical tables enforce minimum row counts per partition. Large unexpected drops fail the pipeline before promotion — preventing partial loads from silently reaching BI consumers.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);border-left:3px solid var(--color-warning);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Null Rate + Duplicate Checks</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Null-rate thresholds (not binary constraints) on critical fields. Duplicate detection on composite business keys before merge operations. High null rates surface as warnings before they become data loss events.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);border-left:3px solid var(--color-danger);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Referential Integrity Assertions</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Fact tables checked for orphaned keys before Gold promotion. Prevents silent BI join failures where rows match nothing in dimension tables — causing incorrect totals rather than visible errors.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);border-left:3px solid var(--color-warning);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Blocking vs Warning Thresholds</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">Minor deviations warn and alert without halting. Critical violations block downstream tasks. This reduces alert fatigue while maintaining hard stops for high-risk failures — the distinction matters in production.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);border-left:3px solid var(--color-success);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Pre-Release Gates</dt>
+          <dd style="font-size:var(--text-sm);color:var(--color-text-secondary);max-width:none;">All checks run automatically before any new pipeline or major change deploys. New logic cannot reach production without passing the full validation suite — responsible for the 95%+ catch rate.</dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="checklist" aria-labelledby="checklist-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Production Standards</p>
+        <h2 id="checklist-heading">Production Readiness Checklist</h2>
+        <p>A forcing function applied before any new pipeline or major change ships to production.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        Most production incidents trace back to something that was never explicitly checked — a race condition
+        nobody thought to test, an alert nobody verified would actually fire. This checklist is an opinionated
+        forcing function applied before every significant pipeline ships.
+      </p>
+
+      <ol role="list" style="display:flex;flex-direction:column;gap:var(--space-4);margin-top:var(--space-8);counter-reset:checklist;" class="reveal" style="--reveal-delay:80ms;">
+
+        <li class="card" style="padding:var(--space-5);display:flex;gap:var(--space-4);align-items:flex-start;">
+          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);font-weight:var(--weight-bold);white-space:nowrap;margin-top:2px;">01</span>
+          <div>
+            <h3 style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-1);">Performance baseline documented</h3>
+            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Production-scale timing captured before deployment. Post-deploy comparison required before closing the change.</p>
+          </div>
+        </li>
+
+        <li class="card" style="padding:var(--space-5);display:flex;gap:var(--space-4);align-items:flex-start;">
+          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);font-weight:var(--weight-bold);white-space:nowrap;margin-top:2px;">02</span>
+          <div>
+            <h3 style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-1);">Idempotency verified</h3>
+            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Re-running the same window produces identical results — explicitly tested, not assumed. Backfills will happen.</p>
+          </div>
+        </li>
+
+        <li class="card" style="padding:var(--space-5);display:flex;gap:var(--space-4);align-items:flex-start;">
+          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);font-weight:var(--weight-bold);white-space:nowrap;margin-top:2px;">03</span>
+          <div>
+            <h3 style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-1);">Quality checks embedded</h3>
+            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Schema, volume, null-rate, and key integrity checks exist as Airflow tasks — blocking downstream steps on failure.</p>
+          </div>
+        </li>
+
+        <li class="card" style="padding:var(--space-5);display:flex;gap:var(--space-4);align-items:flex-start;">
+          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);font-weight:var(--weight-bold);white-space:nowrap;margin-top:2px;">04</span>
+          <div>
+            <h3 style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-1);">Failure behavior defined</h3>
+            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Retry, alert, halt, and fallback behavior documented for known failure modes. On-call engineer has a playbook.</p>
+          </div>
+        </li>
+
+        <li class="card" style="padding:var(--space-5);display:flex;gap:var(--space-4);align-items:flex-start;">
+          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);font-weight:var(--weight-bold);white-space:nowrap;margin-top:2px;">05</span>
+          <div>
+            <h3 style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-1);">Backfill procedure documented and tested</h3>
+            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Historical reprocessing steps written down and tested before going live. Not just "it should work" — verified.</p>
+          </div>
+        </li>
+
+        <li class="card" style="padding:var(--space-5);display:flex;gap:var(--space-4);align-items:flex-start;">
+          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);font-weight:var(--weight-bold);white-space:nowrap;margin-top:2px;">06</span>
+          <div>
+            <h3 style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-1);">Alerting configured and verified</h3>
+            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">SLA and quality alerts tested in staging to confirm they actually fire and reach the right people.</p>
+          </div>
+        </li>
+
+        <li class="card" style="padding:var(--space-5);display:flex;gap:var(--space-4);align-items:flex-start;">
+          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);font-weight:var(--weight-bold);white-space:nowrap;margin-top:2px;">07</span>
+          <div>
+            <h3 style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-1);">Runbook exists</h3>
+            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">An engineer who has never seen this pipeline can diagnose and recover using the documented steps. This is the test.</p>
+          </div>
+        </li>
+
+        <li class="card" style="padding:var(--space-5);display:flex;gap:var(--space-4);align-items:flex-start;">
+          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);font-weight:var(--weight-bold);white-space:nowrap;margin-top:2px;">08</span>
+          <div>
+            <h3 style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-1);">Downstream dependencies identified</h3>
+            <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">All consumers listed. Schema and timing changes communicated before deploy — not discovered after the fact.</p>
+          </div>
+        </li>
+
+      </ol>
+
+    </section>
+
+    
+    <section id="results" aria-labelledby="results-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Results</p>
+        <h2 id="results-heading">Measurable Outcomes</h2>
+        <p>Every metric validated with repeatable before/after benchmarks at production-scale volume.</p>
+      </header>
+
+      <ul role="list" aria-label="Measured outcomes" style="display:flex;flex-direction:column;gap:var(--space-4);" class="reveal" style="--reveal-delay:40ms;">
+        <li class="card" style="padding:var(--space-5);">Zero schema-breaking source changes propagated undetected after the framework was deployed — every one was caught at Bronze before it could corrupt anything downstream</li>
+        <li class="card" style="padding:var(--space-5);">Blocking thresholds stopped multiple malformed upstream incidents from reaching dashboards — problems that would have needed manual correction after a stakeholder noticed them</li>
+        <li class="card" style="padding:var(--space-5);">Warning thresholds surfaced early data drift without halting pipelines — the distinction between "stop everything" and "flag for review" matters when the system runs daily</li>
+      </ul>
+
+    </section>
+
+    
+    <section id="tradeoffs" aria-labelledby="tradeoffs-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Tradeoffs</p>
+        <h2 id="tradeoffs-heading">Tradeoffs &amp; What I'd Improve Next</h2>
+      </header>
+
+      <dl style="display:flex;flex-direction:column;gap:var(--space-5);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Checks are per-pipeline, not centralized</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Quality checks live inside individual DAGs. This works but doesn't scale well. A shared quality library with parameterized checks and centrally managed thresholds would reduce duplication as pipeline count grows beyond 15.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Threshold calibration is manual</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Thresholds are set from historical knowledge and adjusted when they fire incorrectly. Statistical baselining from rolling distributions would reduce both false positives and missed anomalies — making the system self-calibrating over time.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Performance regression testing is ad hoc</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Regressions are caught by monitoring after deployment. A scheduled benchmark suite running against a production snapshot on deploy would catch performance regressions before they go live — the same evidence-driven loop applied automatically.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">No column-level lineage</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Pipeline-level lineage is covered through dbt and Airflow. Tracing a specific field through transformations still requires manual code inspection. Integrating OpenLineage would make column-level traceability automatic.</dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="stack" aria-labelledby="stack-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Stack</p>
+        <h2 id="stack-heading">Technologies</h2>
+      </header>
+
+      <div class="chip-row reveal" style="--reveal-delay:40ms;">
+        <span class="chip">Python</span>
+        <span class="chip">SQL</span>
+        <span class="chip">PySpark</span>
+        <span class="chip">Apache Airflow</span>
+        <span class="chip">Databricks</span>
+        <span class="chip">Delta Lake</span>
+        <span class="chip">dbt</span>
+        <span class="chip">Snowflake</span>
+        <span class="chip">PostgreSQL</span>
+        <span class="chip">Amazon Redshift</span>
+        <span class="chip">Spark UI</span>
+        <span class="chip">EXPLAIN plans</span>
+      </div>
+
+    </section>
+
+    
+    <section id="cs-cta" aria-labelledby="cs-cta-heading">
+      <h2 id="cs-cta-heading">Want to Go Deeper?</h2>
+      <p>
+        Happy to walk through the diagnostic loop in detail, the specific Spark execution plan analysis that
+        identified the bottlenecks, or how the blocking vs warning threshold model was designed.
+      </p>
+      <div>
+        <a href="index.html#contact" class="btn btn-primary">Get in Touch</a>
+        <a href="projects.html" class="btn btn-secondary">All Case Studies</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <p><small>© 2026 Sajal Bhattarai. Built with care.</small></p>
+    <nav aria-label="Footer navigation">
+      <ul role="list">
+        <li><a href="projects.html">Case Studies</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

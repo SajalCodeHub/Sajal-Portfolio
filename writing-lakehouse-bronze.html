@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" autocomplete="off">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Why Your Lakehouse Bronze Layer Is Lying to You — The most common mistake in medallion architecture: treating raw as untouched when it was already processed four times before it landed." />
+  <meta name="author" content="Sajal Bhattarai" />
+  <title>Why Your Lakehouse Bronze Layer Is Lying to You — Sajal Bhattarai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+</head>
+<body spellcheck="false">
+
+  <div class="aurora-center" aria-hidden="true"></div>
+  <div class="aurora-br" aria-hidden="true"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <header role="banner">
+    <nav aria-label="Primary navigation">
+      <a href="index.html" aria-label="Sajal Bhattarai — home">
+        <span class="logo-wordmark">Sajal</span>
+      </a>
+      <ul role="list" id="nav-links">
+        <li><a href="index.html#systems">Systems</a></li>
+        <li><a href="projects.html">Case Studies</a></li>
+        <li><a href="index.html#playbook">Playbook</a></li>
+        <li><a href="index.html#writing" aria-current="page">Writing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <button id="theme-toggle" type="button" aria-label="Toggle light and dark mode" aria-pressed="false">
+          <span aria-hidden="true"></span>
+        </button>
+        <button class="nav-mobile-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <section id="article-hero" aria-labelledby="article-title">
+      <div style="margin-bottom:var(--space-6);">
+        <nav aria-label="Breadcrumb">
+          <ol role="list">
+            <li><a href="index.html#writing">Writing</a></li>
+            <li aria-current="page">Bronze Layer</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="article-meta">
+        <span class="proof-chip" aria-label="Category">Data Architecture</span>
+        <span class="article-sep" aria-hidden="true">·</span>
+        <span class="article-reading-time">9 min read</span>
+        <span class="article-sep" aria-hidden="true">·</span>
+        <time class="article-date" datetime="2025">2025</time>
+      </div>
+      <h1 id="article-title">Why Your Lakehouse Bronze Layer Is Lying to You</h1>
+      <p class="article-lede">
+        Every team treats Bronze the same way: dump raw data in, don't touch it, call it a source of truth.
+        The problem is that "raw" is already a lie by the time most pipelines get there.
+      </p>
+    </section>
+
+    <section id="raw-myth" aria-labelledby="raw-myth-heading">
+      <h2 id="raw-myth-heading">The Myth of "Raw"</h2>
+      <p>
+        Here's what actually happens in a typical ingestion setup. Your source system emits a record.
+        Your Airflow task extracts it via a REST API call that handles pagination and rate limiting —
+        making implicit decisions about which fields to request and how to handle nulls in the response.
+        Your ingestion code parses that response, normalizes the timestamp to UTC, truncates string
+        fields that exceed your schema length, and coerces a few ambiguous type fields to what you
+        assume they should be. Then it writes to Delta Lake.
+      </p>
+      <p>
+        You've now touched the data at least four times before it's "raw." You've made decisions about
+        encoding, truncation, timezone normalization, null handling, and field selection — and none of
+        those decisions are visible or recoverable from the Bronze table alone.
+      </p>
+      <p>
+        Bronze isn't lying because the data is wrong. It's lying because it presents itself as something
+        it isn't: untouched. And that false promise creates problems downstream that are hard to trace,
+        expensive to fix, and easy to miss until someone important notices wrong numbers.
+      </p>
+    </section>
+
+    <section id="three-problems" aria-labelledby="three-problems-heading">
+      <h2 id="three-problems-heading">Three Ways Bronze Layers Mislead You</h2>
+      <p>
+        These aren't edge cases. I've seen all three on production systems at different companies,
+        usually discovered not by the data team but by someone in a meeting asking why a number
+        is different from the one they had last week.
+      </p>
+      <p>
+        <strong>Schema drift treated as schema evolution.</strong> Your source system adds a column.
+        Your ingestion code doesn't know about it, so it drops it silently. Your Bronze table has no
+        record that the column ever existed. Six months later, when someone asks why a field is missing
+        from a downstream report, there's no audit trail. The data was always "raw" — the missing field
+        just happened to have never landed.
+      </p>
+      <p>
+        <strong>Partial loads that succeed.</strong> An API paginator fetches 12 of 15 pages before
+        hitting a rate limit. Your error handling catches the exception, logs it, and marks the task
+        as retried-and-succeeded on the next run. But the next run fetches all 15 pages — including
+        the first 12 again. You now have duplicates in Bronze. The task succeeded. Monitoring shows
+        green. Nobody knows. The data from pages 1–12 gets counted twice in every downstream aggregate
+        until someone notices the numbers don't match an external report.
+      </p>
+      <p>
+        <strong>Null vs. missing conflated.</strong> Your source sends <code>{"price": null}</code>
+        to indicate "price unknown." Your source also sometimes omits the price field entirely, meaning
+        "price not applicable to this record type." Both land in Bronze as <code>NULL</code>. To Silver,
+        they look identical. Every downstream consumer inherits the ambiguity. This is the kind of
+        problem that takes a week to root-cause and five minutes to prevent at ingestion.
+      </p>
+    </section>
+
+    <section id="idempotent-bronze" aria-labelledby="idempotent-heading">
+      <h2 id="idempotent-heading">What Idempotent Bronze Actually Looks Like</h2>
+      <p>
+        Idempotency in Bronze means running the same ingestion job on the same partition twice produces
+        exactly the same output — not double the data, not a failed task, not a silent overwrite of
+        different data. This sounds obvious. Most pipelines don't do it.
+      </p>
+      <p>
+        The pattern I use: every ingestion job is scoped to a specific partition key, usually a date.
+        Before writing, the job checks whether data already exists for that partition. If it does, the
+        job truncates that partition and rewrites it from source. If the source has changed between
+        runs, the partition reflects the latest state. If the job fails halfway through, the partial
+        write is abandoned and the previous good data is still there.
+      </p>
+      <p>
+        The second piece is metadata. Every Bronze record should carry at minimum:
+        <code>ingestion_timestamp</code> (when the record landed, not when it was created at source),
+        <code>source_system</code> (which system it came from), and <code>pipeline_run_id</code>
+        (which specific DAG run wrote it). These three fields cost almost nothing to add and make
+        debugging a bad load take minutes instead of hours.
+      </p>
+      <p>
+        When something goes wrong in Silver or Gold and you need to trace back, these fields let you
+        answer: was this record in the Bronze load from Tuesday, or did it come from the backfill on
+        Thursday? Without them, you're looking at a source timestamp and hoping it lines up with
+        your logs.
+      </p>
+    </section>
+
+    <section id="audit-patterns" aria-labelledby="audit-heading">
+      <h2 id="audit-heading">Audit Patterns That Make Backfills Safe</h2>
+      <p>
+        Backfills are where Bronze integrity is actually tested. Your Bronze layer claims to be
+        auditable — a backfill is the moment you find out if that's true.
+      </p>
+      <p>
+        A safe backfill pattern needs three things. First, partition isolation: Bronze is partitioned
+        by date, and each partition can be independently reprocessed without touching adjacent ones.
+        You should be able to rerun January 15th without affecting January 14th or 16th.
+      </p>
+      <p>
+        Second, source fidelity: when you backfill, you should be pulling from the same source with
+        the same logic that ran originally — not a different endpoint, not a manual export. If your
+        source system doesn't retain historical data long enough to support backfills, document that
+        gap explicitly rather than hide it.
+      </p>
+      <p>
+        Third, downstream reprocessability: Silver and Gold should be designed to accept reprocessed
+        Bronze without treating it as new data. If you backfill Bronze for a date range, the
+        corresponding Silver and Gold partitions should be reprocessable from the corrected source.
+        If they can't be, you don't have a medallion architecture — you have a one-way pipe with
+        a retry button.
+      </p>
+    </section>
+
+    <section id="contract-boundary" aria-labelledby="contract-heading">
+      <h2 id="contract-heading">The Contract Bronze Should Enforce</h2>
+      <p>
+        Bronze's job is not to clean data. Its job is to guarantee that what it stores reflects
+        what was received — and to catch anything that would make that guarantee untrue.
+      </p>
+      <p>
+        That means Bronze should run exactly two categories of checks: structural validation
+        (does this data match the schema we expect?) and completeness validation (did we receive
+        a reasonable volume of records for this period?). Anything beyond that — deduplication,
+        null filtering, business rules — belongs in Silver.
+      </p>
+      <p>
+        The reason this boundary matters: if Bronze is doing Silver's job, you lose the ability
+        to reprocess Silver independently. You also lose the audit trail. If a deduplication
+        decision made at Bronze later turns out to be wrong, you have no original data to correct
+        from. Bronze's append-only, contract-checked design is what makes the rest of the
+        medallion pattern trustworthy.
+      </p>
+      <p>
+        Silver can't compensate for what Bronze doesn't preserve. Once data is dropped, truncated,
+        or silently transformed at ingestion, that information is gone. The only time you find out
+        it mattered is when you need it and it isn't there.
+      </p>
+    </section>
+
+    <section id="cs-cta" aria-labelledby="article-cta-heading">
+      <h2 id="article-cta-heading">Have thoughts on this?</h2>
+      <p>
+        If you've run into these problems in a different form, or you've found a cleaner way to handle
+        the null-vs-missing distinction, I'd genuinely like to hear about it.
+      </p>
+      <div>
+        <a href="index.html#contact" class="btn btn-primary">Get in Touch</a>
+        <a href="index.html#writing" class="btn btn-secondary">More Writing</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <p><small>© 2026 Sajal Bhattarai. Built with care.</small></p>
+    <nav aria-label="Footer navigation">
+      <ul role="list">
+        <li><a href="projects.html">Case Studies</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

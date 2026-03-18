@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none"
+     aria-hidden="true" focusable="false">
+  <!-- Background pill -->
+  <rect width="36" height="36" rx="10" fill="#2563EB"/>
+  <!-- Initials -->
+  <text
+    x="18" y="24"
+    text-anchor="middle"
+    font-family="'DM Sans', system-ui, sans-serif"
+    font-size="14"
+    font-weight="700"
+    letter-spacing="-0.5"
+    fill="#ffffff"
+  >SB</text>
+</svg>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" autocomplete="off">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Fintech Transaction Pipeline — A production-style batch pipeline processing 50K daily fintech transactions through Bronze→Silver→Gold medallion architecture on Airflow + Spark + AWS S3. Two verified DAG runs, real S3 output." />
+  <meta name="author" content="Sajal Bhattarai" />
+  <title>Fintech Transaction Pipeline — Sajal Bhattarai</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+</head>
+<body spellcheck="false">
+
+  <div class="aurora-center" aria-hidden="true"></div>
+  <div class="aurora-br"     aria-hidden="true"></div>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <header role="banner">
+    <nav aria-label="Primary navigation">
+      <a href="index.html" aria-label="Sajal Bhattarai — home">
+        <span class="logo-wordmark">Sajal</span>
+      </a>
+      <ul role="list" id="nav-links">
+        <li><a href="index.html#systems">Systems</a></li>
+        <li><a href="projects.html" aria-current="page">Case Studies</a></li>
+        <li><a href="index.html#playbook">Playbook</a></li>
+        <li><a href="index.html#writing">Writing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <button id="theme-toggle" type="button" aria-label="Toggle light and dark mode" aria-pressed="false">
+          <span aria-hidden="true"></span>
+        </button>
+        <button class="nav-mobile-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    
+    <section id="cs-hero" aria-labelledby="cs-hero-title">
+
+      <nav aria-label="Breadcrumb">
+        <ol role="list">
+          <li><a href="projects.html">Case Studies</a></li>
+          <li aria-current="page">Fintech Transaction Pipeline</li>
+        </ol>
+      </nav>
+
+      <div style="margin-top:var(--space-6);">
+        <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-4);flex-wrap:wrap;">
+          <span class="proof-chip">Personal Project</span>
+          <span class="proof-chip">Jan 2026</span>
+          <span class="proof-chip">Batch · Medallion · AWS · Docker</span>
+          <span class="proof-chip">2 Verified Production Runs</span>
+        </div>
+
+        <h1 id="cs-hero-title">Fintech Transaction Pipeline</h1>
+
+        <p style="font-size:var(--text-xl);color:var(--color-text-secondary);max-width:62ch;margin-top:var(--space-4);">
+          A production-style batch pipeline processing 50K daily fintech transactions through
+          Bronze→Silver→Gold medallion architecture — Airflow orchestrating Spark jobs, writing
+          Parquet to AWS S3, containerized with Docker Compose. Not a tutorial project.
+          Two full DAG runs verified with real S3 output across all four bucket prefixes.
+        </p>
+      </div>
+
+      
+      <dl aria-label="Key metrics" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--space-4);margin-top:var(--space-8);" class="reveal">
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">Daily Transactions</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-text-primary);max-width:none;margin-top:var(--space-1);">50K</dd>
+        </div>
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">Avg Run Duration</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-text-primary);max-width:none;margin-top:var(--space-1);">3:49</dd>
+        </div>
+        <div class="card" style="padding:var(--space-5);text-align:center;">
+          <dt style="font-size:var(--text-xs);color:var(--color-text-tertiary);font-family:var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;">Gold Analytics Tables</dt>
+          <dd style="font-size:var(--text-3xl);font-weight:var(--weight-bold);color:var(--color-accent);max-width:none;margin-top:var(--space-1);">5</dd>
+        </div>
+      </dl>
+
+      
+      <nav aria-label="On-page navigation" style="margin-top:var(--space-8);">
+        <ul role="list" style="display:flex;flex-wrap:wrap;gap:var(--space-2);">
+          <li><a href="#problem" class="chip">Problem</a></li>
+          <li><a href="#architecture" class="chip">Architecture</a></li>
+          <li><a href="#orchestration" class="chip">Orchestration</a></li>
+          <li><a href="#medallion" class="chip">Medallion Layers</a></li>
+          <li><a href="#fraud" class="chip">Fraud Patterns</a></li>
+          <li><a href="#results" class="chip">Results</a></li>
+          <li><a href="#tradeoffs" class="chip">Tradeoffs</a></li>
+        </ul>
+      </nav>
+
+    </section>
+
+    
+    <section id="problem" aria-labelledby="problem-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Problem</p>
+        <h2 id="problem-heading">What This Was Built to Prove</h2>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        Personal projects in data engineering usually fall into one of two failure modes: they're either
+        toy pipelines that load a CSV into pandas, or they're theoretical architectures that were
+        never actually run. I wanted something different — a project that demonstrates the same
+        engineering decisions you'd make in production, run against real infrastructure, with
+        verifiable output you can point to.
+      </p>
+      <p class="reveal" style="--reveal-delay:80ms;">
+        The fintech domain was chosen deliberately. Financial transaction data has specific quality
+        requirements — deduplication on transaction IDs, null filtering on critical fields like
+        amount and merchant, derived feature engineering for fraud detection signals — that make
+        it a realistic test of a medallion pipeline rather than a data movement exercise.
+        The goal was a pipeline that could be handed to another engineer and run without modification.
+      </p>
+
+    </section>
+
+    
+    <section id="architecture" aria-labelledby="arch-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Architecture</p>
+        <h2 id="arch-heading">System Design</h2>
+        <p>Docker Compose running Airflow and a 2-node Spark cluster locally, writing to real AWS S3 storage via environment-injected credentials.</p>
+      </header>
+
+      <figure class="cs-screenshot reveal" style="--reveal-delay:40ms;">
+        <img
+          src="assets/img/Architecture.png"
+          alt="Fintech Transaction Pipeline architecture diagram showing Docker environment with Apache Airflow and Apache Spark cluster on the left, connected to AWS S3 bucket with raw, bronze, silver, and gold prefixes on the right"
+          loading="lazy"
+        />
+        <figcaption>Full system architecture — Airflow schedules PySpark jobs that read from raw CSV and write Parquet to each medallion layer in S3</figcaption>
+      </figure>
+
+      <p class="reveal" style="--reveal-delay:60ms;">
+        The local environment runs entirely inside Docker Compose: an Airflow webserver, scheduler,
+        and PostgreSQL metadata store on one side; a Spark master and worker (2 cores, 2GB RAM) on the other.
+        AWS credentials are injected as environment variables via a <code>.env</code> file — Spark reads
+        directly from and writes directly to S3 without touching local disk for data storage.
+      </p>
+
+      <p class="reveal" style="--reveal-delay:80ms;">
+        The Airflow scheduler triggers <code>fintech_daily_pipeline</code> on a <code>0 2 * * *</code>
+        cron — 2AM daily. The DAG submits PySpark jobs to the Spark cluster via BashOperator,
+        sequencing the bronze, silver, and gold transformations with explicit task dependencies.
+        No data moves forward unless the upstream task completes successfully.
+      </p>
+
+    </section>
+
+    
+    <section id="orchestration" aria-labelledby="orch-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Orchestration</p>
+        <h2 id="orch-heading">DAG Design &amp; Verified Runs</h2>
+        <p>4 tasks, linear dependency chain, 2 full production runs verified with real S3 output.</p>
+      </header>
+
+      
+      <div class="cs-screenshot-grid reveal" style="--reveal-delay:40ms;">
+        <figure class="cs-screenshot">
+          <img
+            src="assets/img/dag-graph-view.png"
+            alt="Airflow graph view of fintech_daily_pipeline showing 4 tasks in sequence: bronze_ingest, silver_transform, gold_aggregations, success_notification — all marked success in green"
+            loading="lazy"
+          />
+          <figcaption>DAG graph — 4 tasks, all success · Run: 2026-01-26, 02:00:00 UTC</figcaption>
+        </figure>
+        <figure class="cs-screenshot">
+          <img
+            src="assets/img/Gridview.png"
+            alt="Airflow grid view showing fintech_daily_pipeline with 2 successful runs, task duration chart, and DAG run summary showing Total success: 2, Max duration 4:41, Mean 3:49"
+            loading="lazy"
+          />
+          <figcaption>Grid view — 2 verified runs · Total success: 2 · Max 4:41 · Mean 3:49</figcaption>
+        </figure>
+      </div>
+
+      <p class="reveal" style="--reveal-delay:60ms;">
+        The DAG has four tasks in a strict linear chain. <code>bronze_ingest</code> reads the raw CSV
+        from <code>s3://bucket/raw/</code>, adds ingestion metadata columns, and writes Parquet
+        partitioned by date to the bronze prefix. <code>silver_transform</code> deduplicates on
+        <code>transaction_id</code>, filters nulls on critical fields, and adds derived feature
+        columns including <code>hour_of_day</code>, <code>day_of_week</code>, <code>is_weekend</code>,
+        <code>is_high_value</code>, and <code>is_cross_border</code>. <code>gold_aggregations</code>
+        creates 5 analytics tables. <code>success_notification</code> logs completion status and
+        prints summary metrics.
+      </p>
+      <p class="reveal" style="--reveal-delay:100ms;">
+        Both runs completed successfully — first run on 2026-01-26 at 22:29 UTC, second on 2026-01-27
+        at 02:00 UTC. Max duration 4 minutes 41 seconds, mean 3 minutes 49 seconds across both runs.
+        The grid view above is the actual Airflow UI from those runs.
+      </p>
+
+    </section>
+
+    
+    <section id="medallion" aria-labelledby="medallion-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Medallion Layers</p>
+        <h2 id="medallion-heading">Bronze → Silver → Gold in S3</h2>
+        <p>Each layer is a separate S3 prefix with its own schema contract and promotion criteria.</p>
+      </header>
+
+      <figure class="cs-screenshot reveal" style="--reveal-delay:40ms;">
+        <img
+          src="assets/img/s3 bucket.png"
+          alt="AWS S3 console showing fintech-pipeline-raw-data-sajalbhattarai-2026 bucket with 4 folder objects: bronze/, gold/, raw/, and silver/"
+          loading="lazy"
+        />
+        <figcaption>S3 bucket <code>fintech-pipeline-raw-data-sajalbhattarai-2026</code> — all 4 layer prefixes confirmed after the second DAG run</figcaption>
+      </figure>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:60ms;">
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">Raw · s3://bucket/raw/</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Daily CSV files uploaded manually or via script. UTF-8 encoded, unmodified from source. Serves as the immutable audit record.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">Bronze · s3://bucket/bronze/</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Raw data with ingestion metadata added. Parquet format, partitioned by <code>dt</code>. Appended with <code>ingestion_timestamp</code> and partition key. Schema-validated at write.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">Silver · s3://bucket/silver/</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Cleaned and validated. Deduped on <code>transaction_id</code>, null-filtered on critical fields, type-cast, and enriched with derived feature columns for analytics.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);letter-spacing:var(--tracking-caps);text-transform:uppercase;margin-bottom:var(--space-2);">Gold · s3://bucket/gold/</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">5 analytics tables: <code>merchant_revenue_daily</code>, <code>fraud_analysis_by_country</code>, <code>user_transaction_volume</code>, <code>payment_method_distribution</code>, <code>high_value_transactions</code>. BI-ready Parquet.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+    
+    <section id="fraud" aria-labelledby="fraud-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Feature Engineering</p>
+        <h2 id="fraud-heading">Fraud Detection Signals</h2>
+        <p>Derived columns added at the Silver layer — these are what make the Gold analytics tables meaningful.</p>
+      </header>
+
+      <p class="reveal" style="--reveal-delay:40ms;">
+        The silver transformation does more than clean — it engineers the features that power fraud
+        detection analytics in Gold. Raw transaction data doesn't tell you much. But once you know
+        that a transaction happened at 3am on a Sunday, was above the high-value threshold, and
+        crossed an international border — you have signals worth aggregating.
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--space-4);margin-top:var(--space-8);" class="reveal" style="--reveal-delay:60ms;">
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);margin-bottom:var(--space-2);">hour_of_day</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Extracted from transaction timestamp. Late-night transactions (22:00–05:00) correlate with elevated fraud rates in training data.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);margin-bottom:var(--space-2);">is_weekend</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Boolean derived from <code>day_of_week</code>. Weekend transaction patterns differ from weekday baselines — a useful signal for anomaly detection.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);margin-bottom:var(--space-2);">is_high_value</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Flags transactions above a configurable amount threshold. High-value transactions are routed to the <code>high_value_transactions</code> Gold table for elevated scrutiny.</p>
+        </div>
+
+        <div class="card" style="padding:var(--space-5);">
+          <p style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-accent);margin-bottom:var(--space-2);">is_cross_border</p>
+          <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Derived from merchant country vs. user country. Cross-border transactions feed directly into the <code>fraud_analysis_by_country</code> Gold aggregate.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+    
+    <section id="results" aria-labelledby="results-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Results</p>
+        <h2 id="results-heading">What This Project Demonstrates</h2>
+      </header>
+
+      <ul role="list" aria-label="Outcomes" style="display:flex;flex-direction:column;gap:var(--space-4);" class="reveal" style="--reveal-delay:40ms;">
+        <li class="card" style="padding:var(--space-5);">Two full DAG runs executed and verified — real Airflow scheduler, real Spark cluster, real S3 writes. Not a notebook, not a simulation. The grid view screenshot is from the actual Airflow UI.</li>
+        <li class="card" style="padding:var(--space-5);">All four S3 prefixes populated after the second run — raw/, bronze/, silver/, and gold/ each contain Parquet files partitioned by date, exactly as designed.</li>
+        <li class="card" style="padding:var(--space-5);">Idempotent pipeline — re-running on the same date partition overwrites cleanly without creating duplicates in Bronze or Silver. A requirement, not an afterthought.</li>
+      </ul>
+
+    </section>
+
+    
+    <section id="tradeoffs" aria-labelledby="tradeoffs-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Tradeoffs</p>
+        <h2 id="tradeoffs-heading">Honest Limitations</h2>
+      </header>
+
+      <dl style="display:flex;flex-direction:column;gap:var(--space-5);" class="reveal" style="--reveal-delay:40ms;">
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Local Spark, not a real cluster</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">The Spark cluster runs in Docker with 2 cores and 2GB RAM. This is enough to demonstrate the pipeline design and verify the transformation logic — but it's not representative of production-scale performance. A managed Spark cluster on Databricks or EMR would handle the data volumes and have autoscaling, execution history, and cost observability.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">No data quality checks</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">Silver transformation includes null filtering and deduplication, but there are no explicit DQ gates — no row count expectations, no schema assertions between layers. In the KWI lakehouse platform, these run as first-class Airflow tasks that block promotion on failure. This pipeline would need those added before it could be considered production-ready for a real environment.</dd>
+        </div>
+
+        <div class="card" style="padding:var(--space-6);">
+          <dt style="font-size:var(--text-base);font-weight:var(--weight-semibold);color:var(--color-text-primary);margin-bottom:var(--space-2);">Synthetic data, no schema evolution testing</dt>
+          <dd style="color:var(--color-text-secondary);max-width:none;">The transaction data is synthetically generated. A real fintech pipeline needs to handle schema drift from upstream payment processors — new fields, renamed columns, type changes. The Bronze layer's append-only design supports this, but the ingestion code doesn't currently handle schema evolution gracefully.</dd>
+        </div>
+
+      </dl>
+
+    </section>
+
+    
+    <section id="stack" aria-labelledby="stack-heading">
+
+      <header class="section-header reveal">
+        <p class="section-label">Stack</p>
+        <h2 id="stack-heading">Technologies</h2>
+      </header>
+
+      <div class="chip-row reveal" style="--reveal-delay:40ms;">
+        <span class="chip">Python</span>
+        <span class="chip">PySpark</span>
+        <span class="chip">Apache Airflow</span>
+        <span class="chip">Apache Spark</span>
+        <span class="chip">AWS S3</span>
+        <span class="chip">Docker</span>
+        <span class="chip">Docker Compose</span>
+        <span class="chip">Parquet</span>
+        <span class="chip">PostgreSQL</span>
+        <span class="chip">BashOperator</span>
+        <span class="chip">PythonOperator</span>
+      </div>
+
+    </section>
+
+    
+    <section id="cs-cta" aria-labelledby="cs-cta-heading">
+      <h2 id="cs-cta-heading">Want to Look at the Code?</h2>
+      <p>
+        Happy to walk through the DAG structure, the Spark transformation logic, how the Docker
+        Compose environment is wired together, or the S3 partition strategy.
+      </p>
+      <div>
+        <a href="index.html#contact" class="btn btn-primary">Get in Touch</a>
+        <a href="projects.html" class="btn btn-secondary">All Case Studies</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <p><small>© 2026 Sajal Bhattarai. Built with care.</small></p>
+    <nav aria-label="Footer navigation">
+      <ul role="list">
+        <li><a href="projects.html">Case Studies</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

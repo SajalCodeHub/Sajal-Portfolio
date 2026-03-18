@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" autocomplete="off">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Operationalizing RAG: From Prototype to Production Pipeline — The demo worked perfectly. Then I thought about what it looks like at 3am when the embedding API is down and the index is a week stale." />
+  <meta name="author" content="Sajal Bhattarai" />
+  <title>Operationalizing RAG: From Prototype to Production — Sajal Bhattarai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+</head>
+<body spellcheck="false">
+
+  <div class="aurora-center" aria-hidden="true"></div>
+  <div class="aurora-br" aria-hidden="true"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <header role="banner">
+    <nav aria-label="Primary navigation">
+      <a href="index.html" aria-label="Sajal Bhattarai — home">
+        <span class="logo-wordmark">Sajal</span>
+      </a>
+      <ul role="list" id="nav-links">
+        <li><a href="index.html#systems">Systems</a></li>
+        <li><a href="projects.html">Case Studies</a></li>
+        <li><a href="index.html#playbook">Playbook</a></li>
+        <li><a href="index.html#writing" aria-current="page">Writing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <button id="theme-toggle" type="button" aria-label="Toggle light and dark mode" aria-pressed="false">
+          <span aria-hidden="true"></span>
+        </button>
+        <button class="nav-mobile-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <section id="article-hero" aria-labelledby="article-title">
+      <div style="margin-bottom:var(--space-6);">
+        <nav aria-label="Breadcrumb">
+          <ol role="list">
+            <li><a href="index.html#writing">Writing</a></li>
+            <li aria-current="page">Operationalizing RAG</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="article-meta">
+        <span class="proof-chip" aria-label="Category">AI + Data Infrastructure</span>
+        <span class="article-sep" aria-hidden="true">·</span>
+        <span class="article-reading-time">10 min read</span>
+        <span class="article-sep" aria-hidden="true">·</span>
+        <time class="article-date" datetime="2025">2025</time>
+      </div>
+      <h1 id="article-title">Operationalizing RAG: From Prototype to Production Pipeline</h1>
+      <p class="article-lede">
+        The demo worked perfectly. Then I thought about what it looks like at 3am when the embedding
+        API is down and the index is a week stale. That question is where the real design work starts.
+      </p>
+    </section>
+
+    <section id="what-changes" aria-labelledby="what-changes-heading">
+      <h2 id="what-changes-heading">What Changes When You Add the Word "Production"</h2>
+      <p>
+        A RAG prototype in a notebook has one requirement: produce relevant results for the queries
+        you tested. A production RAG pipeline has about fifteen more, none of which were on your mind
+        when the prototype was working.
+      </p>
+      <p>
+        The gap isn't mostly technical. It's mostly operational. A notebook doesn't need a plan for
+        when the embedding model changes. It doesn't need to handle the case where a product is added
+        to the catalog between index refreshes. It doesn't need to tell you when search quality is
+        degrading. It doesn't need to keep working when the external API returns 429s.
+      </p>
+      <p>
+        When I shipped KWI's semantic search system, the prototype took about a week. The production
+        system — with monitoring, index freshness checks, fallback modes, evaluation gates, and an
+        embedding refresh pipeline that runs on schedule — took considerably longer. That difference
+        is what this piece is about.
+      </p>
+    </section>
+
+    <section id="what-breaks" aria-labelledby="what-breaks-heading">
+      <h2 id="what-breaks-heading">The Five Things That Break First</h2>
+      <p>
+        These are the specific failure modes I designed for — and in some cases discovered — while
+        building the production system. In rough order of how soon after launch each one became relevant.
+      </p>
+      <p>
+        <strong>Index staleness.</strong> Your catalog changes daily. New products are added.
+        Descriptions are updated. Discontinued items should stop appearing in results. If your index
+        refresh pipeline fails silently, users start seeing results that don't reflect reality. Freshness
+        monitoring isn't optional. You need to know the age of your index at all times, and you need
+        an alert when it exceeds a threshold that users would notice.
+      </p>
+      <p>
+        <strong>Embedding API outages.</strong> External embedding APIs go down. They throttle under
+        load. They change pricing models and return errors you didn't test for. The question isn't
+        whether this will happen but what your system does when it does. Serving stale results is better
+        than serving nothing. A trigram fallback is slower and less accurate but better than a 500 error.
+        Your fallback strategy should be explicit, tested, and surfaced in your response metadata so
+        you always know when it's active.
+      </p>
+      <p>
+        <strong>Latency degradation that isn't a failure.</strong> A p95 query time that drifts from
+        400ms to 750ms to 1.1 seconds over three weeks won't trigger any error alerts. The system is
+        working. It's just getting slower in a way that will eventually break the interactive UX
+        threshold without any single event causing it. The only way to catch this is a latency
+        baseline fixture — a fixed set of queries you run consistently so you can see the trend.
+      </p>
+      <p>
+        <strong>Query distribution shift.</strong> The queries users actually send are different from
+        the ones you tested. Your evaluation set covers what you predicted. Production users find the
+        edge cases you didn't. Building a mechanism to log queries (stripped of PII) and periodically
+        review failure cases is how you find out where your system actually breaks — not where you
+        assumed it might.
+      </p>
+      <p>
+        <strong>Text preparation assumptions that don't scale.</strong> The text cleaning logic that
+        worked on your test set starts failing on edge cases in the full catalog: product names with
+        special characters, descriptions in multiple languages, fields that are sometimes empty. These
+        aren't embedding model problems. They're text pipeline problems. And they're much easier to fix
+        when you've been logging the specific records where retrieval is failing.
+      </p>
+    </section>
+
+    <section id="offline-indexing" aria-labelledby="offline-heading">
+      <h2 id="offline-heading">Designing the Offline Indexing Path</h2>
+      <p>
+        The offline indexing pipeline is where most of the reliability engineering lives. It runs on
+        a schedule, reads product records from the data warehouse, generates embeddings, and upserts
+        them into pgvector. Getting this path right determines whether the system stays fresh or silently
+        degrades.
+      </p>
+      <p>
+        The key design decision: upserts, not full rebuilds. Rebuilding the entire index on every run
+        means any failure during the run leaves you with a partially updated index. Upserting by record
+        ID means each run is idempotent — if it fails halfway through, you run it again and it picks
+        up where it left off without duplicating any records.
+      </p>
+      <p>
+        The second decision: track index age explicitly. After every successful run, write a timestamp
+        to a metadata table. Your monitoring queries that table, not the embedding store. If the
+        timestamp is more than N hours old, fire an alert. This catches failed runs, stuck pipelines,
+        and misconfigured schedules before any user notices degraded results.
+      </p>
+      <p>
+        The third decision: separate the embedding generation from the index write. If embedding
+        generation fails (API timeout, rate limit), the previous good embeddings are still in the
+        index. You don't want a partial API failure to take down the search system. Batch the embedding
+        calls, handle failures per-record, and write to the index only after a full batch succeeds.
+      </p>
+    </section>
+
+    <section id="fallback-mode" aria-labelledby="fallback-heading">
+      <h2 id="fallback-heading">Designing the Fallback Mode</h2>
+      <p>
+        Every production search system needs a fallback for when the primary path is unavailable.
+        For vector search, the natural fallback is traditional text search — in our case, trigram
+        similarity via PostgreSQL's <code>pg_trgm</code> extension.
+      </p>
+      <p>
+        The important part isn't just having a fallback — it's making the fallback transparent.
+        Every search response in our system includes a <code>search_mode</code> field that tells
+        the caller whether the result came from vector similarity or trigram fallback. This means:
+        monitoring can track how often fallback is active, engineers can see at a glance whether
+        a degraded response was a fallback result, and users aren't silently served worse results
+        with no indication that anything changed.
+      </p>
+      <p>
+        Hidden fallback behavior is how you end up in a situation where the embedding API has been
+        down for two days and nobody noticed because the trigram results looked plausible. Explicit
+        mode surfacing in the response prevents that.
+      </p>
+    </section>
+
+    <section id="evaluation" aria-labelledby="evaluation-heading">
+      <h2 id="evaluation-heading">Building an Evaluation Set That Stays Useful</h2>
+      <p>
+        An evaluation set is only useful if it reflects the queries your system actually handles.
+        A 120-pair test set built at launch will cover the patterns you predicted — but won't cover
+        the edge cases that real usage surfaces over time.
+      </p>
+      <p>
+        The way to keep it relevant: log queries where the top result wasn't selected (or where the
+        user rephrased and searched again). These implicit failure signals, stripped of PII, are
+        ground truth for where your system is actually falling short. Periodic review of these cases
+        — even just 20 minutes a week — will surface patterns faster than any synthetic test set.
+      </p>
+      <p>
+        For the latency fixture specifically: keep a fixed set of queries and run them on a schedule
+        against the live system. The value isn't correctness — it's consistency. The same queries
+        run against the same index size over time give you an apples-to-apples comparison when you
+        change the embedding model, upgrade pgvector, or increase the catalog size. Without that
+        baseline, you're guessing at whether a performance change was caused by your last deploy
+        or by something else that happened the same week.
+      </p>
+    </section>
+
+    <section id="cs-cta" aria-labelledby="article-cta-heading">
+      <h2 id="article-cta-heading">Building a RAG system?</h2>
+      <p>
+        The full case study for the KWI semantic search system covers the architecture, monitoring
+        design, evaluation framework, and the tradeoffs in more detail. If you're working through
+        similar problems, it's probably more useful than this piece.
+      </p>
+      <div>
+        <a href="project-semantic-search.html" class="btn btn-primary">Read the Case Study</a>
+        <a href="index.html#writing" class="btn btn-secondary">More Writing</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <p><small>© 2026 Sajal Bhattarai. Built with care.</small></p>
+    <nav aria-label="Footer navigation">
+      <ul role="list">
+        <li><a href="projects.html">Case Studies</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
